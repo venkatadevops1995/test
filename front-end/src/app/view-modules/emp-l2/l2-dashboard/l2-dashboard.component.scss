@@ -1,0 +1,65 @@
+:host { 
+  display: block;
+  margin: 0 auto;
+}
+
+.db-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  margin-bottom: var(--cell-gap);
+  position: relative;
+
+}
+
+.db-head {
+  background-color: var(--col-primary-A200);
+  border-radius: 15px;
+}
+
+.db-head-name {
+  color: var(--col-accent-500);
+  text-align: center;
+  font-size: 22px;
+}
+
+.db-total-emp {
+  // min-height: 42px;
+  // line-height: 42px;
+  // border-radius: 42px;
+  font-size: 16px;
+  // min-width: 100px;
+  // border: 1px solid #aaa;
+  text-align: center;
+  color: var(--col-primary-100);
+  // font-weight: 500;
+  align-self: center;
+  text-align: left;
+  padding-left: 8px;
+  height: auto;
+}
+
+.dot {
+  height: 12px;
+  width: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  background-color: var(--color-primary);
+}
+
+.myInput {
+  height: 50px !important;
+  padding: 10px !important;
+} 
+
+.download-bn:hover {
+  cursor: pointer;
+  // text-decoration: underline;
+}
+
+:host ::ng-deep .mat-form-field-appearance-legacy .mat-form-field-underline {
+  background-color: #555;
+}
+
+.cursor--default{
+  cursor: default !important;
+}

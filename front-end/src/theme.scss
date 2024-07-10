@@ -1,0 +1,588 @@
+@use '@angular/material'as mat;
+@import './assets/scss/ng-palette';
+
+@include mat.core();
+
+// apply the "Inter" font familiy to the whole of angular material
+@import '~@angular/material/theming';
+$custom-typography: mat-typography-config($font-family: '"Inter", Roboto, "Helvetica Neue", sans-serif;');
+@include mat.core($custom-typography);
+
+// dark theme
+$dark-primary : mat.define-palette($md-primary);
+$dark-accent : mat.define-palette($md-accent);
+$dark-warn : mat.define-palette($md-warn);
+$dark-theme : mat.define-dark-theme((color:(primary:$dark-primary,
+      accent:$dark-accent,
+      warn:$dark-warn)));
+
+// Emit theme-dependent styles for common features used across multiple components.
+@include mat.core-theme($dark-theme);
+
+@include mat.button-theme($dark-theme);
+
+@include mat.all-component-themes($dark-theme);
+
+
+body {
+  color: #fff;
+}
+
+
+.mat-input-element {
+  caret-color: var(--col-accent-500);
+}
+
+/* Mat Table */
+
+.mat-header-cell {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(primary-A100);
+
+}
+
+.mat-table thead:after {
+  content: "";
+  display: block;
+  // width: 1300% !important;
+  height: 9px;
+
+  position: sticky !important;
+  bottom: 0 !important;
+}
+
+.mat-cell,
+.mat-footer-cell {
+  font-size: 14px;
+}
+
+.header-gradient {
+  background: linear-gradient(170.84deg, var(--col-primary-500) -49.76%, var(--col-primary-900) 190.96%);
+
+  &.light {
+    background: linear-gradient(to bottom, var(--col-primary-100) -49.76%, var(--col-primary-500) 190.96%);
+  }
+}
+
+.mat-header-row {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 0;
+  z-index: 100 !important;
+  height: 61px !important;
+  border-radius: 10px;
+  border-bottom-width: 0px;
+  @extend .header-gradient;
+
+}
+
+.mat-header-cell {
+  color: var(--col-primary-200) !important;
+}
+
+.mat-sort-header-container {
+  justify-content: flex-start;
+}
+
+/* mat table Header for sorting in affixed table */
+.affix-target{
+  .mat-header-cell {
+    &[aria-sort="none"] {
+      &:hover {
+        .mat-sort-header-arrow {
+          opacity: 0.5;
+        }
+      }
+    }
+  }
+  .mat-sort-header-pointer-left{
+    transform:rotate(-45deg);
+  }
+  .mat-sort-header-pointer-right{
+    transform:rotate(45deg);
+  }
+  
+  [aria-sort="ascending"] {
+    .mat-sort-header-arrow {
+      opacity: 1;
+    }
+  }
+  [aria-sort="descending"] {
+    .mat-sort-header-arrow {
+      opacity: 1;
+    }
+    .mat-sort-header-pointer-left{
+      transform:rotate(45deg);
+      top:10px;
+    }
+    .mat-sort-header-pointer-right{
+      transform:rotate(-45deg);
+      top:10px;
+    }
+  }
+}
+
+.table-colum-left {
+  .mat-sort-header-container {
+    justify-content: flex-start;
+  }
+}
+
+
+.mat-row {
+  height: 52px !important;
+  border-bottom-width: 0px;
+  content-visibility: auto;
+
+  &:not(tr) {
+    background: var(--col-primary-A200);
+  }
+
+  &:first-of-type {
+    margin-top: 10px;
+  }
+
+  &:hover {
+    // cursor: pointer;
+    box-shadow: 0px 0px 1px -1px rgb(136 136 136 / 50%), 0px 1.5px 10px 1px rgb(136 136 136 / 22%);
+    transform: scale(1);
+  }
+}
+
+.mat-header-cell,
+.mat-cell,
+.mat-footer-cell {
+  border-bottom-width: 0px !important;
+  vertical-align: middle !important;
+}
+
+.mat-cell {
+  color: var(--col-primary-100);
+}
+
+.mat-header-cell,
+.mat-cell {
+  text-align: center !important;
+}
+
+//giving border radious to left side of first header cell
+th.mat-header-cell:first-of-type {
+  border-radius: 10px 0 0 10px;
+}
+
+// removing left padding from first column
+th.mat-header-cell:first-of-type,
+td.mat-cell:first-of-type,
+td.mat-footer-cell:first-of-type {
+  padding-left: 15px !important;
+  text-align: center !important;
+}
+
+//giving border radious to right side of last header cell
+th.mat-header-cell:last-of-type {
+  border-radius: 0 10px 10px 0;
+}
+
+
+//Adding color for material-table body background-Color
+.mat-table tbody {
+  background-color: var(--col-primary-A200);
+}
+
+//hover effect on material-table row
+tr.mat-row:hover {
+  // cursor: pointer;
+  box-shadow: 0px 0px 1px -1px rgb(136 136 136 / 50%), 0px 1.5px 10px 1px rgb(136 136 136 / 22%);
+  transform: scale(1);
+}
+
+//reset the bottom border and text alignment in material-table cells
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  border-bottom-width: 0px !important;
+  vertical-align: middle !important;
+  text-align: left !important;
+
+  // rahul change (making policy column left align in policy component)***********
+  &.table-colum-left {
+    text-align: left !important;
+  }
+
+  //*******************************************************
+  background: unset;
+  white-space: normal;
+  word-wrap: break-word;
+  max-width: 60px;
+
+  &.w-350px {
+    max-width: 350px !important;
+  }
+}
+// Rahul change(adding max-width classes for align table-colum)************
+  .txt-center{
+    text-align: center !important;
+  }
+// ************************************************************************
+.mat-calendar-body-selected {
+  background-color: var(--col-accent-500) !important;
+}
+
+.mat-calendar-previous-button,
+.mat-calendar-next-button {
+  color: var(--col-accent-500) !important;
+}
+
+.mat-calendar-table-header {
+  color: var(--col-accent-500) !important;
+}
+
+// .mat-calendar-body-label{
+//   opacity: 0;
+// }
+// .mat-calendar-body-label[colspan="7"] {
+//   display: none;
+// }
+//////////////////////////////////////
+
+/* Material theme styling */
+.mat-form-field-appearance-legacy {
+  .mat-form-field-label {
+    color: var(--col-primary-300);
+  }
+}
+
+.mat-table {
+  background: none;
+}
+
+.mat-form-field {
+  color: #fff;
+
+  &.mat-focused {
+    .mat-form-field-ripple {
+      background-color: var(--col-accent-500);
+    }
+
+    .mat-form-field-label {
+      color: var(--col-accent-500);
+    }
+  }
+}
+
+mat-dialog-container.mat-dialog-container {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+}
+
+// overlay for mat dialog 
+.cdk-overlay-darker-backdrop,
+.cdk-overlay-dark-backdrop {
+  background: rgba(0, 0, 0, 0.8);
+}
+
+// remove padding bottom from the mat form field components
+.no-pb {
+  &.mat-form-field-appearance-legacy .mat-form-field-wrapper {
+    padding-bottom: 0;
+  }
+
+  &.mat-form-field-appearance-legacy .mat-form-field-underline {
+    bottom: 0%;
+  }
+
+  &.atai-file-upload {
+    &.mat-form-field-appearance-legacy .mat-form-field-infix {
+      padding-bottom: 0 !important;
+    }
+
+    &.mat-form-field-appearance-legacy .mat-form-field-subscript-wrapper {
+      top: 100%;
+    }
+  }
+
+}
+
+// ATAI date range picker
+
+.atai-date-range {
+  &.mat-form-field-appearance-legacy>.mat-form-field-wrapper>.mat-form-field-flex>.mat-form-field-infix {
+    padding: 0;
+    border-top: 0 solid transparent;
+  }
+
+  &.mat-form-field-appearance-legacy>.mat-form-field-wrapper>.mat-form-field-underline {
+    display: none;
+  }
+
+  .mat-form-field-wrapper {
+    display: flex;
+  }
+
+  .mat-form-field {
+    display: block;
+  }
+}
+
+// Date picker of angular material
+.mat-calendar-body-today {
+  background-color: none !important;
+}
+
+// 
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+  color: var(--col-primary-100);
+}
+
+.mat-option {
+  font-size: inherit;
+}
+
+/* Mat Paginator styles */
+.mat-paginator {
+  background: none;
+}
+
+.mat-paginator-container {
+  position: relative;
+}
+
+.mat-paginator-range-label {
+  margin: 2px 1px 0 !important;
+}
+
+.mat-paginator-range-actions {
+  justify-content: center;
+  flex-grow: 1;
+}
+
+.mat-paginator-page-size {
+  position: absolute;
+  right: 0;
+}
+
+
+/* check box and radio button button style (click button to check and un check) */
+
+.mat-radio-button {
+  &.button-style {
+    .mat-radio-container {
+      display: none;
+    }
+
+    .mat-radio-label-content {
+      padding: 0.35em 1.2em;
+      border: 2px solid var(--col-primary-400);
+      border-radius: 20px;
+      font-size: inherit;
+      color: var(--col-primary-200);
+    }
+
+    &.mat-radio-checked {
+      .mat-radio-label-content {
+        border: 2px solid var(--col-primary-200);
+        background: var(--col-primary-400);
+        color: #fff;
+      }
+    }
+
+    &.mat-radio-disabled {
+      .mat-radio-label-content {
+        opacity: 0.3;
+      }
+    }
+  }
+}
+
+.mat-checkbox {
+  &.button-style {
+    .mat-checkbox-inner-container {
+      display: none;
+    }
+
+    .mat-checkbox-label {
+      padding: 0.35em 1.2em;
+      border: 2px solid var(--col-primary-400);
+      border-radius: 20px;
+      font-size: inherit;
+      line-height: unset;
+      color: var(--col-primary-200);
+    }
+
+    &.mat-checkbox-checked {
+      .mat-checkbox-label {
+        border: 2px solid var(--col-primary-200);
+        background: var(--col-primary-400);
+        color: #fff;
+      }
+    }
+  }
+
+  &.mat-checkbox-disabled {
+    &.button-style {
+      .mat-checkbox-label {
+        opacity: 0.3;
+      }
+    }
+  }
+}
+
+// ********************************************************
+// Rahulchange (universal popup font -size)**********************
+.mat-option {
+  font-size: inherit !important;
+
+}
+
+// ******************************************************** 
+// Rahulchange (adding font family for table universal)**********************
+
+.mat-table {
+  min-width: 850px;
+
+  &.modifier {
+    min-width: unset !important;
+  }
+}
+
+
+
+// ********************************************************
+
+// File upload component styles ( inside mat form field)
+
+.atai-file-upload {
+  .mat-form-field-underline {
+    display: none;
+  }
+}
+
+// rahul change ( giving some padding to policy column in policy component)***********
+.pl-table-50 {
+  padding-left: 50px !important;
+}
+
+// @use '../src/assets/scss/breakpoints' as bp;
+//*******************************************************
+//adding class to give padding in every celll of the table in order to clearly distinguise the column
+.p-table-5 {
+  // padding: 0 5px 0 5px!important;
+  // @media (max-width:bp.$xmd){
+  padding: 5px !important;
+  // }
+}
+
+
+/* Mat Tabs group */
+
+/* in apply leave pop  up the tabs content need not be shown */
+.apply-leave {
+  .mat-tab-body-wrapper {
+    display: none;
+  }
+
+  .mat-tab-header {
+    border-bottom: none;
+  }
+
+  .mat-tab-group.mat-accent .mat-ink-bar,
+  .mat-tab-nav-bar.mat-accent .mat-ink-bar {
+    background: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, var(--col-accent-700) 29%, var(--col-accent-500) 31%, var(--col-accent-300) 50%, var(--col-accent-500) 70%, var(--col-accent-700) 72%, rgba(0, 0, 0, 0) 100%);
+
+  }
+
+  .mat-ink-bar {
+    height: 3px;
+  }
+
+  .mat-tab-label,
+  .mat-tab-link {
+    font-size: inherit;
+  }
+
+  .mat-tab-label {
+    flex-grow: 1;
+  }
+
+  .slide-anim {
+    height: 0px;
+    overflow: hidden;
+  }
+
+}
+
+/* Mat toggle small switch button */
+.mat-slide-toggle {
+  &.small {
+    .mat-slide-toggle-bar {
+      width: 27px;
+      height: 10px;
+    }
+
+    .mat-slide-toggle-thumb-container {
+      width: 15px;
+      height: 15px;
+      top: -2px;
+    }
+
+    .mat-slide-toggle-ripple {
+      width: 30px;
+      height: 30px;
+      top: calc(50% - 15px);
+      left: calc(50% - 15px);
+    }
+
+    .mat-slide-toggle-thumb {
+      width: 15px;
+      height: 15px;
+    }
+  }
+}
+
+.mat-datepicker-content {
+  background: #111;
+  border: 1px solid #777;
+}
+
+@media screen and (max-width:768px) {
+  .apply-leave {
+    .mat-tab-label {
+      padding: 0 12px;
+      min-width: 50px;
+    }
+  }
+}
+
+@media screen and (max-width:550px) {
+
+  .mat-paginator-page-size {
+    position: relative;
+    right: 0;
+  }
+
+  .mat-paginator-container {
+    flex-direction: column;
+    margin-top: 20px;
+  }
+
+  .mat-paginator-page-size-select {
+    margin-top: 0px;
+  }
+}
+
+@media screen and (max-width:400px) {
+  .apply-leave {
+    .mat-tab-label {
+      padding: 0 8px;
+    }
+  }
+}
+
+.rem-def-btn-style{
+  background: transparent;
+  outline: none;
+  border: none;
+  padding: 0;
+}

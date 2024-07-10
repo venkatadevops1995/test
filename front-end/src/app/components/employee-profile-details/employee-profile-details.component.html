@@ -1,0 +1,61 @@
+<div class="emp-profile" [style.width]="Is_match? '90vw':''">
+  <div class="emp-profile__close">
+    <svg class="use-svg col-primary-200" (click)="onClickClose()" w="30" svg-fill="none"
+      symbol="circle-close-red"></svg>
+  </div>
+  <div class="emp-profile__head pt-20 pt-md-0">
+    <div class="emp-profile__photo">
+      <div>
+        <!-- enable the condition for sow 200*200 emp image -->
+        <!-- <img [src]="data?.emp_details?.image_name ? data?.emp_details?.image_name : '/assets/images/avatar-profile.png'" alt=""> -->
+        <img [src]="'/assets/images/avatar-profile.png'" alt="">
+      </div>
+    </div>
+    <div class="emp-profile__name">
+      <h2 class="col-primary-50 fw-500 mt-10 mt-md-0 mb-5 fs-22 fw-xmd-700 fs-xmd-32" >{{data?.emp_name}}</h2>
+      <div class="fs-13 col-secondary-text-primary-500 mb-15" style="font-size: 16px;" >
+        <span class="dot" *ngIf="data?.emp_details?.leave_flag"></span>
+        <span *ngIf="data?.emp_details?.leave_flag && data?.emp_details?.day_leave_type=='FULL' && !data?.emp_details?.multi_leave" class="ml-5">Onleave Today</span>
+        <span *ngIf="data?.emp_details?.leave_flag && data?.emp_details?.day_leave_type=='FIRST_HALF' && !data?.emp_details?.multi_leave" class="ml-5">Onleave <br>Today first half</span>
+        <span *ngIf="data?.emp_details?.leave_flag && data?.emp_details?.day_leave_type=='SECOND_HALF' && !data?.emp_details?.multi_leave" class="ml-5">Onleave <br>Today second half</span>
+        <span *ngIf="data?.emp_details?.leave_flag && data?.emp_details?.day_leave_type=='FULL' && data?.emp_details?.multi_leave" class="ml-5">Onleave <br>({{data?.emp_details?.startdate | date }} To {{data?.emp_details?.enddate | date }})</span>
+      </div>
+    </div>
+  </div>
+  <div class="emp-profile__body primary-900">
+    <div class="emp-profile__details mt-20">
+      <div>
+        <span class="col-primary-300 emp-profile__title">ID no</span>
+        <div  class="fs-14 fs-md-16">{{data?.emp_details?.staff_no}}</div>
+      </div>
+      <div>
+        <span class="col-primary-300 emp-profile__title">Email</span>
+        <div class="flex middle-xs">
+          <p style=" max-width: 300px;  word-break: break-all;"  class="fs-14 fs-md-16">{{data?.emp_details?.email}}</p>
+          <div class="pos-r">
+            <div>
+              <svg w="20" symbol="copy" class="use-svg ml-10 col-primary-200" (cdkCopyToClipboardCopied)="onCopy()"
+                [cdkCopyToClipboard]="data?.emp_details?.email"></svg>
+            </div>
+            <p style="position: absolute;left: -15px; top: -20px;width: 100px;" *ngIf="showToolTip" class="fs-10">Email
+              Copied</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="emp-profile__hierarchy mt-40 pb-30">
+      <div class="emp-profile__single mb-20">
+        <div class="col-primary-300 emp-profile__title">Reporting Manager</div>
+        <div class="fs-14 fs-md-16">{{data?.emp_details?.reporting_manager}}</div>
+      </div>
+      <div class="emp-profile__single mb-20">
+        <div class="col-primary-300 emp-profile__title">Manager's Manager</div>
+        <div class="fs-14 fs-md-16">{{data?.emp_details?.managers_manager}}</div>
+      </div>
+      <div class="emp-profile__single mb-20">
+        <div class="col-primary-300 emp-profile__title">Functional Owner</div>
+        <div class="fs-14 fs-md-16">{{data?.emp_details?.functional_manager}}</div>
+      </div>
+    </div>
+  </div>
+</div>

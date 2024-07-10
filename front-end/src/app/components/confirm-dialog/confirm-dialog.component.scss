@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  background-image: radial-gradient(130% 100% at 0% 0%, var(--col-primary-300), var(--col-primary-900) 100%);
+  box-shadow: inset 0px -75px 60px rgb(0 0 0 / 22%);
+  border-radius: 15px;
+  border: 1px solid #555;
+  padding: 40px 50px 30px 50px;
+  max-width: 420px;
+
+  .confirm-heading {
+    color: var(--col-accent-300);
+    background: linear-gradient(to right, var(--col-accent-600), var(--col-accent-100));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 26px;
+    font-weight: 700;
+  }
+ 
+}
+@media screen and (max-width:1024px){
+  :host{
+    padding: 20px 30px 15px 30px;
+  }
+}

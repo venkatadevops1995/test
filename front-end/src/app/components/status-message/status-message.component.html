@@ -1,0 +1,27 @@
+<div class="overlay_status tac"  [class.visible]="showStatus" [@visibilityChanged]="(showStatus).toString()"
+    #overlay [class.fail]="status  === false" [class.info]="status == 'info'" [class.warning]="status == 'warning'" [class.full]="full" [class.orange]="status === 'orange'" 
+    [class.success]="status === true"> 
+    <ng-container *ngFor="let notification of notificationsQueue;let i= index;">
+        <ng-container *ngIf="notification.typeof === 'TemplateRef' && notification.show === true">
+            <div [@notificationAnimation] (click)="clickClose($event,i)" class="notification {{notification.status}}">
+                <ng-container *ngTemplateOutlet="notification.message"> 
+                </ng-container>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="notification.typeof === 'string' && notification.show === true">
+            <div [@notificationAnimation] (click)="clickClose($event,i)" class="notification {{notification.status}}">
+                <div class="flex nowrap pl-sm-20" >
+                    <div class="notification__icon">
+                        <svg *ngIf="notification.status === 'success'" class="use-svg" symbol="tick-circle" w="15"></svg>
+                        <svg *ngIf="notification.status === 'fail'" class="use-svg" symbol="close-circle" w="15"></svg>
+                        <svg *ngIf="status === 'info'" class="use-svg" symbol="info" w="15"></svg>
+                        <svg *ngIf="status === 'warning'" class="use-svg" symbol="warning" w="15"></svg>
+                    </div>
+                    <div class="msg">
+                        <p>{{notification.message}}</p>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </ng-container> 
+</div>

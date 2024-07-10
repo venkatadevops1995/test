@@ -1,0 +1,71 @@
+<div class="dummy" appFocus></div>
+<ng-container>
+  <div class=" flex between-xmd top-md flex-row-lg flex-col-xs middle-lg mt-20">
+    <div class="flex between-xs">
+      <h2 class="heading">Leave History </h2>
+    </div>
+
+    <div class="w-100 flex bottom-xmd flex-col-xs flex-row-xmd end-xs fs-12 fs-md-14 middle-xs ">
+
+      <mat-form-field class="mr-xmd-30 no-pb mb-15 mb-xmd-0 top-form-field">
+        <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="managerCtrl"
+          [(ngModel)]="value">
+        <div *ngIf="value" class="use-svg" style="position: absolute;right: 5px;top:50%;transform:translateY(-50%);"
+          symbol="close-circle" w="15" (click)="clear()">
+        </div>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSubmitResolvedLeaveFilter($event)" class="fs-14">
+          <mat-option *ngFor="let emp of filteredManagers | async" [value]="emp.emp_name">
+            {{emp.emp_name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+
+      <mat-form-field class="no-pb atai-date-range no-pb  top-form-field">
+        <app-atai-date-range [disabled]="Ischecked" (dateSelected)="onDateSelect($event)" >
+        </app-atai-date-range>
+      </mat-form-field>
+
+      <div class="future__leave_checkbox fs-14 col-primary-400 flex start-xs">
+        <mat-checkbox color="accent" [checked]="Ischecked" (change)="onFutureLeaveClick($event)">
+          <label class="fs-12 fs-md-14 fs-xmd-16 col-primary-200"> Future Leaves Only</label>
+        </mat-checkbox>
+      </div>
+
+      <!-- <div class="future__leave_checkbox">
+        <mat-checkbox [checked]= "Ischecked"  color="primary" (change) = "onFutureLeaveClick($event)"> 
+        <label style="font-size: 16px;"> Future Leaves Only</label>
+        </mat-checkbox>
+    </div> -->
+      <svg title="Download" class="export_icon ml-xmd-20 use-svg mt-15 mt-xmd-0" (click)="onClickExportResolved()"
+        symbol="excel-green" w="25">
+      </svg>
+
+
+    </div>
+  </div>
+
+
+  <div class="mt-20" *ngIf="showMessage == true">
+    <div class="grid">
+      <ng-container *ngIf="LEAVE_DATA_HISTORY.length==0">
+        <div class="fs-14 col-primary-300" *ngIf=" historyLeavesFiltersApplied">
+          No leave history available
+        </div>
+      </ng-container>
+
+
+      <div [tableAffix]="{affixReference:'this',sort:showTable.sort}" style=" max-height: 450px;" class="pr-10 w-100 of-auto"
+        *ngIf="LEAVE_DATA_HISTORY.length" #refTableWrap>
+        <app-show-table #showTable [LEAVE_DATA_HISTORY]="LEAVE_DATA_HISTORY" style="width:100%"></app-show-table>
+      </div>
+    </div>
+  </div> 
+</ng-container>
+
+
+
+
+<ng-template #not_access>
+  <div>Sorry, You Don't have access to this page</div>
+</ng-template>

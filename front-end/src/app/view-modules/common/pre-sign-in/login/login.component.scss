@@ -1,0 +1,49 @@
+:host{
+    position: relative;
+    .welcome-heading{
+        position: absolute;
+        bottom: calc(100% + 40px);
+        left: 50px;
+        font-size: 16px;
+        h1{
+            font-size: 2.6em;
+            background:linear-gradient(to right,var(--col-accent-400),var(--col-accent-600));
+            background-clip: text;
+            font-weight: 700;
+            -webkit-text-fill-color: transparent;
+        }
+        span{
+            background:linear-gradient(to right,var(--col-primary-400),var(--col-primary-500)); 
+            font-size: 1.5em;
+            background-clip: text; 
+            -webkit-text-fill-color: transparent;
+        }
+    }
+}
+
+//  a:focus{
+//      border:1px dotted var(--col-primary-300);
+//  }
+@media screen and (max-width:1024px){
+    :host{
+        .welcome-heading{
+            font-size: 14px;
+            bottom:calc(100% + 10px);
+        }
+    }
+}
+@media screen and (max-width:768px){
+    :host{
+        .welcome-heading{
+            font-size: 12px; 
+            left: 30px;
+        }
+    }
+}
+@media screen and (max-width:768px){
+    :host{
+        .welcome-heading{ 
+            left: 15px;
+        }
+    }
+}

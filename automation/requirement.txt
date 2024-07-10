@@ -1,0 +1,4 @@
+selenium
+webdriverdownloader
+unittest2
+openpyxl

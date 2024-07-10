@@ -1,0 +1,16 @@
+:host {
+  .strip {
+    display: grid;
+    grid-template-columns: minmax(min-content, max-content) 50px minmax(min-content, max-content);
+    height: 40px;
+    line-height: 1.3;
+    align-content: center;
+
+    >div:nth-child(1) {
+      font-weight: 500;
+    }
+    >div:nth-child(2) {
+      text-align: center;
+    }
+  }
+}

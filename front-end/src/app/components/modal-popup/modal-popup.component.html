@@ -1,0 +1,31 @@
+<div class="overlay" #overlay style="display: none">
+  <div
+    [ngStyle]="{
+      'max-width': maxWidthToSet,
+      'max-height': maxHeightToSet,
+      'min-width': minWidthToSet,
+      'min-height': minHeightToSet
+    }"
+    class="modal-content"
+    #content
+  >
+    <!--The heading of the pop up with angular transclusion using attribute head-->
+    <div *ngIf="head" class="head">
+      <ng-content select="[head]"></ng-content> 
+    </div>
+
+    <!-- The content for the main content area of the pop up -->
+    <div class="middle" [style.overflow]="policy_style ? 'hidden' : 'auto'">
+      <!-- <wyniki-scroll-bar [takeMinParentHeight]="true" [autoUpdate]="true" style="height:100%;" idd="test" #scrollbar> -->
+      <div style="height: 100%">
+        <ng-content></ng-content>
+      </div>
+      <!-- </wyniki-scroll-bar> -->
+    </div>
+
+    <!--The content for the foot of the pop up with angular transclusion using attribute foot-->
+    <!-- <div *ngIf="foot" class="foot">
+            <ng-content select="[foot]"></ng-content>
+        </div> -->
+  </div>
+</div>

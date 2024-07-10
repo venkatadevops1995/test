@@ -1,0 +1,112 @@
+app-button {
+
+  button {
+    background-color: transparent;
+    color: #eee;
+    padding: 0 40px;
+    height: 50px;
+    line-height: 52px;
+    position: relative;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+    background: unset;
+    border: 0px solid transparent;
+
+    span{
+        position: relative;
+        z-index: 1;
+    } 
+
+    > svg {
+      position: absolute;
+      top: 0px;
+      left: 0px;
+    }
+
+    @mixin transparent() {
+      $rgba: rgba(#139b48, 0.1);
+      --end-color: #{$rgba}; 
+    }
+
+    @include transparent();
+
+    .border-gradient {
+      background: transparent;
+      //   background-image: linear-gradient(to right, #139b48, );
+      display: block;
+      width: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 40px;
+      border-radius: 10px;
+      background-clip: padding-box;
+      color:#ccc;
+    }
+
+    svg {        
+        rect{ 
+            fill-opacity: 0;
+            stroke-opacity: 1;
+            transition:all 0.25s ease-in-out;
+            stroke-width:2;
+        }
+    }
+    &:hover{
+        svg{
+            rect{
+                fill-opacity: 1;
+                // stroke-opacity: 0;
+                stroke-width:1;
+            }
+        }
+    }
+    //Rahul change(adding tab focuse for all button)*******************
+    &:focus{
+      svg{
+          rect{
+              fill-opacity: 1;
+              // stroke-opacity: 0;
+              stroke-width:1;
+          }
+      }
+  }
+  //************************************************************************
+    &.success {
+      background: var(--color-success);
+    }
+
+    &.danger {
+      background: var(--color-danger);
+    }
+
+    &.small {
+      height: 40px;
+      line-height: 42px; 
+      font-size: 13px;
+      min-width: 100px;
+      padding: 0 25px;
+    }
+
+    &.extra-small {
+      height: 30px;
+      padding: 0 15px;
+      line-height: 32px;
+      border-radius: 25px;
+      font-size: 11px;
+      min-width: 80px;
+    }
+  }
+
+  &.disabled {
+    pointer-events: none;
+  }
+
+  &.disabled button { 
+    opacity: 0.3;
+  }
+}

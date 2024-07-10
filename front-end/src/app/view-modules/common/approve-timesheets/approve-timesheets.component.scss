@@ -1,0 +1,331 @@
+ :host {
+
+   display: flex;
+   flex-direction: column;
+   height: 100%;
+
+   --cell-gap: 5px;
+   font-size: 16px;
+
+   .timesheet {
+     position: relative;
+     font-size: 16px;
+
+     &.disable {
+       pointer-events: none;
+     }
+   }
+
+   .dot {
+     height: 10px;
+     width: 10px;
+     background-color: #bbb;
+     position:relative;
+     border-radius: 50%;
+     display: inline-block;
+     top:-36px;
+     left:5px;
+   }
+
+   .wsr-download {
+     color: var(--color-tertiary);
+     font-size: 20px;
+   }
+
+   a>.wsr-download:hover {
+     text-decoration: underline;
+     cursor: pointer;
+     color: var(--color-tertiary);
+   }
+
+   .timesheet__overlay {
+     position: absolute;
+     top: 0;
+     pointer-events: none;
+     height: 100%;
+     display: grid;
+     grid-template-columns: minmax(150px, 250px) repeat(8, 1fr);
+     width: 100%;
+
+     .timesheet__weekend-overlay {
+       grid-column: 2 / span 2;
+       height: 100%;
+       background: rgba(228, 161, 54, 0.2);
+     }
+   }
+
+   .timesheet__row,
+   .timesheet__head-days {
+     display: grid;
+     grid-template-columns: minmax(150px, 250px) repeat(8, 1fr);
+     margin-bottom: var(--cell-gap);
+     position: relative;
+     padding: 10px 0;
+     border-radius: 8px;
+     box-shadow: 0px 4px 4px rgba(45, 45, 45, 0.25);
+     align-items: center;
+   }
+
+   .timesheet__body {
+     display: grid;
+     // row-gap: 5px;
+   }
+
+   .timesheet__head-days {
+     >* {
+       display: flex;
+       justify-content: center;
+       height: 35px;
+       line-height: 35px;
+       align-items: center;
+       background: var(--color-secondary);
+       color: #fff;
+       font-weight: 700;
+     }
+
+     >div.week {
+       margin-right: var(--cell-gap);
+     }
+   }
+
+   .timesheet__head-name {
+     display: flex;
+     height: 50px;
+     justify-content: space-between;
+     align-items: center;
+     background: var(--color-tertiary);
+     padding: 0 10px;
+     font-size: 20px;
+     // border:1px solid  #000;
+     margin-bottom: var(--cell-gap);
+
+     .timesheet__name {
+       line-height: 50px;
+     }
+
+     .dot-red {
+       height: 10px;
+       width: 10px;
+       background-color: var(--color-danger);
+       border-radius: 50%;
+       display: inline-block;
+     }
+   }
+
+   .timesheet__actions {
+     display: flex;
+   }
+
+   .wts-approved {
+     height: 36px;
+     line-height: 36px;
+     border-radius: 36px;
+     font-size: 14px;
+     min-width: 100px;
+     background: white;
+     text-align: center;
+     color: var(--color-success);
+     font-weight: 500;
+   }
+
+   .wts-rejected {
+     height: 36px;
+     line-height: 36px;
+     border-radius: 36px;
+     font-size: 14px;
+     min-width: 100px;
+     background: white;
+     text-align: center;
+     color: var(--color-danger);
+     font-weight: 500;
+   }
+
+   .timesheet__row {
+     >* {
+       height: 45px;
+       display: flex;
+       justify-content: center;
+       align-items: center;
+     }
+
+     >*:not(:first-child) {
+       border-top: 1px solid #bbb;
+       border-bottom: 1px solid #bbb;
+     }
+
+     >*:nth-child(2) {
+       border-left: 1px solid #bbb;
+     }
+
+     >*:last-child {
+       border-right: 1px solid #bbb;
+     }
+
+     >*:first-child {
+       margin-right: var(--cell-gap);
+       word-break: break-all;
+     }
+
+     .timesheet__row-remove {
+       position: absolute;
+       left: -15px;
+       top: 50%;
+       transform: translateY(-50%);
+       background: #fff;
+       border-radius: 50%;
+     }
+
+     >.project {
+       background: var(--color-primary);
+       border: 1px solid var(--color-primary);
+       color: #fff;
+       position: relative;
+       text-align: center;
+       padding: 5px;
+     }
+
+     >.sel-project {
+       background: var(--color-quaternary);
+       border: 1px solid var(--color-quaternary);
+       color: #333;
+       position: relative;
+
+       &.disabled {
+         pointer-events: none;
+         color: #999;
+       }
+
+       .sel-project__project-list {
+         position: absolute;
+         top: calc(100% - 10px);
+         width: 200px;
+         left: 0;
+         background: var(--color-quaternary);
+         box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+         border-radius: 5px;
+         max-height: 200px;
+         overflow: auto;
+         z-index: 11;
+
+         div {
+           height: 40px;
+           line-height: 40px;
+           padding: 0 15px;
+           cursor: pointer;
+
+           &:hover {
+             background: var(--color-quaternary-dark);
+           }
+         }
+       }
+     }
+
+     >.misc {
+       background: #888;
+       border: 1px solid #888;
+       color: #fff;
+     }
+
+     >.holi {
+       background: #666;
+       border: 1px solid #666;
+       color: #fff;
+     }
+
+     >.vacation {
+       background: #444;
+       border: 1px solid #444;
+       color: #fff;
+     }
+
+     >.sub-total {
+       background: #444;
+       border: 1px solid #444;
+       color: #fff;
+     }
+
+     >.total {
+       background: #222;
+       border: 1px solid #222;
+       color: #fff;
+     }
+
+     >.net {
+       background: #222;
+       border: 1px solid #222;
+       color: #fff;
+       display: grid;
+     }
+
+     >.gross {
+       background: #111;
+       border: 1px solid #111;
+       color: #fff;
+       display: grid;
+     }
+
+   }
+
+   .wsr__project-text {
+     min-width: 100%;
+     width: 100%;
+     min-height: 100px;
+     border: 1px solid #aaa;
+     height: auto;
+   }
+
+   .wsr__project-name {
+     background: var(--color-secondary);
+     display: inline-block;
+     color: #fff;
+     padding: 10px 20px;
+   }
+
+   .reject-textarea {
+     width: 100%;
+     min-height: 100px;
+     border: 1px solid #aaa;
+     height: auto;
+     padding: 5px;
+   }
+
+   .red_total {
+     background-color: rgb(240 75 65);
+   }
+
+ }
+
+ .no-timesheet-data {
+  max-width: 200px;
+}
+
+ .resolve-popup {
+   display: flex;
+   flex-direction: column;
+
+   &.resolve-popup--reject-timesheet {
+     max-width: 500px;
+   }
+
+
+   .resolve-popup__project-name {
+     position: relative;
+
+     &:before {
+       content: "";
+       position: absolute;
+       width: 2px;
+       background: var(--col-accent-500);
+       height: 100%;
+       left: 0;
+       top: 0;
+     }
+   }
+
+ }
+
+ @media screen and (max-width:768px) {
+   .no-timesheet-data {
+     max-width: 150px;
+   }
+ }

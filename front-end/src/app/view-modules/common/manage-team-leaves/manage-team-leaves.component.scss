@@ -1,0 +1,14 @@
+:host{
+    th{
+        &.show-on-hover{
+            .sort-icon{
+                opacity: 0;
+            }
+            &:hover{
+                .sort-icon{
+                    opacity: 1;
+                }
+            }
+        }
+    }
+}

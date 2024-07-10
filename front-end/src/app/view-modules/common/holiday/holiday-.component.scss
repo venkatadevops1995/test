@@ -1,0 +1,322 @@
+:host {
+  --cell-gap: 5px;
+
+  .holidays__row,
+  .holidays__head {
+    display: grid;
+    grid-template-columns: minmax(200px, 2fr) minmax(80px, 1fr) minmax(150px, 2fr) minmax(150px, 2fr);
+    margin-bottom: var(--cell-gap);
+    position: relative;
+    height: 55px !important;
+    border-radius: 10px;
+  }
+
+  .holidays__body {
+    display: grid;
+    background: var(--col-primary-A200);
+    // row-gap: 5px;
+  }
+
+  .holidays {
+    position: relative;
+    font-size: 16px;
+
+    &.disable {
+      pointer-events: none;
+    }
+
+
+  }
+
+  .holidays__row {
+    font-size: 14px;
+    color: var(--col-primary-100); 
+
+    >* {
+      height: 55px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px;
+
+      &.left-cell {
+        justify-content: flex-start;
+      }
+    
+
+    >*:first-child {
+      margin-right: var(--cell-gap);
+      word-break: break-all;
+      padding-left: 40px;
+    }
+
+    >.applicable {
+      background: var(--color-success);
+    }
+
+    >* input[type=text] {
+      outline: 0;
+      border: none;
+      border-bottom: 1px solid var(--col-primary-300);
+      height: 30px;
+      text-align: left;
+      background-color: var(--color-bg);
+      color: inherit;
+    }
+    .input-date {
+      border-bottom: 1px solid var(--col-primary-300);
+      padding-right: 30px;
+      height: 30px;
+      color: inherit;
+      text-align: left;
+
+      +div {
+        position: absolute;
+        right: 3px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer;
+      }
+    }
+
+    >*>input[type=number] {
+      outline: 0;
+      border: 1px solid #666;
+      height: 30px;
+      text-align: center;
+      width: 50px;
+      background-color: var(--color-bg);
+    }
+
+    >*>select {
+      height: 30px;
+      width: 100px;
+      background-color: var(--color-bg);
+    }
+
+    >div:focus-within {
+      input[type=text] {
+        background-color: var(--color-quaternary);
+      }
+
+      background-color: var(--color-quaternary);
+      border:1px solid #000;
+      // and any other style
+    }
+
+    input[type=checkbox] {
+      background: var(--color-success);
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+    }
+
+    >.not_applicable {
+      background: var(--color-danger);
+    }
+
+    .holidays__row-remove {
+      position: absolute;
+      left: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #fff;
+      border-radius: 50%;
+
+    }
+
+    >.sel-project {
+      background: var(--color-quaternary);
+      border: 1px solid var(--color-quaternary);
+      color: #333;
+      position: relative;
+
+      &.disabled {
+        pointer-events: none;
+        color: #999;
+      }
+
+      .sel-project__project-list {
+        position: absolute;
+        top: calc(100% - 10px);
+        width: 200px;
+        left: 0;
+        background: var(--color-quaternary);
+        box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 5px;
+        max-height: 200px;
+        overflow: auto;
+        z-index: 11;
+      }
+    }
+
+  }
+
+  .holidays__head {
+    >* {
+      display: flex;
+      align-items: center;
+      background: var(--color-secondary);
+      color: #fff;
+      justify-content: center;
+      padding: 0 5px;
+      font-size: 12px;
+      color: var(--col-primary-200);
+
+      &.left-cell {
+        justify-content: flex-start;
+      }
+
+      &:first-child {
+        padding-left: 40px;
+      }
+    }
+
+    >div.week {
+      background: #bbb;
+      margin-right: var(--cell-gap);
+    }
+
+    >div.location {
+      background: linear-gradient(to bottom, var(--col-primary-300) -49.76%, var(--col-primary-700) 190.96%);
+      color: var(--col-primary-100);
+
+      &:last-of-type {
+        border-top-right-radius: 10px;
+        border-bottom-right-radius: 10px;
+      }
+
+      &:nth-child(5) {
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+      }
+    }
+
+  }
+
+  .mat-datepicker-popup {
+    background-color: #333 !important;
+  }
+
+  .date_range_before::after {
+    content: "";
+    border: 1px solid #333;
+    width: 70px;
+    height: 28px;
+    float: left;
+    opacity: .5;
+    top: 8px;
+    background-color: #bbb !important;
+    position: absolute;
+  }
+
+  .date_range_after::before {
+    content: "";
+    border: 1px solid #333;
+    width: 7px;
+    height: 28px;
+    float: left;
+    opacity: .5;
+    top: 8px;
+    background-color: red !important;
+    position: absolute;
+  }
+
+  .error_msg {
+    padding: 5px;
+    background: red;
+    color: #fff;
+    position: absolute;
+    // left: 50%;
+    // transform: translateX(35%);
+    bottom: calc(100% + 10px);
+    width: 300px;
+    text-align: center;
+    border-radius: 5px;
+  }
+
+  .error_msg:after {
+    content: "";
+    position: absolute;
+    left: 47%;
+    width: 20px;
+    height: 15px;
+    background: red;
+    top: 100%;
+    clip-path: polygon(0px 0px, 100% 0px, 50% 100%, 0px 0px);
+  }
+
+  // .date_range::before{
+  //   width: 20%;
+  //   background-color: red;
+  // }
+  .checkbox {
+    height: 16px;
+    width: 16px;
+    background: radial-gradient(var(--col-primary-400), var(--col-primary-800));
+    border-radius: 50%;
+    cursor: default;
+
+    &.checked {
+      background: radial-gradient(var(--col-accent-600), var(--col-accent-A200));
+    }
+
+    &.disabled {
+      pointer-events: none;
+      opacity: 0.2;
+    }
+  }
+
+  .edit-mode {
+    .checkbox {
+      cursor: pointer;
+
+      &.disabled {
+        pointer-events: none;
+      }
+    }
+  }
+
+  .check {
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 0px;
+    transform: rotate(45deg);
+    position: relative;
+  }
+
+  .searchOptions {
+    display: absolute;
+    position: absolute;
+    top: 40px;
+    width: 150px;
+    z-index: 1;
+    box-shadow: 0 0 2px 4px rgba(0, 0, 0, 0.2);
+    background-color: #d6f1f8;
+  }
+
+  .hideSearchOptions {
+    display: none;
+    background-color: #d6f1f8;
+  }
+
+  .holiday_option {
+    height: 25px !important;
+    border: 1px;
+    text-align: center;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+
+    &.active {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .holiday_option:focus {
+    height: 25px;
+    border: 1px solid #666;
+  }
+
+}

@@ -1,0 +1,41 @@
+// class generator eg: ml-5, ml-10
+@mixin attr-x( $attr, $classname, $attr-count: 10, $attr-steps: 10, $unit: '%', $attr-start : 1) {
+    $attr-list: null;
+    @for $i from $attr-start through $attr-count {
+        $attr-value: $attr-steps * $i;
+
+        .#{$classname}#{$attr-value} {
+            #{$attr}: #{$attr-value}#{$unit};
+        }
+        $attr-list: append($attr-list, unquote(".#{$attr}-#{$attr-value}"), comma);
+    } 
+}
+
+@mixin col-classes( $attr, $palette) { 
+    $palette-new : map-remove($palette, contrast); 
+    $palette-contrast : map-get($palette,contrast);;
+    @each $key, $val in $palette-new {  
+        .col-#{$attr}-#{$key} {
+             color:$val;
+        } 
+    } 
+    @each $key, $val in $palette-contrast {  
+        .col-on-#{$attr}-#{$key} {
+             color:$val;
+        }  
+    } 
+    .col-#{$attr}{
+         color:map-get($palette-new,A500);
+    } 
+}
+
+@mixin palette-classes( $attr, $palette) { 
+    $palette-new : map-remove($palette, contrast); 
+    $palette-contrast : map-get($palette,contrast);
+    @each $key, $val in $palette-new {  
+        .#{$attr}-#{$key} {
+            background-color: var(--col-#{$attr}-#{$key});
+             color:var(--on-#{$attr}-#{$key}); 
+        }
+    }  
+}

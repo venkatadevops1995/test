@@ -1,0 +1,109 @@
+<div class="dummy" appFocus></div>
+<div class="flex flex-col-xs flex-row-xmd between-md start-xs top-md middle-xmd  mb-20">
+  <h2 class="mb-15 mb-xmd-0">Attendance Report</h2>
+  <ng-container *ngIf="isPageAccessable;else not_access">
+    <div class="flex flex-col-xs flex-row-md fs-xmd-14 fs-12 fs-md-13  center-xs middle-xs mb-0-xmd bottom-md start-md">
+      <mat-form-field class="no-pb mr-md-30 mb-15 mb-md-0 top-form-field">
+        <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="option"
+          [(ngModel)]="value">
+        <svg matSuffix svg-fill="currentColor" class="col-primary-300 use-svg" (click)="clear()" symbol="triangle-down"
+          w="8"></svg>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEmp($event.option.value)'>
+          <mat-option *ngFor="let emp of filteredManagers | async" [value]="emp.emp_name">
+            {{emp.emp_name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <mat-form-field appearance="legacy" class="no-pb atai-date-range mb-15 mb-md-0  top-form-field">
+        <app-atai-date-range [maxDate]="maxDate" [minDate]="minDate" (dateSelected)="onDateSelection($event)" (cancel)="onCancelDateSelection()"></app-atai-date-range>
+      </mat-form-field>
+      <svg class="export_icon ml-md-30 use-svg" [dbdFileDownload]="{endPoint:getDownloadEndPoint(),responseType:'blob'}"
+        symbol="excel-green" w="25">
+      </svg>
+    </div>
+  </ng-container>
+</div>
+<ng-container *ngIf="isPageAccessable;else not_access">
+
+  <div *ngIf="ATTENDENCE_DATA.length==0 && downloadable == false && showMessage==true"
+    class="p-20 fs-14 col-primary-300">
+    NO DATA AVAILABLE
+  </div>
+
+  <div *ngIf="downloadable == true " class="p-20 fs-14 col-primary-300">
+    <b> Please download the data </b>
+  </div>
+
+  <div>
+
+    <div [tableAffix] class="w-100 of-x-auto" *ngIf="ATTENDENCE_DATA.length!==0 && downloadable == false">
+
+
+      <table mat-table [dataSource]="ATTENDENCE_DATA" class="mat-elevation-z8 w-100">
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Date </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.Date}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="firstIn">
+          <th mat-header-cell *matHeaderCellDef> First In Time </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.FirstInTime}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastOut">
+          <th mat-header-cell *matHeaderCellDef> Last Out Time </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.LastOutTime}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="gross">
+          <th mat-header-cell *matHeaderCellDef> Gross Working<br />Hours </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}">
+            {{element.GrossWorkingHours}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="net">
+          <th mat-header-cell *matHeaderCellDef> Net Working<br />Hours </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}">
+            {{element.NetWorkingHours}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="posted">
+          <th mat-header-cell *matHeaderCellDef> Timesheet <br /> Submitted <br />Hours </th>
+          <td mat-cell *matCellDef="let element"
+            [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}">
+            <div *ngIf="element.holiday_hours!=='00:00'">
+              <span class="holiday_class" tooltip="Holiday hours: {{element.holiday_hours}}"
+                placement="bottom">{{element.project_hours}} </span>
+            </div>
+            <div *ngIf="element.holiday_hours==='00:00'">
+              <span class="vacation_class" *ngIf="element.vacation_hours !== '00:00'"
+                tooltip="Vacation hours: {{element.vacation_hours}}" placement="bottom">
+                {{element.project_hours}}
+              </span>
+              <span class="project_class" *ngIf="element.vacation_hours==='00:00'">
+                {{element.project_hours}}
+              </span>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  </div>
+</ng-container>
+
+<ng-template #not_access>
+  <!-- <div class="fs-14 col-primary-200">Sorry, You Don't have access to this page</div> -->
+</ng-template>

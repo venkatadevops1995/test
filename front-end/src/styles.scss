@@ -1,0 +1,226 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "./assets/scss/reset";
+@import "./assets/scss/flex-grid";
+@import "./assets/scss/flex-align";
+
+
+@import "./assets/scss/typography";
+@import "./assets/scss/classes";
+@import "./assets/scss/css-variables";
+@import "./assets/scss/use-mixins";
+
+body {
+  --padding-sides: 6.25%;
+  background: #000;
+  height: 100vh;
+  overflow: auto;
+  display: block;
+
+}
+
+* {
+  font-family: "Inter", Roboto, "Helvetica Neue", sans-serif;
+  caret-color: var(--col-accent-500);
+}
+
+img {
+  max-width: 100%;
+}
+
+/* svg icons */
+.use-svg {
+  cursor: pointer;
+}
+
+.btn-outline {
+  cursor: pointer;
+  border: 1px solid var(--col-primary-100);
+  border-radius: 15px;
+  font-size: 10px;
+  padding: 5px 5px;
+}
+.dummy{
+  position: absolute;
+  height:0;
+  width:0;
+  opacity:0;
+  overflow:hidden;
+}
+/* text area box styles */
+.textarea-black {
+  background-color: var(--col-primary-A200);
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  min-height: 125px;
+  padding: 20px 10px;
+  color: var(--col-primary-100);
+}
+
+.textarea-border {
+  background: none;
+  border: 1px solid var(--col-primary-400);
+  min-height: 125px;
+  border-radius: 10px;
+  padding: 15px;
+  color: var(--col-primary-100);
+}
+
+
+
+.ng-tooltip {
+  position: absolute;
+  max-width: 150px;
+  font-size: 14px;
+  text-align: center;
+  color: var(--col-primary-200);
+  padding: 3px 8px;
+  background: linear-gradient(to bottom, var(--col-primary-500), var(--col-primary-600));
+  border-radius: 4px;
+  z-index: 1000;
+  opacity: 0;
+  width: 150px;
+}
+
+.ng-tooltip:after {
+  content: "";
+  position: absolute;
+  border-style: solid;
+}
+
+.ng-tooltip-top:after {
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-color: var(--col-primary-500) transparent transparent transparent;
+}
+
+.ng-tooltip-bottom:after {
+  bottom: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-color: transparent transparent var(--col-primary-500) transparent;
+}
+
+.ng-tooltip-left:after {
+  top: 50%;
+  left: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-color: transparent transparent transparent var(--col-primary-500);
+}
+
+.ng-tooltip-right:after {
+  top: 50%;
+  right: 100%;
+  margin-top: -5px;
+  border-width: 5px;
+  border-color: transparent var(--col-primary-500) transparent transparent;
+}
+
+.ng-tooltip-show {
+  opacity: 1;
+}
+
+// affix directive classes for fixing the elements
+.affix-target {
+  position: fixed !important;
+  top: 0px;
+  z-index: 110;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+}
+
+
+// the form field in the top form of the many of the views
+.top-form-field {
+  width: 215px;
+  &.atai-date-rande{
+    // min-width: 220px;
+  }
+}
+
+@media screen and (max-width:768px) {
+  .top-form-field {
+    width: 70vw;
+    max-width: 180px;
+  }
+}
+
+@media screen and (max-width:550px) {
+  .top-form-field { 
+    // max-width: 150px;
+    &.single-row{
+      max-width: 150px;
+    }
+  }
+}
+
+::placeholder {
+  font-size: 12px;
+}
+
+input::placeholder {
+  font-size: 12px;
+}
+
+/*------scroll bar (Chrome)---------------------*/
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+  position: relative;
+}
+
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--col-primary-300);
+  border: 0px none #ffffff;
+  border-radius: 0px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--col-primary-200);
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: var(--col-primary-200);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--col-primary-700);
+  border: 0px none #ffffff;
+  border-radius: 50px;
+
+}
+
+
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+
+//removing the default styling of the button
+.remove-btn-style{
+  border:none;
+  outline:none;
+  background:transparent;
+  color:inherit;
+  cursor: pointer;
+  padding-left: 0;
+}
+
+.danger{
+  color:red
+}

@@ -1,0 +1,133 @@
+[{
+        "text": "Timesheet",
+        "link": "",
+        "submenu": [{
+                "text": "Entry",
+                "link": "timesheet"
+            },
+            {
+                "text": "Rejected Timesheet",
+                "link": "rejected-timesheet"
+            },
+            {
+                "text": "Report",
+                "link": "report"
+            }
+        ]
+    },
+    {
+        "text": "Attendance",
+        "link": "attendance"
+    },
+    {
+        "text": "Employee Management",
+        "link": "",
+        "submenu": [{
+                "text": "Add Employee",
+                "link": "add-user"
+            },
+            {
+                "text": "Edit Employee",
+                "link": "edit-user"
+            },
+            {
+                "text": "Transfer Employee",
+                "link": "manage-user"
+            },
+            {
+                "text": "Project Change",
+                "link": "manage-project"
+            }
+        ]
+    },
+
+    {
+        "text": "Holidays",
+        "link": "holiday"
+    },
+    {
+        "text": "Leave Management",
+        "link": "",
+        "submenu": [{
+                "text": "Policy Configuration",
+                "link": "leave-policy-config"
+            },
+            {
+                "text": "Apply Leave",
+                "link": "manage-self-leaves"
+            },
+            {
+                "text": "Bulk Leave Update",
+                "link": "import-export-leave"
+            },
+            {
+                "text": "Leave Update",
+                "link": "employee-leave-info"
+
+            }
+
+        ]
+    },
+    {
+        "text": "HR Reports",
+        "link": "",
+        "submenu": [{
+                "text": "Leave History",
+                "link": "leave-history"
+            },
+            {
+                "text": "Timesheet Report",
+                "link": "hr-timesheet-reports"
+            },
+            {
+                "text": "Attendance report",
+                "link": "hr-attendance-reports"
+            }
+
+        ]
+    },
+    {
+        "text": "Document Management",
+        "link": "",
+        "submenu": [{
+                "text": "Create",
+                "link": "document-config"
+            }, {
+                "text": "All Policies",
+                "link": "document-list"
+            },
+            {
+                "text": "Policy",
+                "link": "emp-document-list"
+            }
+
+        ]
+    },
+    {
+        "text": "MIS",
+        "link": "",
+        "submenu": [
+            {
+                "text": "Add Project",
+                "link": "mis-add-project"
+            },
+            {
+                "text": "Download MIS",
+                "link": "mis-download"
+            }
+
+        ]
+    },
+    {
+        "text": "Client Reports",
+        "link": "",
+        "submenu": [
+            {
+                "text": "Attendance report",
+                "link": "attendance-report-by-alt"
+            }
+        ]
+    }
+    
+    
+]

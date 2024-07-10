@@ -1,0 +1,61 @@
+<div (drop)="drop_handler($event, $event.target)" class="fg {{theme}}" [ngClass]="ngClassInput"
+  [class.is-empty]="(fileArray.length == 0)">
+  <div *ngIf="false" class="loader-files">
+    <svg version="1.1" id="L4" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+      style="width:50px;height:50px;" x="0px" y="0px" viewBox="0 0 100 100" enable-background="new 0 0 0 0"
+      xml:space="preserve">
+      <circle fill="#fff" stroke="none" cx="6" cy="50" r="6">
+        <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.1" />
+      </circle>
+      <circle fill="#fff" stroke="none" cx="26" cy="50" r="6">
+        <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.2" />
+      </circle>
+      <circle fill="#fff" stroke="none" cx="46" cy="50" r="6">
+        <animate attributeName="opacity" dur="1s" values="0;1;0" repeatCount="indefinite" begin="0.3" />
+      </circle>
+    </svg>
+  </div>
+  <div (keyup)="keyUp($event, $event.target)" tabindex="0" class="file-wrap" [ngStyle]="{backgroundColor:(bgColor || 'var(--col-primary-900)')}">
+    <!--Upload button connected using for attribute to file input to trigger the file browser on click-->
+    <label #fileLabel class="btn-file flex middle-xs" for="{{idd}}" [ngStyle]="{borderColor:(borderColor)}"
+      *ngIf="fileArray.length < 1">
+      <ng-container>
+        <svg symbol="upload" class="use-svg  mb-10 col-primary-300" w="25"></svg>
+        <ng-container *ngIf="pH;else defaultPh">
+          <div>{{pH}} <sup *ngIf="!optional">*</sup></div>
+        </ng-container>
+        <ng-template #defaultPh>
+          <div>Drop files or click to add attachments here <sup *ngIf="!optional">*</sup></div>
+        </ng-template>
+        <p class="accept-string mt-10" *ngIf="acceptString">{{acceptString}}</p>
+      </ng-container>
+    </label>
+
+    <div class="file-list flex start-xs" *ngIf="fileArray.length > 0">
+      <ng-container *ngIf="fileArray.length < 6;else noOfFiles">
+        <div [class.single]="multiple === false" class="file fs-13 fs-md-16 flex middle-xs center-xs mr-5 "
+          *ngFor="let file of fileArray;let i = index;">
+          {{file.name}} - ({{file.size | fileSize}})
+          <svg symbol="remove" class="use-svg  ml-15 col-warn-500" w="25" (click)="upDateFileList($event,i)"></svg>
+        </div>
+      </ng-container>
+      <ng-template #noOfFiles>
+        <div class="file fs-13 fs-md-16 flex middle-xs center-xs mr-5" >
+          {{fileArray.length }} files selected ({{control?.fileSize | fileSize}})
+          <svg symbol="circle-close-red" class="use-svg" w="25" (click)="upDateFileList($event,undefined)"></svg>
+        </div>
+      </ng-template>
+    </div>
+
+    <ng-container *ngIf="!folderUpload;else refFolderUpload">
+      <!--file input control. hidden in UI-->
+      <input tabindex="-1" type="file" accept="{{accept?.browse}}" id="{{idd}}" #file (click)="markTouched();"
+        (change)="onChange($event,file.files)">
+    </ng-container>
+    <ng-template #refFolderUpload>
+      <input tabindex="-1" type="file" accept="{{accept.browse}}" multiple id="{{idd}}" #file (click)="markTouched();"
+        (change)="onChange($event,file.files)" webkitdirectory="" directory="">
+    </ng-template>
+
+  </div>
+</div>

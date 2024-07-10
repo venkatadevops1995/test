@@ -1,0 +1,211 @@
+<!-- <div class="grid container"> -->
+  <div class="dummy" appFocus></div>
+  <div class="leaves">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="leaves__stats col-xs-12  col-xmd-8 col-lg-6  between-xs  middle-xs flex flex-col-xs flex-row-sm ">
+        <div class="leaves__count flex middle-xs">
+          <span class="flex center-xs middle-xs fs-20 fw-700 mr-30"
+            [ngClass]="{'negative-balance':currentBalance<0,'positive-balance':currentBalance>=0}">{{currentBalance}}</span>
+          <div class="flex col col-primary-100">
+            <span class="fs-18">Available</span>
+            <span class="fs-10">Leaves</span>
+          </div>
+        </div>
+        <div class="leaves__apply ml-sm-50 mt-20 mt-sm-0">
+          <app-button (click)="openApplyPopUp()">Apply Leave</app-button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- <div style="width: 300px;display: inline-block;padding-left: 10px;">
+    <h2>Current Leave Balance: <span
+        [ngClass]="{'negative-balance':currentBalance<0,'positive-balance':currentBalance>=0}"></span>
+    </h2>
+  </div>
+  <div style="justify-self: end;display: inline-block;">
+    <app-button size='small' theme="blue-lite" type="button" w="130" (click)="openApplyPopUp()">Apply</app-button>
+  </div> -->
+  <!-- </div> -->
+  <div class="mt-50">
+    <h2 class="heading mb-10">Leave Requests <span *ngIf="appliedCount !=0">[ {{appliedCount}} ]</span>
+    </h2>
+
+    <div class="grid">
+      <div class=" fs-14 col-primary-300" *ngIf="LEAVE_APPLICATION_DATA.length==0 && leaveErrMsg===true">
+        No leave requests available
+      </div>
+
+      <div style="max-height: 250px;" class="of-auto w-100" [tableAffix]="{'affixReference' : 'this'}" *ngIf="LEAVE_APPLICATION_DATA.length!=0" >
+        <table mat-table style="min-width:1000px;" [dataSource]="LEAVE_APPLICATION_DATA" class="mat-elevation-z8 w-100" >
+              <colgroup>
+                <col width='100'/>
+                <col width='180'/>
+                <col width='180'/>
+                <col width="100"/>
+                <col width="150"/>
+                <col width="200"/>
+                <col width="100"/>
+              </colgroup>
+          <ng-container matColumnDef="serial">
+            <th mat-header-cell *matHeaderCellDef > S.No. </th>
+            <td mat-cell *matCellDef="let element;let i=index;">{{i+1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="day_count">
+            <th mat-header-cell *matHeaderCellDef>Total Days </th>
+            <td mat-cell *matCellDef="let element"> {{element.day_count}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startdate">
+            <th mat-header-cell *matHeaderCellDef> Start Date </th>
+            <td mat-cell *matCellDef="let element"> {{convertDatefmt(element.startdate)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="enddate">
+            <th mat-header-cell *matHeaderCellDef> End Date </th>
+            <td mat-cell *matCellDef="let element"> {{convertDatefmt(element.enddate)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="leave_type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.leave_type_name == 'Paid' ? 'General' : element.leave_type_name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="p-table-5">Leave Status</th>
+            <td mat-cell *matCellDef="let element" class="p-table-5"> {{element.req_status}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="view">
+            <th mat-header-cell *matHeaderCellDef> Action</th>
+            <td mat-cell *matCellDef="let element;let i = index">
+              <div class="flex middle-xs start-xs ">
+              <button title="View" class="rem-def-btn-style">
+                <svg class="use-svg " (click)="leaveDetailsRequestId = { request_id: element.id }; openLeaveDetails()"
+                color="var(--col-primary-100)" title="View Details" symbol="view-details" w="20" svg-fill="currentColor"></svg>
+              </button>
+              <button title="Cancel" class="rem-def-btn-style">
+                <svg
+                  *ngIf="element.status != leaveApplcnStatus.Rejected && element.status != leaveApplcnStatus.EmployeeCancelled && !(element.status == leaveApplcnStatus.Approved && element.isInProgress)"
+                  class="use-svg ml-20 col-primary-300" (click)="onClickCancelLeaveApplication($event,element)" title="Cancel Leave"
+                  symbol="cancel-application" w="20">
+                </svg>
+              </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="appliedLeaveColumns sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: appliedLeaveColumns; "></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-50">
+    <div class="flex between-xs mb-15 middle-md flex-col-xs flex-row-md top-xs ">
+      <h2>Leave History </h2>
+      <div class="flex bottom-xs mt-15 mt-md-0">
+        <div class="fs-14">
+          <mat-form-field appearance="legacy" class="no-pb atai-date-range " style="width: 205px;">
+            <app-atai-date-range [minDate]="minDate" [maxDate]="maxDate" [allowSameDateRange]="true" [showInput]="true"
+              [showPresets]="true" (dateSelected)="getLeaveHistory($event)"></app-atai-date-range>
+          </mat-form-field>
+        </div>
+        <div class="export_icon ml-40 col-primary-300">
+          <a (click)="onClickExportResolved()">
+            <svg class="ml-5 use-svg" symbol="excel-green" w="25" style=" margin-top:0px;cursor:pointer"></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-20 fs-14 col-primary-300" *ngIf="LEAVE_HISTORY_DATA.length==0 && leaveHistoryErrMsg===true">
+      No leave history available
+    </div>
+    <div class="mt-20 w-100 of-auto" >
+      <table mat-table style="min-width:1000px;" [dataSource]="LEAVE_HISTORY_DATA" *ngIf="LEAVE_HISTORY_DATA.length!=0"
+        class="mat-elevation-z8 w-100">
+        <colgroup>
+          <col width='100'/>
+          <col width='180'/>
+          <col width='180'/>
+          <col width="100"/>
+          <col width="120"/>
+          <col width="200"/>
+          <col width="200"/>
+          <col width="120"/>
+        </colgroup>
+        <ng-container matColumnDef="serial">
+          <th mat-header-cell *matHeaderCellDef > S.No. </th>
+          <td mat-cell *matCellDef="let element;let i=index;">{{i+1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="day_count">
+          <th mat-header-cell *matHeaderCellDef>Total Days </th>
+          <td mat-cell *matCellDef="let element"> {{element.day_count}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startdate">
+          <th mat-header-cell *matHeaderCellDef> Start Date </th>
+          <td mat-cell *matCellDef="let element"> {{convertDatefmt(element.startdate)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="enddate">
+          <th mat-header-cell *matHeaderCellDef> End Date </th>
+          <td mat-cell *matCellDef="let element"> {{convertDatefmt(element.enddate)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="leave_type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.leave_type_name == 'Paid' ? 'General' : element.leave_type_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="leavestatus">
+          <th mat-header-cell *matHeaderCellDef class="p-table-5">Leave Status</th>
+          <td mat-cell *matCellDef="let element" class="p-table-5">
+            {{element.req_status}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="correctionstatus">
+          <th mat-header-cell *matHeaderCellDef class="p-table-5">Correction Status</th>
+          <td mat-cell *matCellDef="let element" class="p-table-5">
+            {{element.discrepancy_status == null ? '--' : element.discrepancy_status}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef> Action</th>
+          <td mat-cell *matCellDef="let element;let i = index">
+            <div class="flex middle-xs start-xs  ">
+              <button title="View" class="rem-def-btn-style">
+              <svg tabindex="0" (keydown.enter)="leaveDetailsRequestId={request_id:element.id,get_discrepancy:true};openLeaveDetails()" class="use-svg "
+                (click)="leaveDetailsRequestId={request_id:element.id,get_discrepancy:true}; openLeaveDetails()"
+                color="var(--col-primary-100)" title="View Details" symbol="view-details" w="20"></svg>
+              </button>
+              <button title="Correction" class="rem-def-btn-style">
+              <svg *ngIf="element.discrepancy_status == null" tabindex="0" (keydown.enter)="onClickRaiseDiscrepancy($event,element)" class="use-svg ml-20 " (click)="onClickRaiseDiscrepancy($event,element)" title="Correction"
+              color="var(--col-primary-100)" symbol="edit" w="20"></svg>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="historyLeaveColumns sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: historyLeaveColumns; "></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+
+<!-- <app-modal-popup (close)="applyFormSubmitted = false" #applyLeaveDialog [w]="'50%'" [maxH]="'90%'" h="auto"> -->
+<ng-template #templateRefApplyLeave>
+  <app-apply-leave (event)="eventHandlerApplyLeave($event)"></app-apply-leave>
+</ng-template>
+<!-- </app-modal-popup> -->
+
+<ng-template #templateRefLeaveDetails>
+  <app-leave-details [requestId]="leaveDetailsRequestId" type="self"></app-leave-details>
+</ng-template>

@@ -1,0 +1,303 @@
+<div class="dummy" appFocus></div>
+<div>
+  <form #searchForm="ngForm" [formGroup]="fgSearch" (ngSubmit)="Search(searchField.value)" >
+  <div class="pb-20 flex flex-col-xs flex-row-xmd center-xs between-xs middle-xmd">
+    <h2 class="heading fw-600">Edit Employee</h2>
+    <div class="fs-12 fs-md-14 flex w-md-70 w-xmd-50 end-xmd middle-xs bottom-xmd mt-15 mt-xmd-0">
+      <mat-form-field class="no-pb w-50 mr-30 top-form-field single-row" >
+        <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="searchField">
+        <svg matSuffix class="use-svg col-primary-300" symbol="triangle-down" [w]="8" (click)="clear()"></svg>
+        <mat-autocomplete class="fs-14" #auto="matAutocomplete">
+          <mat-option *ngFor="let state of filteredManagers | async" [value]="state.emp_name">
+            {{state.emp_name}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <app-button [disabled]="searchField.invalid" [size]="is_XMD_LT ? 'small' : 'default'" >
+        Submit
+      </app-button>
+
+    </div>
+  </div>
+</form>
+  <!-- Rahul change(adding a horizontal-scroll-bar for table)*****************************************
+  **********************************************************************
+  ************************************************************ -->
+
+  <div class="w-100 of-x-auto" [tableAffix] *ngIf="USERS_DATA.length!=0">
+
+    <table style="min-width:1024px;" mat-table [dataSource]="USERS_DATA" class="mat-elevation-z8 w-100">
+      <colgroup>
+        <col  width="70">
+        <col  width="150">
+        <col  width="250">
+        <col  width="100">
+        <col  width="300">
+        <col  width="110">
+        <col  width="120">
+        <col  width="120">
+        <col  width="50">
+        <col  width="70">
+      </colgroup>
+      <ng-container matColumnDef="serial_no">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> S.NO </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element;let i =index;"> {{i+1}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> Name </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.emp_name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="staff_no">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Staff No. </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.staff_no}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Email </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.email}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="company">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> Group </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.company}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="category">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> Category </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.category_name}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="device_id">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>HID</th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.device_id!=null?element.device_id:'0'}} </td>
+      </ng-container>
+      <ng-container matColumnDef="amd_id">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Alt.ID</th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.amd_id!=null?element.amd_id:'0'}} </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="edit">
+
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> Edit</th>
+        <td class="p-table-5 " mat-cell *matCellDef="let element;let i = index">
+
+          <!-- Rahul change(Using Event delegation for optimising ) the app performance ******************* -->
+          <!-- Previous code-->
+          <!-- <svg (click)="editUser(i)" [attr.index] = 'i' class="use-svg edit" symbol="edit" [w]="16" style="color: var(--col-primary-300);"></svg> -->
+          <!-- new code -->
+          <svg tabindex="0" (keydown.enter)="onClickHost($event)" [attr.index]='i' class="use-svg edit" symbol="edit" [w]="20"
+            ></svg>
+          <!-- ****************************************************** -->
+        </td>
+      </ng-container>
+
+
+      <ng-container matColumnDef="disable">
+        <th class="p-table-5 " mat-header-cell *matHeaderCellDef> Disable</th>
+        <td class="p-table-5 " mat-cell *matCellDef="let element;let i = index">
+          <!-- Rahul change(Using Event delegation for optimising ) the app performance ******************* -->
+          <!-- Previous code-->
+          <!-- <button class="action--btn "  (click)="setId(i); disableEmppopupopen()"
+          [disabled]="element.staging_status !== null ? true : false"
+          [ngClass]="element.staging_status !== null ? 'disable--emp-btn' : ' '" style="border: none;cursor: pointer;  "
+          title="{{element.staging_status === null ? '':'Employee will be disabled on'+' ' +element.staging_relieved}}"
+          svg-fill="currentColor"> -->
+          <!-- ****************************************************** -->
+          <!-- new code -->
+          <button class="action--btn disable" [attr.index]='i'
+            [disabled]="element.staging_status !== null ? true : false"
+            [ngClass]="element.staging_status !== null ? 'disable--emp-btn' : ' '"
+            style="border: none;cursor: pointer;  "
+            title="{{element.staging_status === null ? '':'Employee will be disabled on'+' ' +element.staging_relieved}}"
+            svg-fill="currentColor">
+            <svg class="use-svg" symbol="disable" [w]="20"></svg>
+
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <!-- ****************************************************************************************
+******************************************************************************
+***************************************************************************** -->
+  <div *ngIf="USERS_DATA.length==0 && show_message==true" class="p-20 fs-14 col-primary-300">
+    NO DATA AVAILABLE
+  </div>
+
+  <!-- **************************************************************
+************************************************************ -->
+  <!-- Rahul change(no need some field in editUser popup change into modelpopup) ************************************
+ ************************************************* -->
+  <ng-template #editEmppopup>
+    <form class="fs-14 flex col nowrap center-xs" [formGroup]="editUserForm" (ngSubmit)="updateEmp()">
+
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input autocomplete="off" matInput formControlName="emp_name">
+        <mat-error *ngIf="editUserForm.controls.emp_name.touched && editUserForm.controls.emp_name.hasError('required')">
+          Email is required
+         </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Email</mat-label>
+        <input autocomplete="off" matInput formControlName="email">
+        <mat-error *ngIf="editUserForm.controls.email.touched && editUserForm.controls.email.hasError('required')">
+         Email is required
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>HID</mat-label>
+        <input autocomplete="off" matInput formControlName="device_id">
+        <mat-error *ngIf="editUserForm.controls.device_id.touched && editUserForm.controls.device_id.hasError('pattern')">
+          Allowed Number Only
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Alt.ID</mat-label>
+        <input autocomplete="off" matInput formControlName="amd_id">
+        <mat-error *ngIf="editUserForm.controls.amd_id.touched && editUserForm.controls.amd_id.hasError('pattern')">
+          Allowed Number Only
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option [value]="category['id']" *ngFor="let category of ALL_CATEGORIES">{{category['name']}}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="editUserForm.controls.category.touched && editUserForm.controls.category.hasError('required')">
+          Please Select Category
+        </mat-error>
+      </mat-form-field>
+      <!-- <mat-form-field>
+        <mat-label>Group</mat-label>
+        <mat-select formControlName="company">
+          <mat-option [value]="grp" *ngFor="let grp of GROUPS_DATA">{{grp}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="editUserForm.controls.company.touched && editUserForm.controls.company.hasError('required')">
+          Please select Group
+        </mat-error>
+      </mat-form-field> -->
+      <mat-form-field>
+        <mat-label>Location</mat-label>
+        <mat-select formControlName="location">
+          <mat-option [value]="location.id" *ngFor="let location of ALL_LOCATIONS">{{location.name}}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="editUserForm.controls.location.touched && editUserForm.controls.location.hasError('required')">
+          Please select Location
+        </mat-error>
+      </mat-form-field>
+      <mat-label class="mb-10 " style="display:block;color: var(--col-primary-300);">Gender</mat-label>
+      <mat-radio-group formControlName="gender">
+        <mat-radio-button class="mr-10 mb-5 ml-5" style="color: var(--col-primary-300);" [value]="gender['id']"
+          *ngFor="let gender of ALL_GENDERS">{{gender['name']}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-error *ngIf="editUserForm.controls.gender.touched && editUserForm.controls.gender.hasError('required')">
+        Please select Gender
+      </mat-error>
+        <!-- upload image formcontroller ----> 
+      <!-- <div class="flex col flex-row-md fs-14  mb-xmd-0  start-xs ">
+          <input style="display: none" type="file" id="file-id"  autocomplete="off" (click)="reSetInput($event)" (change)="onFileChanged($event)"  #fileInput>
+        
+            <button type="button" class="flex flex-row-md   mb-xmd-0  start-xs bottom-md remove-btn-style" (click)="fileInput.click()">
+              <svg class=" mr-5 use-svg col-accent-500"  symbol="user"  w="20" svg-fill="currentColor">
+              </svg>
+             Upload Image 
+            </button>
+            <p class="danger" *ngIf="SupportImageType">Only jpg/png/jpeg images allowed</p>
+            <p class="danger" *ngIf="SupportImageSize">Image size shuold be less then 200kb</p>
+            <p class="danger" *ngIf="getImageHeightIsValid" >Image height and width should be 200X200 px </p>
+      </div> -->
+           <!-- ************************* -->
+      <div class="center-xs  mt-20 pb-20" mat-dialog-actions >
+        <!-- <div style="display: inline-block; text-align: center;padding-left: 10px;">
+            <app-button size='small' theme="grey" type="button" (click)="close()">Close</app-button>
+        </div> -->
+        <div style="display: inline-block; text-align: center;">
+          <app-button size='small' theme="success" type="submit" [disabled]="editUserForm.invalid">Update</app-button>
+        </div>
+
+
+      </div>
+    </form>
+  </ng-template>
+  <!-- **************************************************************
+************************************************************ -->
+<!-- --------------------------- -->
+  <!-- rahul change added custom date(disable-employee popup) *****************************
+            ******************************************************************* -->
+  <ng-template #disableEmppopup>
+    <div class=" p-15 flex col nowrap center-xs">
+      <p class="col-primary-400">
+        You want to disable :
+      </p>
+      <div class="fs-18 mb-30 delete__emp">
+        {{ userName ? userName : '' }}
+      </div>
+      <!-- <div class="delete__emp">
+            <p> <span> </span> </p>
+        </div> -->
+      <form class="fs-14" [formGroup]="deleteUserForm">
+        <mat-form-field class="custompicker w-100">
+
+          <mat-label>Relieved Date</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="dol" autocomplete="off" (keydown)="false"
+            (click)="picker.open()" (dateChange)="onDate($event)">
+          <svg matDatepickerToggleIcon (click)="picker.open()" matSuffix class="use-svg" symbol="calendar" w="20"></svg>
+          <!-- <div  
+            [svgIcon]="{url: './assets/icons-sprite-new.svg#calendar',w:20}" style="
+            color: var(--col-primary-300); 
+            cursor: pointer; 
+          " svg-fill="currentColor">
+          </div> -->
+
+          <mat-datepicker [touchUi]="IS_mobile" (selectedChanged)="onDate($event)" #picker></mat-datepicker>
+          <mat-error *ngIf="deleteUserForm.controls.dol.touched || deleteUserForm.controls.dol.touched ">
+            Please select Relieving Date
+          </mat-error>
+        </mat-form-field>
+
+        <!-- <mat-form-field appearance="legacy" class="no-pb atai-date-range">
+            <app-atai-date-range [minDate]="minDate" [maxDate]="maxDate" [allowSameDateRange]="true" [showInput]="true"
+              [showPresets]="true" (dateSelected)="onDateSelection($event)"></app-atai-date-range>
+          </mat-form-field> -->
+      </form>
+      <div class="flex mt-40 end-xs" style="justify-content: center;align-items: center;">
+        <!-- <app-button theme="black" size="small" theme="grey"class="mr-30 zeros-project-cancel" (click)="disableEmpclose()">Cancel</app-button> -->
+        <app-button size="small"  [disabled]="deleteUserForm.invalid" theme="success" class="zeros-project-proceed" (click)="proeceedDisable()">Proceed
+        </app-button>
+      </div>
+    </div>
+  </ng-template>
+  <!-- **************************************************************
+************************************************************ --> 
+  <!-- Rahul change (template refrance added for the getting error masg while disabling the employee)*****************-->
+  <ng-template #errorOnDisablePopup>
+    <div class=" flex col nowrap center-xs" style="gap:1em;">
+      <div class="flex center-xs">
+        <svg class="use-svg" symbol="yellow_alert" w="40"
+          style=" color: var(--col-primary-300); margin-top: 0px;"></svg>
+      </div>
+      <h1 class="fs-14 col-primary-100">{{errorMessage}}</h1>
+      <app-button size="small" theme="success" class="zeros-project-proceed" (click)="disableerorrpopup()">Got it
+      </app-button>
+    </div>
+  </ng-template>
+  <!-- *************************************************************************************************************** -->
+
+  <ng-template #successOnDisablePopup>
+    <div class=" flex col nowrap center-xs" style="gap:1em;">
+      <div class="flex center-xs">
+        <svg class="use-svg" symbol="success-tick-circle" w="40" style=" color: var(--col-primary-300);  "></svg>
+      </div>
+      <h1 class="fs-14 col-primary-100">{{delete_emp_success_msg}}</h1>
+      <app-button size="small" theme="success" class="zeros-project-proceed" (click)="disableerorrpopup()">Done
+      </app-button>
+    </div>
+  </ng-template>

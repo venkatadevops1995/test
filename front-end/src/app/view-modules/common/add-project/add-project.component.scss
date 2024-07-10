@@ -1,0 +1,17 @@
+.virtual-scroll {
+    height: 350px;
+    overflow-x: hidden;
+}
+
+mat-option {
+    height: 60px;
+    font-size: 16px;
+}
+
+::ng-deep .mat-autocomplete-panel.single-autocomplete {
+    max-height: 500px;
+}
+
+.virtual-scroll ::ng-deep .cdk-virtual-scroll-orientation-vertical .cdk-virtual-scroll-content-wrapper {
+    width: 100%;
+}

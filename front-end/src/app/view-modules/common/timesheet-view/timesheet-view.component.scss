@@ -1,0 +1,110 @@
+:host {
+  // min-width: 850px; 
+  display: flex;
+  flex-direction: column;
+  display: block;
+  .wsr__sel-project {
+    color: #333;
+    position: absolute;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-flex;
+    &.disabled {
+      pointer-events: none;
+      color: #999;
+    }
+    .wsr__sel-project-toggle{
+      border:1px solid var(--col-primary-100);
+      border-radius: 15px;
+      font-size: 10px;
+      padding:5px 5px;
+      cursor: pointer;
+      color:var(--col-primary-100);
+    }
+    .wsr__sel-project-list {
+      position: absolute;
+      top: calc(100% + 10px);
+      width: 180px;
+      left: 0;
+      background: var(--col-primary-100);
+      color: var(--on-primary-100);
+      box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+      border-radius: 5px;
+      max-height: 200px;
+      overflow: auto;
+      z-index: 11;
+      font-size: 12px;
+      padding-bottom:10px;
+      div {
+        height: 40px;
+        line-height: 40px;
+        padding: 0 15px;
+        cursor: pointer;
+        &:hover {
+          background: var(--col-primary-200);
+        }
+      }
+    }
+  }
+  .wsr__text-area-wrap{
+    display: grid;
+    grid-template-columns: 60% 1fr;
+    column-gap: 30px; 
+  }
+  .wsr__project-text {
+    width: 100%;
+    height: 100px;
+    border: none;
+    background: var(--col-primary-900);
+    border-radius: 10px;
+    resize: vertical;
+    color:var(--col-primary-200);
+    display: block;
+    padding:20px;
+    &:focus{
+      box-shadow: 0px 6px 20px rgb(119 119 119 / 9%);
+    }
+  }
+  .wsr__project-name { 
+    display: flex;
+    color: var(--col-primary-50);
+    padding: 10px 10px;
+    position: relative;
+    font-size: 14px;
+    &:before{
+      content:"";
+      height: 60%;
+      width:2px;
+      background: var(--col-accent-500);
+      position: absolute;
+      left: 0px;
+      top:20%;
+    }
+  }
+  .wsr__char-count{
+    font-size:12px; 
+    font-weight: 500;
+    margin:0; 
+    color:var(--col-primary-200);
+    border-radius: 5px;
+  }
+  .wsr__char-count.error{
+    background:red;
+  }
+  ::placeholder{
+    font-size: 12px;
+  }
+}
+@media screen  and (max-width:768px){
+  :host{
+    .wsr__text-area-wrap{
+      grid-template-columns: 1fr;
+    }
+    .wsr__sel-project {
+      position: relative;
+    }
+  }
+}
+.grey{
+ background-color: var(--col-primary-200);
+}

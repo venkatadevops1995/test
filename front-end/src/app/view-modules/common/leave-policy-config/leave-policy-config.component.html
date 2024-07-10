@@ -1,0 +1,144 @@
+<div class="dummy" appFocus></div>
+<div>
+  <div>
+    <div class="policy-grid-wrap">
+      <ng-container *ngIf="is_LG_LT;">
+        <div style="overflow-x:auto;overflow-y:hidden;" #refLeaveCreditContainer>
+          <div class="flex policy-min-width  mt-60 " >
+            <ng-container *ngTemplateOutlet="templateEmployeeType;context:translateLeaveCredit;"></ng-container>
+            <ng-container [ngTemplateOutlet]="templateLeaveCreditDefault"></ng-container>
+          </div>
+        </div>
+        <div style="overflow-x:auto;overflow-y:hidden;"  #refNewHireContainer>
+          <div class="flex mt-60 pt-60 policy-min-width">
+            <ng-container *ngTemplateOutlet="templateEmployeeType;context:translateNewHire;"></ng-container>
+            <ng-container [ngTemplateOutlet]="templateLeaveCreditNewHire"></ng-container>
+          </div>
+        </div>
+      </ng-container>
+      <ng-container *ngIf="!is_LG_LT;">  
+            <ng-container [ngTemplateOutlet]="templateEmployeeType"></ng-container>
+            <ng-container [ngTemplateOutlet]="templateLeaveCreditDefault"></ng-container>
+            <ng-container [ngTemplateOutlet]="templateLeaveCreditNewHire"></ng-container> 
+      </ng-container>
+    </div>
+    <!-- <div class="flex center-xs mt-20" *ngIf="leaveCredits?.inEdit.length > 1">
+      <app-button class="policy-grid-cancel-all" theme="black" (click)="resetEmpTypeRows('cancel-all')" size="default"
+        class="mr-20">Cancel All
+      </app-button>
+      <app-button class="policy-grid-save-all" theme="blue-lite" [attr.data-grid]="'leave-credit-grid'" size="default">
+        Save All</app-button>
+    </div> -->
+  </div>
+</div>
+ 
+
+<ng-template #templateEmployeeType let-translateX="value">
+  <div class="policy-grid-left-header pr-5 pos-r  primary-A100" [ngStyle]="{'z-index':10, 'grid-template-rows':'50px 1fr',transform:'translateX('+translateX+'px)'}">
+    <div class="policy-grid-cell"></div>
+    <div class="policy-grid-cell br-10 mt-5 header-gradient fs-11 fs-md-12 col-primary-200 fw-500 "
+      style="display: grid;height:auto;" [ngStyle]="{'grid-row': '2 / span '+(employeeTypes.length), 'grid-template-rows' : 'repeat('+(employeeTypes.length)+', 50px)'}">
+      <ng-container *ngFor="let empType of employeeTypes">
+        <div class="policy-grid-cell  " *ngIf="empType.status != 0">
+          {{empType?.name}} 
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateLeaveCreditDefault>
+
+  <div class="policy-grid-right pos-r" (click)="onClickLeaveCreditGrid($event,'leave-credit-default');"
+    #refPolicyLeaveCredit [ngStyle]="{'grid-template-columns':'repeat('+(leaveTypes.length + 1)+',1fr)'}">
+    <h2 class="heading">Leave Policy Configuration</h2>
+    <div class="policy-grid-cell col-primary-100  header-gradient br-10 fs-12 fs-md-14"
+      [ngStyle]="{'grid-column': 'span '+(leaveTypes.length+1), 'grid-template-columns' : 'repeat('+(leaveTypes.length+1)+', 1fr)'}"
+      style="display: grid;justify-items: center;padding:0px;">
+      <ng-container *ngFor="let leaveType of leaveTypes">
+        <div class="pl-15 pr-15 w-100 flex center-xs">
+          {{leaveType?.name == "Paid" ? "General" : leaveType?.name}}
+        </div>
+      </ng-container>
+    </div>
+    <div class="policy-grid-data mt-5 action primary-A200" style="display: grid; "
+      [ngStyle]="{'grid-column': 'span '+(leaveTypes.length+1), 'grid-template-columns':'repeat('+(leaveTypes.length + 1)+',1fr)','grid-template-rows' : 'repeat('+(employeeTypes.length)+', 50px)',height:(employeeTypes.length*50)+'px'}">
+
+      <ng-container *ngFor="let leaveCredit of leaveCredits?.data;let i=index">
+
+        <ng-container *ngIf="employeeTypesAll[i].status != 0">
+
+          <ng-container *ngFor="let leaveType of leaveCredit.leave_type_credits;">
+            <div class="policy-grid-cell  fs-12 fs-md-14">
+              <span *ngIf="!leaveCredit?.edit || leaveType?.status == 0">
+                {{leaveType?.status == 0 ? 'NA' : leaveType?.value }}
+              </span>
+              <input class="input-leave-policy-config" [class.special-leaves]="leaveType?.type != 'paid'" [class.no-entry]="!leaveType.value && leaveType.value != 0" type="number" [attr.step]="leaveType?.type == 'paid' ? 0.5 : 1" min="0" [(ngModel)]="leaveType.value" *ngIf="leaveCredit?.edit && leaveType?.status != 0" />
+            </div>
+          </ng-container>
+
+          <div class="policy-grid-cell action">
+
+            <svg tabindex="0"  class="policy-grid-edit-icon  use-svg" symbol="edit" w="20" [attr.data-index]="i"
+              [attr.data-emp-type-id]="leaveCredit.category_id" *ngIf="!leaveCredit?.edit" svg-fill="currentColor">
+            </svg>
+
+            <svg class="policy-grid-save-button use-svg" symbol="tick-circle" w="20" [attr.data-index]="i"
+              [attr.data-emp-type-id]="leaveCredit.category_id" *ngIf="leaveCredit?.edit"></svg>
+
+            <svg class="policy-grid-close-icon use-svg ml-5" symbol="circle-close-red" w="25" [attr.data-index]="i"
+              [attr.data-emp-type-id]="leaveCredit.category_id" *ngIf="leaveCredit?.edit"></svg>
+
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #templateLeaveCreditNewHire>
+
+  <div class="policy-grid-right ml-5  pos-r" (click)="onClickLeaveCreditGrid($event,'leave-credit-new-hire');"
+    #refPolicyLeaveCreditNewHire
+    [ngStyle]="{'grid-template-columns':'repeat('+(newHireTimePeriods.length + 1)+', 1fr)'}">
+    <h2 class="heading">Joining Month Leave Credit</h2>
+    <div class="grid header-gradient br-10 fs-14 col-primary-100"
+      [ngStyle]="{'grid-column': 'span '+(newHireTimePeriods.length + 1),'grid-template-columns':'repeat('+(newHireTimePeriods.length + 1)+', 1fr)'}">
+      <ng-container *ngFor="let timePeriod of newHireTimePeriods">
+        <div class="policy-grid-cell  fs-12 fs-md-14">
+          {{timePeriod?.start_date}} - {{timePeriod?.end_date}}
+        </div>
+      </ng-container>
+    </div>
+    <!-- <div class="policy-grid-cell action">
+</div> -->
+    <div class="grid primary-A200 mt-5 "
+      [ngStyle]="{'grid-column': 'span '+(newHireTimePeriods.length + 1),'grid-template-columns':'repeat('+(newHireTimePeriods.length + 1)+', 1fr)','grid-template-rows' : 'repeat('+(employeeTypes.length)+', 50px)',height:(employeeTypes.length*50)+'px'}">
+      <ng-container *ngFor="let leaveCredit of leaveCreditsNewHire?.data;let i=index">
+        <ng-container *ngIf="employeeTypesAll[i].status != 0">
+          <ng-container *ngFor="let leaveType of leaveCredit.leave_type_credits ;">
+            <div class="policy-grid-cell  fs-12 fs-md-14">
+              <span *ngIf="!leaveCredit?.edit || leaveType?.status == 0">
+                {{leaveType?.status == 0 ? 'NA' : (leaveType?.value) }}
+              </span>
+              <input class="input-leave-policy-config"  [class.no-entry]="!leaveType.value && leaveType.value != 0" type="number" step="0.5" min="0" [(ngModel)]="leaveType.value"
+                *ngIf="leaveCredit?.edit && leaveType?.status != 0" />
+            </div>
+          </ng-container>
+          <div class="policy-grid-cell action">
+
+            <svg tabindex="0" class="policy-grid-edit-icon  use-svg" symbol="edit" w="20" [attr.data-index]="i"
+              [attr.data-emp-type-id]="leaveCredit.category_id" *ngIf="!leaveCredit?.edit" svg-fill="currentColor">
+            </svg>
+
+            <svg class="policy-grid-save-button use-svg" symbol="tick-circle" w="20" [attr.data-index]="i"
+              [attr.data-emp-type-id]="leaveCredit.category_id" *ngIf="leaveCredit?.edit"></svg>
+
+            <svg class="policy-grid-close-icon use-svg ml-5" symbol="circle-close-red" w="25" [attr.data-index]="i"
+              [attr.data-emp-type-id]="leaveCredit.category_id" *ngIf="leaveCredit?.edit"></svg>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>

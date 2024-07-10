@@ -1,0 +1,35 @@
+<div class="atai-date-range" *ngIf="showInput" [class.disabled]="disabled">
+  <div class="atai-date-range__input" style="font-size: inherit;" #dateField>
+    <mat-form-field  tabindex="-1" color="accent" appearance="legacy" (click)="disabled ? null :openDateRangePicker()">
+      <mat-label>{{label}}</mat-label>
+      <input  tabindex="-1" matInput autocomplete="off" #input placeholder="Select Date" [attr.value]="dateMeta.dateString">
+    </mat-form-field>
+    <svg tabindex="0" #iconSvg (click)="disabled ? null :openDateRangePicker()" class="atai-date-range__calendar-icon pointer use-svg"
+      symbol="calendar" [w]="20"></svg> 
+  </div>
+</div>
+<ng-template #calendarTemplate>
+  <div class="atai-calendar">
+    <div>
+      <div class="atai-date-range__calendar">
+        <div *ngIf="showPresets" class="selection-presets">
+          <div *ngFor="let preset of selectionPresets;let i = index;" tabindex="0" [attr.data-index]="i"
+            [attr.id]="preset.id" [class.selected]="dateMeta.dateString == preset.str" class="selection-preset">
+            {{preset.str}}</div>
+        </div>
+        <mat-calendar (mouseover)="onHover($event)" readonly style="width:100%; height:auto" [dateClass]="dateClass"
+          [selected]="dateMeta.selectedRange" (selectedChange)="onSelect($event)" [minDate]="minDate"
+          [startAt]="this._model?.selection?.start || startDate" [maxDate]="maxDate" (monthSelected)="changeMonth($event)"
+          (_userSelection)="_handleUserSelection($event)">
+        </mat-calendar>
+        <!-- <div class="buttons mb-10 w-90"
+          style="display: grid;justify-content: center; grid-template-columns: repeat(2,1fr);margin-left: 5%;column-gap: 10px;">
+          <button mat-raised-button color="primary" id="cancel-date-selection"
+            (click)="onClickCancel()">Cancel</button>
+          <button mat-raised-button color="accent" id="apply-date-selection"
+            (click)="onClickApply()">Apply</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</ng-template>

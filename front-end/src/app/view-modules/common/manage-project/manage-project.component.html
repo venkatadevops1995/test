@@ -1,0 +1,452 @@
+<div class="dummy" appFocus></div>
+<div>
+  <form #searchForm="ngForm" [formGroup]="fgSearch" (ngSubmit)="search(managerCtrl.value)">
+
+    <div class="flex nowrap flex-col-xs flex-row-xmd  between-xs mb-20 middle-xmd">
+      <h2 class="col-accent-500 fs-24 fw-600">
+        Project change
+      </h2>
+      <div class="flex fs-14 w-md-60 w-xmd-50 end-xmd bottom-xs mt-15 mt-xmd-0 ">
+
+        <mat-form-field class="w-50  mr-30 no-pb top-form-field single-row">
+          <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="managerCtrl"
+            [(ngModel)]="value">
+          <svg matSuffix class="col-primary-300 use-svg" (click)="clear()" symbol="triangle-down" w="8"></svg>
+          <mat-autocomplete class="fs-14" #auto="matAutocomplete">
+            <mat-option *ngFor="let state of filteredManagers | async" [value]="state.emp_name">
+              {{state.emp_name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <div class="flex end-xs middle-xs">
+        <app-button [size]="is_XMD_LT ? 'small' : 'default'">Submit
+        </app-button>
+        </div>
+      </div>
+      <!-- <div *ngIf="showMisDownload" class="fs-18 p-10 download-bn" style="color: #067bca;cursor:pointer;justify-content:space-between;" [dbdFileDownload]="{endPoint:'downloadmis/?',responseType:'blob'}">
+                MIS
+                <span [svgIcon]="{url:'./assets/icons-sprite.svg#download',w:15}" style="color:var(--color-tertiary);" svg-fill="currentColor" class="ml-5 mt-3"></span>
+            </div> -->
+    </div>
+
+  </form>
+  <!-- <form [formGroup]="filterForm">
+        <h2 style="color:var(--color-primary)">
+            Search Employee
+        </h2>
+        <div class="w-50 flex">
+            <div>
+                <mat-form-field style="width:250px; margin: 5px;">
+                    <mat-label>Search</mat-label>
+                    <input type="text" autocomplete="off" placeholder="Enter search text" aria-label="Number" matInput formControlName="filter">
+                </mat-form-field>
+            </div>
+            <div style="margin: 10px 5px;">
+                <app-button size='default' theme="blue-lite" type="button" w="130" (click)="filterForm.reset()">Reset</app-button>
+            </div>
+        </div>
+    </form> -->
+</div>
+
+<!-- Rahul change(adding a horizontal-scroll-bar for table)*****************************************
+  **********************************************************************
+  ************************************************************ -->
+<div style="width:100%; overflow-x: auto;" *ngIf="EMP_PROJECTS_FILTERED_DATA.length!=0" [tableAffix]>
+  <table mat-table style="min-width:1024px;" [dataSource]="EMP_PROJECTS_FILTERED_DATA" class="mat-elevation-z8 w-100">
+    <colgroup>
+      <col width='120'/>
+      <col width='150'/>
+      <col width='250'/>
+      <col width="130"/>
+      <col width="180"/>
+      <col width="180"/>
+      <col width="180"/>
+      <col width="70"/>
+    </colgroup>
+    <ng-container matColumnDef="serial_no">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> S.NO </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element;let i =index;"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' "> {{i+1}} </td>
+
+    </ng-container>
+
+    <ng-container matColumnDef="emp_name">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Name </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+      [style.cursor]="element.staging_status !== null ? 'pointer': ' '"
+      title="{{element.staging_status !== null ? 'Employee will be disabled on'+ ' '+element.staging_relieved : ''}}"
+      [ngClass]="element.staging_status !== null ? 'disabled--emp':'' "> {{element.emp_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="company">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Group </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        {{element.company}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="staff_no">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef>Staff No. </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        {{element.staff_no}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="proj1">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef > Project 1 </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;" *ngIf="element.staged_proj1.id !== ''" class='fc_blue'
+          tooltip="Current Project: <span class='col-accent-500'>{{element.proj1?.name}}</span>" placement="bottom">
+          {{element.staged_proj1?.name}}</div>
+        <div style="display:inline;" *ngIf="element.staged_proj1.id === ''">{{element.proj1?.name}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="proj2">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef > Project 2</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;" *ngIf="element.staged_proj2.id !== ''" class='fc_blue'
+          tooltip="Current Project: <span class='col-accent-500'>{{element.proj2?.name}}</span" placement="bottom">
+          {{element.staged_proj2?.name}}</div>
+        <div style="display:inline;" *ngIf="element.staged_proj2.id === ''">{{element.proj2?.name}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="proj3">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef > Project 3</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;" *ngIf="element.staged_proj3.id !== ''" class='fc_blue'
+          tooltip="Current Project: <span class='col-accent-500'>{{element.proj3?.name}}</span" placement="bottom">
+          {{element.staged_proj3?.name}}</div>
+        <div style="display:inline;" *ngIf="element.staged_proj3.id === ''">{{element.proj3?.name}}</div>
+      </td>
+    </ng-container>
+
+    <!-- 
+<div style="width:100%; overflow-x: auto;">
+  <table mat-table [dataSource]="EMP_PROJECTS_FILTERED_DATA" *ngIf="EMP_PROJECTS_FILTERED_DATA.length!=0"
+    class="mat-elevation-z8 w-100">
+    <ng-container matColumnDef="serial_no">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> S.NO </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element;let i =index;"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' "> {{i+1}} {{element.staging_status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="emp_name">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Name </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div placement="bottom"
+          tooltip="{{element.staging_status !== null ? 'Employee will be disbled on'+ ' '+element.staging_relieved : ''}}">
+          {{element.emp_name}}
+        </div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="company">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Group </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        {{element.company}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="staff_no">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef>Staff No. </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        {{element.staff_no}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="proj1">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef style="width:20%;"> Project 1 </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;" *ngIf="element.staged_proj1.id !== ''" class='fc_blue'
+          tooltip="Current Project: <span class='col-accent-500'>{{element.proj1?.name}}</span>" placement="bottom">
+          {{element.staged_proj1?.name}}</div>
+        <div style="display:inline;" *ngIf="element.staged_proj1.id === ''">{{element.proj1?.name}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="proj2">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef style="width:20%;"> Project 2</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;" *ngIf="element.staged_proj2.id !== ''" class='fc_blue'
+          tooltip="Current Project: <span class='col-accent-500'>{{element.proj2?.name}}</span" placement="bottom">
+          {{element.staged_proj2?.name}}</div>
+        <div style="display:inline;" *ngIf="element.staged_proj2.id === ''">{{element.proj2?.name}}</div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="proj3">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef style="width:20%;"> Project 3</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;" *ngIf="element.staged_proj3.id !== ''" class='fc_blue'
+          tooltip="Current Project: <span class='col-accent-500'>{{element.proj3?.name}}</span" placement="bottom">
+          {{element.staged_proj3?.name}}</div>
+        <div style="display:inline;" *ngIf="element.staged_proj3.id === ''">{{element.proj3?.name}}</div>
+      </td>
+    </ng-container>
+
+ 
+    <ng-container matColumnDef="proj1">
+        <th mat-header-cell  *matHeaderCellDef style="width:20%;"> Project 1 </th>
+        <td mat-cell *matCellDef="let element">
+            <div style="display:inline;" *ngIf="element.staged_proj1.id !== ''" class='fc_blue' tooltip="Current Project: {{element.proj1?.name}}" placement="bottom">{{element.staged_proj1?.name}}</div>
+            <div style="display:inline;" *ngIf="element.staged_proj1.id === ''">{{element.proj1?.name}}</div>
+        </td>
+    </ng-container>
+
+    <ng-container matColumnDef="proj2">
+        <th mat-header-cell *matHeaderCellDef style="width:20%;"> Project 2</th>
+        <td mat-cell *matCellDef="let element" [ngClass]= "element.staging_status !== null ? 'disabled--emp':' ' " >
+            <div style="display:inline;" *ngIf="element.staged_proj2.id !== ''" class='fc_blue' tooltip="Current Project: {{element.proj2?.name}}" placement="bottom">{{element.staged_proj2?.name}}</div>
+            <div style="display:inline;" *ngIf="element.staged_proj2.id === ''">{{element.proj2?.name}}</div>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="proj3">
+        <th mat-header-cell *matHeaderCellDef style="width:20%;"> Project 3</th>
+        <td mat-cell *matCellDef="let element" [ngClass]= "element.staging_status !== null ? 'disabled--emp':' ' " >
+            <div style="display:inline;" *ngIf="element.staged_proj3.id !== ''" class='fc_blue' tooltip="Current Project: {{element.proj3?.name}}" placement="bottom">{{element.staged_proj3?.name}}</div>
+            <div style="display:inline;" *ngIf="element.staged_proj3.id === ''">{{element.proj3?.name}}</div>
+        </td>
+    </ng-container> -->
+
+
+    <ng-container matColumnDef="edit">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Edit</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element;let i = index"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <!-- <button type="button" style="border: none;background-color: #f6fafd;" (click)="openEditDialog(i)"><span class="material-icons">
+                mode_edit
+                </span></button> -->
+        <!-- rahul changes(icons-sprite-new) ************************************
+        ****************************************************** -->
+        <!-- Rahul change(Using Event delegation for optimising ) the app performance ******************* -->
+        <!-- Previous code-->
+        <!--  <svg (click)="openEditDialog(i)" class="use-svg col-primary-300" symbol="edit" w="16" ></svg> -->
+        <!-- ****************************************************** -->
+        <!-- new code -->
+        <svg tabindex="0" (keydown.enter)="onClickHost($event)" [attr.index]='i' class="use-svg  edit" symbol="edit" w="20"></svg>
+        <!-- ************************************************************ -->
+      </td>
+    </ng-container>
+
+
+
+    <tr mat-header-row class="header-gradient" *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+
+
+  </table>
+</div>
+<!-- *****************************************
+  **********************************************************************
+  ************************************************************ -->
+<div *ngIf="EMP_PROJECTS_FILTERED_DATA.length==0 && showMessage == true" class="fs-14 col-primary-300">
+  NO DATA AVAILABLE
+
+</div>
+
+
+
+
+<!-- Rahul change(changing the EditProjectDialog structure)*******************************************
+ *************************************************************************************** -->
+<ng-template #EditProjectDialog>
+  <!-- <form class="flex col nowrap center-xs"[formGroup]="editUserForm" (ngSubmit)="updateEmp()">
+    </form> -->
+  <div class="fs-14 flex col nowrap center-xs">
+    <p  class="fs-18 mb-20" *ngIf="EmpName">{{EmpName}}</p>
+    <p class="mb-30" style="color:var(--col-primary-400);">
+      Modified projects should be effected from the next cycle
+    </p>
+    <ng-container>
+      <form class="fs-14" [formGroup]="editProjectForm" (ngSubmit)="addProject()">
+        <mat-form-field class="max-w250">
+          <mat-label>Project 1</mat-label>
+          <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="proj1"
+            [matAutocomplete]="autop1">
+          <mat-autocomplete class="fs-14" #autop1="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+              {{option['name']}}
+            </mat-option>
+          </mat-autocomplete>
+          <!-- <mat-error *ngIf="editProjectForm.touched && editProjectForm.controls.proj1.hasError('required')">
+                    Please select Project 1
+                </mat-error> -->
+        </mat-form-field>
+
+        <!-- <mat-form-field>
+                <mat-label>Project 2</mat-label>
+                <mat-select formControlName="proj2">
+                    <mat-option [value]="proj" *ngFor="let proj of PROJECTS">{{proj}}</mat-option>
+                </mat-select>
+
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Project 3</mat-label>
+                <mat-select formControlName="proj3">
+                    <mat-option [value]="proj" *ngFor="let proj of PROJECTS">{{proj}}</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+
+        <mat-form-field class="mt-15 max-w250">
+          <mat-label>Project 2</mat-label>
+          <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="proj2"
+            [matAutocomplete]="autop2">
+          <mat-autocomplete class="fs-14" #autop2="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions2 | async" [value]="option">
+              {{option['name']}}
+            </mat-option>
+          </mat-autocomplete>
+
+        </mat-form-field>
+
+        <mat-form-field class="mt-15 max-w250">
+          <mat-label>Project 3</mat-label>
+          <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="proj3"
+            [matAutocomplete]="autop3">
+          <mat-autocomplete class="fs-14" #autop3="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions3 | async" [value]="option">
+              {{option['name']}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+
+
+        <!-- <div formArrayName="projects" *ngFor="let item of getControls(); let i = index;">
+                <mat-form-field [formGroupName]="i">
+                    <mat-label>Project {{i + 1}}</mat-label>
+                    <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="p" [matAutocomplete]="autop">
+                    <mat-autocomplete #autop="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let option of filteredOptions4 | async" [value]="option">
+                            {{option['name']}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div> -->
+
+        <div class="flex mt-15 nowrap around-xs" mat-dialog-actions>
+          <!-- <div style="display: inline-block; text-align: center;">
+                    <app-button size='small' theme="blue-lite" type="button" (click)="closeEditDialog()">close</app-button>
+                </div> -->
+          <div style="display: inline-block; text-align: center;">
+            <app-button size='small' theme="blue-lite" type="submit" [disabled]="editProjectForm.invalid">Update
+            </app-button>
+          </div>
+        </div>
+
+      </form>
+    </ng-container>
+  </div>
+</ng-template>
+<!-- *******************************************************************************************************
+******************************************************************************************
+**************************************************************************** -->
+
+<!-- Rahul change(commenting the previous popup template)***************************************
+************************************************************************************** -->
+<!-- <app-modal-popup #editProjectDialog [w]="'350px'" [h]="'450px'">
+    <div head>
+        Edit Project
+    </div>
+    <p style="color: red;">
+        Modified projects should be effected from the next cycle
+    </p>
+    <ng-container>
+        <form [formGroup]="editProjectForm" (ngSubmit)="addProject()">
+            <mat-form-field class="max-w250">
+                <mat-label>Project 1</mat-label>
+                <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="proj1" [matAutocomplete]="autop1">
+                <mat-autocomplete #autop1="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                        {{option['name']}}
+                    </mat-option>
+                </mat-autocomplete> -->
+<!-- <mat-error *ngIf="editProjectForm.touched && editProjectForm.controls.proj1.hasError('required')">
+                    Please select Project 1
+                </mat-error> -->
+<!-- </mat-form-field> -->
+
+<!-- <mat-form-field>
+                <mat-label>Project 2</mat-label>
+                <mat-select formControlName="proj2">
+                    <mat-option [value]="proj" *ngFor="let proj of PROJECTS">{{proj}}</mat-option>
+                </mat-select>
+
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>Project 3</mat-label>
+                <mat-select formControlName="proj3">
+                    <mat-option [value]="proj" *ngFor="let proj of PROJECTS">{{proj}}</mat-option>
+                </mat-select>
+            </mat-form-field> -->
+
+<!-- 
+            <mat-form-field class="max-w250">
+                <mat-label>Project 2</mat-label>
+                <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="proj2" [matAutocomplete]="autop2">
+                <mat-autocomplete #autop2="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let option of filteredOptions2 | async" [value]="option">
+                        {{option['name']}}
+                    </mat-option>
+                </mat-autocomplete>
+
+            </mat-form-field>
+
+            <mat-form-field class="max-w250">
+                <mat-label>Project 3</mat-label>
+                <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="proj3" [matAutocomplete]="autop3">
+                <mat-autocomplete #autop3="matAutocomplete" [displayWith]="displayFn">
+                    <mat-option *ngFor="let option of filteredOptions3 | async" [value]="option">
+                        {{option['name']}}
+                    </mat-option>
+                </mat-autocomplete>
+            </mat-form-field> -->
+
+
+
+
+<!-- <div formArrayName="projects" *ngFor="let item of getControls(); let i = index;">
+                <mat-form-field [formGroupName]="i">
+                    <mat-label>Project {{i + 1}}</mat-label>
+                    <input type="text" placeholder="Pick one" aria-label="Number" matInput formControlName="p" [matAutocomplete]="autop">
+                    <mat-autocomplete #autop="matAutocomplete" [displayWith]="displayFn">
+                        <mat-option *ngFor="let option of filteredOptions4 | async" [value]="option">
+                            {{option['name']}}
+                        </mat-option>
+                    </mat-autocomplete>
+                </mat-form-field>
+            </div> -->
+
+
+
+
+
+<!-- 
+
+            <div mat-dialog-actions>
+                <div style="display: inline-block; text-align: center;">
+                    <app-button size='small' theme="blue-lite" type="submit" [disabled]="editProjectForm.invalid">Update</app-button>
+                </div>
+            </div>
+
+
+
+        </form>
+
+    </ng-container>
+</app-modal-popup> -->
+<!-- **********************************************************************************************
+***************************************************************************** -->
+
+
+<!-- ***************************************** -->

@@ -1,0 +1,117 @@
+@import "./ng-palette";
+body {
+    
+    // The primary color of the theme
+    --col-primary: #{map-get($md-primary, 500)};
+    --col-primary-50: #{map-get($md-primary, 50)};
+    --col-primary-100: #{map-get($md-primary, 100)};
+    --col-primary-200: #{map-get($md-primary, 200)};
+    --col-primary-300: #{map-get($md-primary, 300)};
+    --col-primary-400: #{map-get($md-primary, 400)};
+    --col-primary-500: #{map-get($md-primary, 500)};
+    --col-primary-600: #{map-get($md-primary, 600)};
+    --col-primary-700: #{map-get($md-primary, 700)};
+    --col-primary-800: #{map-get($md-primary, 800)};
+    --col-primary-900: #{map-get($md-primary, 900)};
+    --col-primary-A100: #{map-get($md-primary, A100)};
+    --col-primary-A200: #{map-get($md-primary, A200)};
+    --col-primary-A400: #{map-get($md-primary, A400)};
+    --col-primary-A700: #{map-get($md-primary, A700)};
+    --on-primary: #{map-get(map-get($md-primary,contrast), 500)};
+    --on-primary-50: #{map-get(map-get($md-primary,contrast), 50)};
+    --on-primary-100: #{map-get(map-get($md-primary,contrast), 100)};
+    --on-primary-200: #{map-get(map-get($md-primary,contrast), 200)};
+    --on-primary-300: #{map-get(map-get($md-primary,contrast), 300)};
+    --on-primary-400: #{map-get(map-get($md-primary,contrast), 400)};
+    --on-primary-500: #{map-get(map-get($md-primary,contrast), 500)};
+    --on-primary-600: #{map-get(map-get($md-primary,contrast), 600)};
+    --on-primary-700: #{map-get(map-get($md-primary,contrast), 700)};
+    --on-primary-800: #{map-get(map-get($md-primary,contrast), 800)};
+    --on-primary-900: #{map-get(map-get($md-primary,contrast), 900)};
+    --on-primary-A100: #{map-get(map-get($md-primary,contrast), A100)};
+    --on-primary-A200: #{map-get(map-get($md-primary,contrast), A200)};
+    --on-primary-A400: #{map-get(map-get($md-primary,contrast), A400)};
+    --on-primary-A700: #{map-get(map-get($md-primary,contrast), A700)};
+
+    // The accent color of the theme
+    --col-accent: #{map-get($md-accent, 500)};
+    --col-accent-50: #{map-get($md-accent, 50)};
+    --col-accent-100: #{map-get($md-accent, 100)};
+    --col-accent-200: #{map-get($md-accent, 200)};
+    --col-accent-300: #{map-get($md-accent, 300)};
+    --col-accent-400: #{map-get($md-accent, 400)};
+    --col-accent-500: #{map-get($md-accent, 500)};
+    --col-accent-600: #{map-get($md-accent, 600)};
+    --col-accent-700: #{map-get($md-accent, 700)};
+    --col-accent-800: #{map-get($md-accent, 800)};
+    --col-accent-900: #{map-get($md-accent, 900)};
+    --col-accent-A100: #{map-get($md-accent, A100)};
+    --col-accent-A200: #{map-get($md-accent, A200)};
+    --col-accent-A400: #{map-get($md-accent, A400)};
+    --col-accent-A700: #{map-get($md-accent, A700)};
+
+    // the text on the accent color
+    --on-accent: #{map-get(map-get($md-accent,contrast), 500)};
+    --on-accent-50: #{map-get(map-get($md-accent,contrast), 50)};
+    --on-accent-100: #{map-get(map-get($md-accent,contrast), 100)};
+    --on-accent-200: #{map-get(map-get($md-accent,contrast), 200)};
+    --on-accent-300: #{map-get(map-get($md-accent,contrast), 300)};
+    --on-accent-400: #{map-get(map-get($md-accent,contrast), 400)};
+    --on-accent-500: #{map-get(map-get($md-accent,contrast), 500)};
+    --on-accent-600: #{map-get(map-get($md-accent,contrast), 600)};
+    --on-accent-700: #{map-get(map-get($md-accent,contrast), 700)};
+    --on-accent-800: #{map-get(map-get($md-accent,contrast), 800)};
+    --on-accent-900: #{map-get(map-get($md-accent,contrast), 900)};
+    --on-accent-A100: #{map-get(map-get($md-accent,contrast), A100)};
+    --on-accent-A200: #{map-get(map-get($md-accent,contrast), A200)};
+    --on-accent-A400: #{map-get(map-get($md-accent,contrast), A400)};
+    --on-accent-A700: #{map-get(map-get($md-accent,contrast), A700)};
+
+    // The accent color of the theme
+    --col-warn: #{map-get($md-warn, 500)};
+    --col-warn-50: #{map-get($md-warn, 50)};
+    --col-warn-100: #{map-get($md-warn, 100)};
+    --col-warn-200: #{map-get($md-warn, 200)};
+    --col-warn-300: #{map-get($md-warn, 300)};
+    --col-warn-400: #{map-get($md-warn, 400)};
+    --col-warn-500: #{map-get($md-warn, 500)};
+    --col-warn-600: #{map-get($md-warn, 600)};
+    --col-warn-700: #{map-get($md-warn, 700)};
+    --col-warn-800: #{map-get($md-warn, 800)};
+    --col-warn-900: #{map-get($md-warn, 900)};
+    --col-warn-A100: #{map-get($md-warn, A100)};
+    --col-warn-A200: #{map-get($md-warn, A200)};
+    --col-warn-A400: #{map-get($md-warn, A400)};
+    --col-warn-A700: #{map-get($md-warn, A700)};
+
+
+    // the text on the accent color
+    --on-warn: #{map-get(map-get($md-warn,contrast), 500)};
+    --on-warn-50: #{map-get(map-get($md-warn,contrast), 50)};
+    --on-warn-100: #{map-get(map-get($md-warn,contrast), 100)};
+    --on-warn-200: #{map-get(map-get($md-warn,contrast), 200)};
+    --on-warn-300: #{map-get(map-get($md-warn,contrast), 300)};
+    --on-warn-400: #{map-get(map-get($md-warn,contrast), 400)};
+    --on-warn-500: #{map-get(map-get($md-warn,contrast), 500)};
+    --on-warn-600: #{map-get(map-get($md-warn,contrast), 600)};
+    --on-warn-700: #{map-get(map-get($md-warn,contrast), 700)};
+    --on-warn-800: #{map-get(map-get($md-warn,contrast), 800)};
+    --on-warn-900: #{map-get(map-get($md-warn,contrast), 900)};
+    --on-warn-A100: #{map-get(map-get($md-warn,contrast), A100)};
+    --on-warn-A200: #{map-get(map-get($md-warn,contrast), A200)};
+    --on-warn-A400: #{map-get(map-get($md-warn,contrast), A400)};
+    --on-warn-A700: #{map-get(map-get($md-warn,contrast), A700)};
+
+
+    // Miscelleneous colors
+    // --col-accent: #039be5;
+    --col-success: #{map-get($md-misc, 'success')};
+    --col-info:#{map-get($md-misc, 'info')};
+    --col-warning:#{map-get($md-misc,'warning')};
+    --col-error: #{map-get($md-warn, 900)};
+    --col-warn: #{map-get($md-warn, A100)};
+    --bg-body: #f5f5f5;
+    // Borders
+    --border-style: 1px solid rgba(128, 41, 41, 0.12);
+    --box-shadow-card: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
+}

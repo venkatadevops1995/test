@@ -1,0 +1,216 @@
+@import 'breakpoints';
+
+$columns: 12;
+
+$gutter-width: 30px;
+$half-gutter-width: $gutter-width / 2;
+$gutter-compensation: -1 * $half-gutter-width;
+
+body {
+    --flex-grid-gutter: 30px;
+    --flex-grid-gutter-half: calc(var(--flex-grid-gutter) / 2);
+}
+
+.flex {
+  display: flex;
+  flex: 0 1 auto;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  &.inline {
+    display: inline-flex;
+  }
+}
+
+@mixin grid-row ($reverse:false) {
+  @include grid-row-direction($reverse);
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  margin-right: calc(-1 * var(--flex-grid-gutter-half));
+  margin-left: calc(-1 * var(--flex-grid-gutter-half));
+}
+
+@mixin grid-row-direction ($reverse:false) {
+  @if ($reverse) {
+    flex-direction: row-reverse;
+  }
+
+  @else {
+    flex-direction: row;
+  }
+}
+
+@mixin grid-row-alignment-horizontal ($alignment) {
+  $justify: inherit;
+
+  @if ($alignment==center) {
+    $justify: center;
+  }
+
+  @elseif ($alignment==end) {
+    $justify: flex-end;
+  }
+
+  @elseif ($alignment==start) {
+    $justify: flex-start;
+  }
+
+  justify-content: $justify;
+  text-align: $alignment;
+}
+
+@mixin grid-row-alignment-vertical ($alignment) {
+  @if ($alignment==middle) {
+    align-items: center;
+  }
+
+  @else if ($alignment==bottom) {
+    align-items: flex-end;
+  }
+
+  @else {
+    align-items: flex-start;
+  }
+}
+
+@mixin grid-row-spacing ($spacing) {
+  justify-content: $spacing;
+}
+
+@mixin grid-column ($reverse:false) {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 1 auto;
+  flex-grow: 0;
+  flex-shrink: 0;
+  padding-right: var(--flex-grid-gutter-half);
+  padding-left: var(--flex-grid-gutter-half);
+}
+
+@mixin grid-column-direction ($reverse:false) {
+  @if ($reverse) {
+    flex-direction: column-reverse;
+  }
+
+  @else {
+    flex-direction: column;
+  }
+}
+
+@mixin grid-column-span ($columns-to-span:12, $total-columns-in-row:12) {
+  @if ($columns-to-span==auto) {
+    flex-grow: 1;
+    flex-basis: 0;
+    max-width: 100%;
+
+  }
+
+  @else {
+    $span-percentage: $columns-to-span / $total-columns-in-row;
+
+    flex-basis: $span-percentage * 100%;
+    max-width: $span-percentage * 100%;
+  }
+}
+
+@mixin grid-column-offset ($columns-to-offset, $total-columns-in-row:12) {
+  margin-left: ($columns-to-offset / $total-columns-in-row) * 100%;
+}
+
+@mixin grid-column-order ($position) {
+  @if ($position==last) {
+    $position: 9999;
+  }
+
+  @else if ($position==first) {
+    $position: -9999;
+  }
+
+  order: $position;
+}
+
+
+.row.nowrap,
+.flex.nowrap {
+  flex-wrap: nowrap;
+}
+
+.container-fluid {
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+
+.row {
+  @include grid-row;
+}
+
+.row.reverse {
+  @include grid-row-direction(true);
+}
+
+.col.reverse {
+  @include grid-column-direction($reverse:true);
+}
+
+.flex.col {
+  -ms-flex-direction: column;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  flex-direction: column;
+}
+
+@mixin example-viewport ($key) {
+  .col-#{$key} {
+    $str: "&";
+
+    @for $i from 1 through $columns {
+      $str: $str + ","+"&"+ "-"+ $i + ","+" &"+ "-offset-"+ $i;
+    }
+
+    @at-root #{$str} {
+      @include grid-column;
+    }
+
+    & {
+      // no idea why the indenting no longer works for this and why I need & {}
+      @include grid-column-span(auto);
+    }
+
+    @for $i from 1 through $columns {
+      &-#{$i} {
+        @include grid-column-span($i);
+      }
+
+      &-offset-#{$i} {
+        @include grid-column-offset($i);
+      }
+    }
+  }
+}
+
+@each $key,
+$value in $breakpoints {
+  @if ($key==xs) {
+
+    @include example-viewport($key);
+
+  }
+
+  @else {
+
+    $min-width: map-get($value, "min-width");
+
+    @media screen and (min-width: $min-width) {
+      @include example-viewport($key);
+
+      .container {
+        width: $min-width;
+      }
+    }
+
+  }
+}

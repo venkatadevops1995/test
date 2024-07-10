@@ -1,0 +1,104 @@
+<div class="dummy" appFocus></div>
+<div class="flex mb-20  flex-row-xmd flex-col-xs">
+  <h1  class="attendance-heading fw-600 flex nowrap  fs-24 middle-xs start-xs">Attendance</h1>
+  <div class="start-xs bottom-md middle-xs mt-15 mt-xmd-0 flex fs-12 fs-md-14  flex-nowrap-md flex-col-xs flex-row-md  fg-1 end-xmd start-xs">
+    <mat-form-field class="w-100  no-pb mr-md-30 top-form-field "  >
+      <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="option"
+        [(ngModel)]="value">
+      <svg matSuffix s class="col-primary-300 use-svg" (click)="clear()" symbol="triangle-down" w="8"></svg>
+      <mat-autocomplete #auto="matAutocomplete" class="fs-14" (optionSelected)='selectEmp($event.option.value)'>
+        <mat-option *ngFor="let emp of filteredManagers | async" [value]="emp.emp_name">
+          {{emp.emp_name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field style="max-width: 300px;" appearance="legacy" class="no-pb atai-date-range w-100 mr-md-30 mt-15 mt-md-0 top-form-field "
+      style="width: 225px;">
+      <app-atai-date-range [maxDate]="maxDate" [minDate]="minDate" (dateSelected)="onDateSelection($event)" (cancel)="onCancelDateSelection()" [allowSameDateRange]="true"></app-atai-date-range>
+    </mat-form-field>
+    <div tabindex="0" [dbdFileDownload]="{endPoint:getDownloadEndPoint(),responseType:'blob'}" class="mt-15 mt-md-0">
+      <svg matSuffix class=" use-svg" symbol="excel-green" w="25"></svg>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="ATTENDENCE_DATA.length==0 && downloadable == false && showMessage==true" class="p-20 fs-14 col-primary-300">
+  NO DATA AVAILABLE
+</div>
+
+<div *ngIf="downloadable == true " class="p-20 fs-14 col-primary-300">
+  <b> Please download the data </b>
+</div>
+
+<div *ngIf="ATTENDENCE_DATA.length!==0 && downloadable == false">
+  <div [tableAffix] class="w-100 of-x-auto">
+    <table style="min-width: 800px;width:100%" mat-table [dataSource]="ATTENDENCE_DATA" class="mat-elevation-z8 w-100">
+      <colgroup>
+        <col width='150'/>
+        <col width='150'/>
+        <col width='150'/>
+        <col width="150"/>
+        <col width="150"/>
+        <col width="170"/>
+      </colgroup>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.Date}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="firstIn">
+        <th mat-header-cell *matHeaderCellDef> First In Time </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.FirstInTime}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="lastOut">
+        <th mat-header-cell *matHeaderCellDef> Last Out Time </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.LastOutTime}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="gross">
+        <th mat-header-cell *matHeaderCellDef> Gross Working<br />Hours </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}">
+          {{element.GrossWorkingHours}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="net">
+        <th mat-header-cell *matHeaderCellDef> Net Working<br />Hours </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}"> {{element.NetWorkingHours}}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="posted">
+        <th mat-header-cell *matHeaderCellDef> Timesheet  Submitted <br />Hours </th>
+        <td mat-cell *matCellDef="let element"
+          [ngClass]="{'weekend_class' : element.WeekdayFlag,'holiday':element.HolidayFlag}">
+          <div *ngIf="element.holiday_hours!=='00:00'">
+            <span class="holiday_class" tooltip="Holiday hours: {{element.holiday_hours}}"
+              placement="bottom">{{element.project_hours}} </span>
+          </div>
+          <div *ngIf="element.holiday_hours==='00:00'">
+            <span class="vacation_class" *ngIf="element.vacation_hours !== '00:00'"
+              tooltip="Vacation hours: {{element.vacation_hours}}" placement="bottom">
+              {{element.project_hours}}
+            </span>
+            <span class="project_class" *ngIf="element.vacation_hours==='00:00'">
+              {{element.project_hours}}
+            </span>
+          </div>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row class="header-gradient" *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+</div>

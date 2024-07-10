@@ -1,0 +1,84 @@
+<div class="dummy" appFocus></div>
+<div  class="flex middle-sm between-sm mb-15 flex-col-xs flex-row-sm">
+
+  <h2 class="dis-ib"   class="heading mb ">
+    {{timeSheetType == 'rejected' ? 'Rejected' : 'Weekly'}} Timesheet
+  </h2>
+  <a (click)="openManagerComments()" *ngIf="timeSheetType == 'rejected' && weeklyTimeSheetData" href="javascript:;"
+    class="view-rejection-comments fs-14 col-primary-200 flex middle-xs mt-10 mb-10 mt-sm-0 mb-sm-0">
+    <svg class="mr-5 use-svg" symbol="comments" w="20">
+    </svg>
+    <span>View Comments</span>
+  </a>
+</div>
+
+<div class="timesheet-wrap w-100" style="overflow-x:auto;" #refTimesheetWrap >
+  <app-time-sheet [translateTitle]="translateTimesheetTitle" [ngStyle]="{minWidth:weeklyTimeSheetData ? '800px':'auto'}"
+    class="dis-blk"  [disable]="disableTimesheet" (evChange)="onTimeSheetChange($event)" [data]='weeklyTimeSheetData'>
+  </app-time-sheet>
+</div>
+
+<div *ngIf="showWsr" class="wsr mt-30" [formGroup]="fgWsrProjects">
+  <h2 class="heading flex middle-sm flex-col-xs flex-row-sm between-sm">Weekly Status Report
+    <p class="wsr__char-count" [class.error]="wsrCharCount > 5000">{{wsrCharCount}} / 5000</p>
+  </h2>
+  <div class="wsr__text-area-wrap pb-md-50">
+    <div class="pos-r">
+      <div *ngFor="let project of wsrActiveProjectsVisible;let i=index;">
+        <div class="wsr__project-name mb-10 mt-20">{{project?.project_name}}</div>
+        <div></div>
+        <textarea #textarea placeholder="Add details  of the project"
+          [formControl]="fgWsrProjects['controls']['active_projects']['controls'][i] "
+          class="wsr__project-text  fs-14 fs-md-16"></textarea>
+      </div>
+
+      <div   tabindex="0" (keydown)="key_pressed($event)"  *ngIf="weeklyTimeSheetData?.enableSaveSubmit && wsrActiveProjectsHidden.length > 0" #selProject
+        class="wsr__sel-project flex middle-xs mt-15" [class.disabled]="wsrActiveProjectsHidden.length < 1">
+        <div  class="flex middle-xs center-xs wsr__sel-project-toggle">
+          <svg class=" mr-5 use-svg" symbol="add-circle" w="14">
+          </svg>
+          Select Project
+        </div>
+        <div   class="wsr__sel-project-list" *ngIf="showProjectList && wsrActiveProjectsHidden.length > 0">
+          <div  #select id="{{ i }}"  class="wsr__sel-project-project" [attr.data-project]="project?.project_id" [attr.index]="i"
+            *ngFor="let project of wsrActiveProjectsHidden;let i = index;" tabindex="index" >
+            {{project?.project_name}}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex col">
+      <div class="wsr__project-name general mt-20 mb-10 between-xs">
+        General Project
+      </div>
+      <div></div>
+      <textarea placeholder="General details to include" formControlName="general"
+        class="wsr__project-text fg-1 fs-14 fs-md-16"></textarea>
+    </div>
+  </div>
+  <ng-container *ngIf="this.timeSheetType == 'rejected'">
+    <div class="flex end-xs middle-xs mt-20" *ngIf="weeklyTimeSheetData?.enableSaveSubmit">
+      <app-button [class.disabled]='(!checkWsrSubmitEnable())' (click)="onSubmitWsr('save-submit')">Submit
+      </app-button>
+    </div>
+  </ng-container>
+  <ng-container *ngIf="this.timeSheetType == 'regular'">
+    <div *ngIf="weeklyTimeSheetData?.enableSaveSubmit" class="flex end-xs middle-xs mt-20">
+      <!-- <p class="wsr__char-count" [class.error]="wsrCharCount > 5000">{{wsrCharCount}} / 5000</p> -->
+      <app-button theme="default" [class.disabled]="showDisable()" [disabled]="showDisable()"
+        [size]="is_MD_LT ? 'small' : 'default'" class=" mr-30 mr-sm-40 mr-md-50" (click)="confirmSaveSubmit()">Save &
+        Submit
+      </app-button>
+      <app-button theme="grey" [class.disabled]="savedWtr || wsrCharCount > 5000" (click)="onSubmitTimeSheet('save')"
+        [size]="is_MD_LT ? 'small' : 'default'">
+        Save</app-button>
+    </div>
+  </ng-container>
+</div>
+
+
+<ng-template #templateRefManagerComments>
+  <p class="fs-12 fw-300 col-primary-100" style="word-break: break-all;">
+    {{weeklyTimeSheetData?.comments}}
+  </p>
+</ng-template>

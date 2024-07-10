@@ -1,0 +1,604 @@
+<div class="dummy" appFocus></div>
+<div>
+  <form #searchForm="ngForm" [formGroup]="fgSearch" (ngSubmit)="onSubmitSearch(managerCtrl.value)">
+    <div class="flex pb-20 flex-col-xs flex-row-xmd middle-xmd  between-xs">
+      <h2 class="col--accent-500 fs-24">
+        Transfer Employee
+      </h2>
+      <div class="flex fs-14 w-md-60 w-xmd-50 bottom-xs  end-xmd mt-15 mt-xmd-0">
+        <mat-form-field class="no-pb w-50 mr-30 top-form-field single-row">
+          <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" (focus)="onFocus()" [formControl]="managerCtrl" [(ngModel)]="value" >
+          <svg matSuffix class="col-primary-300 use-svg" (click)="clear()" symbol="triangle-down" w="8"></svg>
+          <mat-autocomplete class="fs-14" #auto="matAutocomplete">
+            <mat-option *ngFor="let state of filteredManagers | async" [value]="state.emp_name">
+              {{state.emp_name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <app-button [size]="is_XMD_LT ? 'small' : 'default'">Submit
+        </app-button>
+
+      </div>
+
+    </div>
+  </form>
+</div>
+
+
+<!-- Rahul change(adding a horizontal-scroll-bar for table)*****************************************
+  **********************************************************************
+  ************************************************************ -->
+<div style="overflow-x: auto;width: 100%;" [tableAffix] *ngIf="USERS_DATA.length!=0">
+  <table mat-table style="min-width:1024px;" [dataSource]="USERS_DATA"  class="mat-elevation-z8 w-100">
+    <colgroup>
+      <col width='70'/>
+      <col width='150'/>
+      <col width='250'/>
+      <col width="150"/>
+      <col width="180"/>
+      <col width="180"/>
+      <col width="180"/>
+      <col width="50"/>
+    </colgroup>
+    <ng-container matColumnDef="serial_no">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> S.NO </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element;let i =index;"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' "> {{i+1}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Name </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [style.cursor]="element.staging_status !== null ? 'pointer': ' '"
+        title="{{element.staging_status !== null ? 'Employee will be disabled on'+ ' '+element.staging_relieved : ''}}"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' "> {{element.emp_name}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="staff_no">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef>Staff No. </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        {{element.staff_no}} </td>
+    </ng-container>
+
+
+    <ng-container matColumnDef="company">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef> Group </th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        {{element.company}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="reporting_manager">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef>Reporting Manager</th>
+
+
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+
+        <div style="display:inline;">{{element.managers['1']['emp_name']}}</div>
+
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="managers_manager">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef>Manager's Manager</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;">{{element.managers['2']['emp_name']}}</div>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="functional_manager">
+      <th class="p-table-5" mat-header-cell *matHeaderCellDef>Functional Owner</th>
+      <td class="p-table-5" mat-cell *matCellDef="let element"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <div style="display:inline;">{{element.managers['3']['emp_name']}}</div>
+      </td>
+    </ng-container>
+
+
+
+    <ng-container matColumnDef="edit">
+      <th class="p-table-5 txt-center" mat-header-cell *matHeaderCellDef> Edit</th>
+      <td class="p-table-5 txt-center" mat-cell *matCellDef="let element;let i = index"
+        [ngClass]="element.staging_status !== null ? 'disabled--emp':'' ">
+        <!-- Rahul change(Using Event delegation for optimising ) the app performance ******************* -->
+        <!-- Previous code-->
+        <!-- <svg class="use-svg col-primary-300 " (click)="editManagers(i)" symbol="edit" w="16"></svg> -->
+        <!-- ****************************************************** -->
+        <!-- new code -->
+        <svg tabindex="0" (keydown.enter)="onClickHost($event)" class="use-svg  edit" [attr.index]='i' symbol="edit" w="20"></svg>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row class="header-gradient" *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+<!-- *****************************************
+  **********************************************************************
+  ************************************************************ -->
+<div *ngIf="USERS_DATA.length==0 && showMessage==true"  class="pl-20 fs-14 col-primary-300">
+  NO DATA AVAILABLE
+</div>
+
+
+<app-modal-popup #addUserDialog [idd]="'addusermodel'" [closeModel]="false" (close)="addUserOutputData($event)"
+  [w]="'720px'" [h]="'650px'">
+  <div head>
+    Add User
+  </div>
+
+  <ng-container>
+    <form [formGroup]="addUserForm" (ngSubmit)="addUser()">
+      <div>
+        <div class="grid-container">
+          <mat-form-field>
+            <mat-label>First Name</mat-label>
+            <input matInput formControlName="firstName" [(ngModel)]='newUserFirstName'>
+            <mat-error
+              *ngIf=" addUserForm.controls.firstName.touched && addUserForm.controls.firstName.hasError('required')">
+              Please enter firstName
+            </mat-error>
+          </mat-form-field>
+
+
+
+
+          <mat-form-field>
+            <mat-label>Last Name</mat-label>
+            <input matInput formControlName="lastName" [(ngModel)]='newUserLastName'>
+            <mat-error
+              *ngIf="addUserForm.controls.lastName.touched && addUserForm.controls.lastName.hasError('required')">
+              Please enter lastName
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Staff No.</mat-label>
+            <input matInput formControlName="staff_no">
+            <mat-error
+              *ngIf="addUserForm.controls.staff_no.touched && addUserForm.controls.staff_no.hasError('required')">
+              Please enter Staff No.
+            </mat-error>
+            <mat-error
+              *ngIf="addUserForm.controls.staff_no.touched && addUserForm.controls.staff_no.hasError('is_duplicated')">
+              Entered Staff No. already exists
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" />
+            <mat-error *ngIf="addUserForm.controls.email.touched && addUserForm.controls.email.hasError('required')">
+              Please enter Email
+            </mat-error>
+            <mat-error *ngIf="addUserForm.controls.email.touched && addUserForm.controls.email.hasError('email')">
+              Please enter valid Email
+            </mat-error>
+            <mat-error
+              *ngIf="addUserForm.controls.email.touched && addUserForm.controls.email.hasError('is_duplicated')">
+              Entered Email already exists
+            </mat-error>
+
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Group</mat-label>
+            <mat-select formControlName="company">
+              <mat-option [value]="grp" *ngFor="let grp of GROUPS_DATA">{{grp}}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="addUserForm.controls.company.touched && addUserForm.controls.company.hasError('required')">
+              Please select Group
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Gender</mat-label>
+            <mat-select formControlName="gender">
+              <mat-option [value]="gender['id']" *ngFor="let gender of ALL_GENDERS">{{gender['name']}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="addUserForm.controls.gender.touched && addUserForm.controls.gender.hasError('required')">
+              Please select Gender
+            </mat-error>
+          </mat-form-field>
+
+
+          <mat-form-field>
+            <mat-label>Category</mat-label>
+            <mat-select formControlName="category">
+              <mat-option [value]="category['id']" *ngFor="let category of ALL_CATEGORIES">
+                {{category['name']}}
+              </mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="addUserForm.controls.category.touched && addUserForm.controls.category.hasError('required')">
+              Please select Category
+            </mat-error>
+          </mat-form-field>
+
+
+          <mat-form-field class="custompicker">
+            <mat-label>Date of joining</mat-label>
+            <app-atai-date-range></app-atai-date-range>
+
+            <mat-error *ngIf="addUserForm.controls.doj.touched && addUserForm.controls.doj.hasError('notNull')">
+              Please Select Date of joining
+            </mat-error>
+          </mat-form-field>
+
+        </div>
+
+
+        <div class="grid-container">
+          <div style="padding: 0px 0px 17.5px;margin: 4px;">
+            <div
+              style="display: inline-block;position: relative;min-width: 280px;min-height: 65px; padding: 10px 0px 0px 20px;"
+              class="box2 mat-form-field-flex ">
+
+              <p style="margin: 0 0 0 0px;">Atwork Role</p>
+              <div style="padding-left: 2px;">
+                <ul>
+                  <li *ngFor="let role of ROLES;let i=index">
+                    <label class="container"> {{role.name}}
+                      <input type="checkbox" [disabled]="true" *ngIf="role.name === 'L0'" [checked]="true">
+                      <input type="checkbox" (change)="selectRole(i,role.selected)" *ngIf="role.name != 'L0' "
+                        [checked]="role.selected" [disabled]="role.disabled">
+                      <span class="checkmark"></span>
+                    </label>
+                  </li>
+                   
+                </ul>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+
+        <div class="grid-container">
+          <div *ngIf="!makeSelfFM">
+            <mat-form-field>
+              <mat-label>Functional Owner</mat-label>
+              <mat-select formControlName="fun_own" (selectionChange)="changeFM($event.value,newUserRoleValue)">
+                <mat-option [value]=0 *ngIf="newUserRoleValue==4" class="self-option">Self
+                  ({{newUserFirstName +" "+newUserLastName}})</mat-option>
+                <mat-option [value]="emp['emp_id']" *ngFor="let emp of FM_DATA">{{emp["emp_name"]}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="addUserForm.controls.fun_own.touched && addUserForm.controls.fun_own.hasError('notNull')">
+                Please select Functional Owner
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Manager's Manager</mat-label>
+              <mat-select formControlName="man_manager" (selectionChange)="changeMM($event.value, newUserRoleValue)">
+                <mat-option [value]=0 *ngIf="newUserRoleValue==4 " class="self-option">Self
+                  ({{newUserFirstName +" "+newUserLastName}})</mat-option>
+                <mat-option [value]="emp['emp_id']" *ngFor="let emp of MM_DATA">{{emp["emp_name"]}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="addUserForm.controls.man_manager.touched && addUserForm.controls.man_manager.hasError('notNull')">
+                Please select Manager's Manager
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <mat-label>Reporting Manager</mat-label>
+              <mat-select formControlName="rep_manager">
+                <mat-option [value]=0 *ngIf="newUserRoleValue==4 " class="self-option">Self
+                  ({{newUserFirstName +" "+newUserLastName}})</mat-option>
+                <mat-option [value]="emp['emp_id']" *ngFor="let emp of RM_DATA">{{emp["emp_name"]}}
+                </mat-option>
+              </mat-select>
+              <mat-error
+                *ngIf="addUserForm.controls.rep_manager.touched && addUserForm.controls.rep_manager.hasError('notNull')">
+                Please select Reporting Manager
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div mat-dialog-actions>
+        <div style="display: inline-block;padding-bottom: 10px;">
+          <app-button size='small' theme="blue-lite" type="submit" [disabled]="addUserForm.invalid">Add
+          </app-button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+</app-modal-popup>
+
+<app-modal-popup #confirmationDialog [w]="'40%'" [h]="'30%'">
+  <ng-container>
+    Are you sure to discard the form ?
+    <div style="margin-top: 10px ;">
+      <div style="display: inline-block;padding: 4px;">
+        <app-button size='small' type="button" theme="danger" (click)="closeAllDialog()">Yes</app-button>
+      </div>
+      <div style="display: inline-block;padding: 4px;">
+        <app-button size='small' type="button" theme="blue-lite" (click)="closeConfirmationDialog()">No
+        </app-button>
+      </div>
+    </div>
+  </ng-container>
+</app-modal-popup>
+
+<!-- Rahul changes (adding new popup for transfer employee)************************************************************* -->
+<ng-template #EditManagerDialog>
+  <div class="fs-14 flex col nowrap center-xs">
+    <p class="col-primary-400">
+      Select managers for
+    </p>
+    <p class="fs-18 mb-40">{{edited_emp_name}}</p>
+    <p style="color: red;" *ngIf="edited_emp_role==4">
+      <b>Note:</b> Managers cannot be changed for users having role L3
+    </p>
+    <ng-container>
+      <div *ngIf="is_emp_admin || user_role_id === 4">
+        <mat-form-field class="w-90">
+          <mat-label>Edit role/manager</mat-label>
+          <mat-select [formControl]="editableItem" (selectionChange)="getEffectedEmpList()">
+            <mat-option [value]="'role'">ROLE</mat-option>
+            <mat-option [value]="'manager'">Managers</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <div *ngIf="editableItem.value=='role'">
+        <div style="padding: 0px 0px 17.5px;margin: 4px;">
+          <div
+            style="display: inline-block;position: relative;min-width: 280px;min-height: 65px; padding: 10px 0px 0px 20px;"
+            class="box2 mat-form-field-flex ">
+
+            <p style="margin: 0 0 10px 0px;">Atwork Role</p>
+            <div style="padding-left: 2px;">
+              <ul>
+                <li *ngFor="let role of ROLES;let i=index">
+                  <label class="container"> {{role.name}}
+                    <input type="checkbox" [disabled]="true" *ngIf="role.name === 'L0'" [checked]="true">
+                    <input type="checkbox" (change)="selectRole(i,$event,false)" *ngIf="role.name != 'L0' "
+                      [checked]="role.selected" [disabled]="role.disabled">
+                    <span class="checkmark"></span>
+                  </label>
+                </li>
+                <!-- Rahul change******************* -->
+              <!-- <li class="mr-20 fs-16 fw-600" *ngFor="let role of ROLES;let i=index"> 
+                <mat-checkbox  [disabled]="true" *ngIf="role.name === 'L0'" [checked]="true">{{role.name}}</mat-checkbox>
+                <mat-checkbox  (change)="selectRole(i,$event,false)" *ngIf="role.name != 'L0' "
+                      [checked]="role.selected" [disabled]="role.disabled" style="color:var(--col-primary-300);">{{role.name}}</mat-checkbox>
+                </li> -->
+                  <!-- ***************************************** -->
+              </ul>
+            </div>
+          </div>
+          <div style="text-align: center;margin:20px;">
+            <app-button size='small' theme="blue-lite" type="button" (click)="changeRole()"
+              [disabled]="this.PreviousRoleVlaue>=selectedRoleValue">Update</app-button>
+          </div>
+        </div>
+      </div>
+      <div *ngIf="editableItem.value=='manager'">
+        <form [formGroup]="editManagerForm" (ngSubmit)="updateManager()">
+
+
+          <mat-form-field class="w-90 mt-10"
+            [ngClass]="{'disabled_field' : (user_role_id<4 && is_emp_admin==false) ||edited_emp_role==4}">
+            <mat-label>Functional Owner</mat-label>
+            <mat-select formControlName="fun_own" (selectionChange)="changeFM($event.value, edited_emp_role)"
+              [disabled]='(user_role_id<4 && is_emp_admin==false) ||edited_emp_role==4'>
+              <mat-option [value]="emp['emp_id']" *ngFor="let emp of FM_DATA">{{emp["emp_name"]}}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="editManagerForm.controls.fun_own.touched && editManagerForm.controls.fun_own.hasError('required')">
+              Please select Functional Owner
+            </mat-error>
+          </mat-form-field>
+
+
+          <mat-form-field class="w-90 mt-10"
+            [ngClass]="{'disabled_field' : (user_role_id<3  && is_emp_admin==false) || edited_emp_role==4}">
+            <mat-label>Manager's Manager</mat-label>
+            <mat-select formControlName="man_manager" (selectionChange)="changeMM($event.value, edited_emp_role)"
+              [disabled]='(user_role_id<3  && is_emp_admin==false) || edited_emp_role==4'>
+              <mat-option [value]="emp['emp_id']" *ngFor="let emp of MM_DATA">{{emp["emp_name"]}}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="editManagerForm.controls.man_manager.touched && editManagerForm.controls.man_manager.hasError('required')">
+              Please select Manager's Manager
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field class="w-90 mt-10">
+            <mat-label>Reporting Manager</mat-label>
+            <mat-select formControlName="rep_manager" [disabled]='edited_emp_role==4'>
+              <mat-option [value]="emp['emp_id']" *ngFor="let emp of RM_DATA">{{emp["emp_name"]}}</mat-option>
+            </mat-select>
+            <mat-error
+              *ngIf="editManagerForm.controls.rep_manager.touched && editManagerForm.controls.rep_manager.hasError('required')">
+              Please select Reporting Manager
+            </mat-error>
+          </mat-form-field>
+
+
+          <div class="flex center-xs mt-20" mat-dialog-actions *ngIf="edited_emp_role!=4">
+
+
+            <div style="display: inline-block; text-align: center;">
+              <app-button size='small' theme="blue-lite" type="submit" [disabled]="editManagerForm.invalid">
+                Update
+              </app-button>
+            </div>
+          </div>
+
+        </form>
+      </div>
+
+    </ng-container>
+  </div>
+</ng-template>
+
+
+
+<app-modal-popup #transferEmps [w]="'450px'" [h]="'480px'">
+  <div head>
+    Transfer employee
+  </div>
+  <p style="color: red;">
+    Number of employees under selected manager : <b>{{effected_emp_count}}</b>
+  </p>
+  <ng-container>
+    <form [formGroup]="transferEmpForm" (ngSubmit)="transferEmp()">
+
+
+
+      <mat-form-field [ngClass]="{'disabled_field' : user_role_id<4 && is_emp_admin==false}">
+        <mat-label>Functional Owner</mat-label>
+        <mat-select formControlName="fun_own" (selectionChange)="changeFM($event.value, 1)"
+          [disabled]='user_role_id<4 && is_emp_admin==false'>
+          <mat-option [value]="emp['emp_id']" *ngFor="let emp of FM_DATA">{{emp["emp_name"]}}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="transferEmpForm.controls.fun_own.touched && transferEmpForm.controls.fun_own.hasError('required')">
+          Please select Functional Owner
+        </mat-error>
+      </mat-form-field>
+
+
+      <mat-form-field [ngClass]="{'disabled_field' : user_role_id<3 && is_emp_admin==false}">
+        <mat-label>Manager's Manager</mat-label>
+        <mat-select formControlName="man_manager" (selectionChange)="changeMM($event.value, 1)"
+          [disabled]='user_role_id<3 && is_emp_admin==false'>
+          <mat-option [value]="emp['emp_id']" *ngFor="let emp of MM_DATA">{{emp["emp_name"]}}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="transferEmpForm.controls.man_manager.touched && transferEmpForm.controls.man_manager.hasError('required')">
+          Please select Manager's Manager
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Reporting Manager</mat-label>
+        <mat-select formControlName="rep_manager">
+          <mat-option [value]="emp['emp_id']" *ngFor="let emp of RM_DATA">{{emp["emp_name"]}}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="transferEmpForm.controls.rep_manager.touched && transferEmpForm.controls.rep_manager.hasError('required')">
+          Please select Reporting Manager
+        </mat-error>
+      </mat-form-field>
+
+
+
+
+      <div mat-dialog-actions style="padding-bottom:20px">
+        <div style="display: inline-block; text-align: center;">
+          <app-button size='small' theme="blue-lite" type="submit" [disabled]="(transferEmpForm.invalid)">
+            Update
+          </app-button>
+        </div>
+      </div>
+
+    </form>
+
+
+  </ng-container>
+</app-modal-popup>
+
+
+<app-modal-popup #updateLeave [w]="'450px'" [h]="'480px'">
+  <div head>
+    Import/Export Leaves
+  </div>
+  <ng-container>
+    <div class="flex p-5 left-xs fs-18 download-bn" style="color: #067bca;cursor:pointer;"
+      [dbdFileDownload]="{endPoint:'leave/config/export-emp-leave/?',responseType:'blob'}">Export Leaves <svg
+        symbol="download" w="15" class="ml-5 mt-3 use-svg"></svg></div>
+    <div style="margin-top: 20px;    background-color: var(--color-quaternary);padding: 10px;">
+
+      <form [formGroup]="fileUpdateForm" (ngSubmit)="addUser()">
+        <mat-form-field class="full-width fg-1 file">
+          <app-file [folderUpload]="false" formControlName="file" [multiple]="false"
+            [accept]="{browse:'.xlsx', drop:['.xlsx']}" pH="Drop or browse file to import leave balance "
+            idd="leave-bal-upload"></app-file>
+
+          <mat-error class="fs-14"
+            *ngIf="fileUpdateForm.controls.file.touched && fileUpdateForm.controls.file.hasError('required')">
+            This field is required
+          </mat-error>
+        </mat-form-field>
+        <app-button size='small' theme="blue-lite" type="button" (click)="uploadLeaveExcel()"
+          [disabled]="fileUpdateForm.invalid">Upload</app-button>
+      </form>
+
+      <!-- <div class="upload" style="position: relative;margin-top: 10px;">
+            <label for="upload"> Import Leaves </label>
+            <input  class="upload" id="upload" type="file" (change)="addFile($event)"> -->
+      <!-- <div *ngIf="leaveUpdateFormControl.touched && leaveUpdateFormControl.hasError('required')" style="color: red;">This field is required</div>
+            <div *ngIf="leaveUpdateFormControl.touched && !leaveUpdateFormControl.hasError('required')">{{leaveUpdateFormControl.value.name}}</div>
+             -->
+      <!-- </div> -->
+    </div>
+
+
+  </ng-container>
+</app-modal-popup>
+
+
+<app-modal-popup #updateMis [w]="'450px'" [h]="'480px'">
+  <div head>
+    Import/Export MIS
+  </div>
+  <ng-container>
+    <div class="flex p-5 left-xs fs-18 download-bn" style="color: #067bca;cursor:pointer;"
+      [dbdFileDownload]="{endPoint:'downloadmis/?',responseType:'blob'}">Export MIS <svg symbol="download" w="15"
+        class="ml-5 mt-3 use-svg"></svg></div>
+    <div style="margin-top: 20px;    background-color: var(--color-quaternary);padding: 10px;">
+      <!-- <h2>Import leave</h2> -->
+
+      <form [formGroup]="fileUpdateForm" (ngSubmit)="addUser()">
+        <mat-form-field class="full-width fg-1 file">
+          <app-file [folderUpload]="false" formControlName="file" [multiple]="false"
+            pH="Drop or browse file to import MIS " idd="mis-upload"></app-file>
+
+          <mat-error class="fs-14"
+            *ngIf="fileUpdateForm.controls.file.touched && fileUpdateForm.controls.file.hasError('required')">
+            This field is required
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field>
+          <mat-label>Password</mat-label>
+          <input matInput type="password" formControlName="password" required>
+          <mat-error
+            *ngIf=" fileUpdateForm.controls.password.touched && fileUpdateForm.controls.password.hasError('required')">
+            Please enter password
+          </mat-error>
+        </mat-form-field>
+
+        <app-button size='small' theme="blue-lite" type="button" (click)="uploadMis()"
+          [disabled]="fileUpdateForm.invalid">Upload</app-button>
+      </form>
+
+      <!-- <div class="upload" style="position: relative;margin-top: 10px;">
+            <label for="upload"> Import Leaves </label>
+            <input  class="upload" id="upload" type="file" (change)="addFile($event)"> -->
+      <!-- <div *ngIf="leaveUpdateFormControl.touched && leaveUpdateFormControl.hasError('required')" style="color: red;">This field is required</div>
+            <div *ngIf="leaveUpdateFormControl.touched && !leaveUpdateFormControl.hasError('required')">{{leaveUpdateFormControl.value.name}}</div>
+             -->
+      <!-- </div> -->
+    </div>
+
+
+  </ng-container>
+</app-modal-popup>

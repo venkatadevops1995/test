@@ -1,0 +1,493 @@
+<div class="dummy" appFocus></div>
+<div class="bg-box mt-20">
+  <h2 class="heading mb-20"> Leave Requests </h2>
+  <div class="grid">
+    <div class="fs-14 col-primary-200" *ngIf="LEAVE_DATA_PENDING.length==0 && leaveReqErrMsg===true">
+      No Leave requests to resolve
+    </div>
+    <div style="overflow: auto;max-height: 450px;" #refTableWrap>
+      <div>
+        <table mat-table style="min-width:1000px;" [dataSource]="LEAVE_DATA_PENDING" *ngIf="LEAVE_DATA_PENDING.length!=0"
+          class="mat-elevation-z8 w-100">
+          <colgroup>
+            <col width='120'/>
+            <col width='120'/>
+            <col width='250'/>
+            <col width="130"/>
+            <col width="180"/>
+            <col width="180"/>
+            <col width="150"/>
+            <col width="220"/>
+            <col width="150"/>
+          </colgroup>
+          <ng-container matColumnDef="serial">
+            <th mat-header-cell *matHeaderCellDef> S.No. </th>
+            <td mat-cell *matCellDef="let element;let i=index;">{{i+1}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="staff_no">
+            <th mat-header-cell *matHeaderCellDef>
+              Staff No.
+            </th>
+            <td mat-cell *matCellDef="let element;let i=index;">{{element?.emp_staff_no}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="employee">
+            <th mat-header-cell *matHeaderCellDef class="p-table-5"> Name </th>
+            <td mat-cell *matCellDef="let element;let i=index;" class="p-table-5">{{element?.emp_name}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="day_count">
+            <th mat-header-cell *matHeaderCellDef>Total Days </th>
+            <td mat-cell *matCellDef="let element"> {{element?.day_count}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="startdate">
+            <th mat-header-cell *matHeaderCellDef> Start Date </th>
+            <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.startdate)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="enddate">
+            <th mat-header-cell *matHeaderCellDef> End Date </th>
+            <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.enddate)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="leave_type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let element">
+              {{element.leave_type_name == 'Paid' ? 'General' : element.leave_type_name}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef class="p-table-5">Status </th>
+            <td mat-cell *matCellDef="let element" class="p-table-5"> {{element?.req_status}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="view">
+            <th mat-header-cell *matHeaderCellDef style="min-width: 120px;"> Action</th>
+            <td mat-cell *matCellDef="let element;let i = index">
+              <div class="flex middle-xs ">
+                <!-- <app-button class=" view-leave-details mr-5" title="View Details" type="button" theme="blue-lite"
+                  size="extra-small" style="border: none;background-color:transparent;" [attr.data-id]="element.id"
+                  [attr.data-start-date]="convertDatefmt(element.startdate)+ ' to ' +convertDatefmt(element.enddate)">
+                  View
+                </app-button> -->
+                <button title="View" class="rem-def-btn-style">
+                <svg tabindex="0"  class="view-leave-details  use-svg" title="View Details"
+                  symbol="view-details" w="20" [attr.data-id]="element.id"
+                  [attr.data-start-date]="convertDatefmt(element.startdate)+ ' to ' +convertDatefmt(element.enddate)"
+                  color="var(--col-primary-100)" svg-fill="currentColor"></svg>
+                </button>
+                 <div style="width:15px;" ></div>
+                 <button title="Approve" class="rem-def-btn-style">
+                <svg class="approve-request  use-svg" *ngIf="element.status == leaveApplcnStatus.Pending"
+                color="var(--col-primary-100)" symbol="tick-circle" w="20" [attr.data-request-id]="element.id"></svg>
+                </button>
+                  <div style="width:15px;"></div>
+                  <button title="Reject" class="rem-def-btn-style">
+                <svg class="reject-request  use-svg" *ngIf="element.status == leaveApplcnStatus.Pending"
+                  symbol="circle-close-red" w="27" [attr.data-request-id]="element.id"
+                  [attr.data-start-date]="convertDatefmt(element.startdate)+ ' to ' +convertDatefmt(element.enddate)">
+                </svg>
+              </button>
+
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="leaveApplicationColumns sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: leaveApplicationColumns; "></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-box mt-30">
+  <div class="flex col">
+    <h2 class="heading mb-20">Leave Correction Requests</h2>
+    <div class="grid">
+      <div class="fs-14 col-primary-200" *ngIf="LEAVE_DATA_DISCREPANCY.length==0 && leavecorrErrMsg===true">
+        No Leave Corrections to resolve
+      </div>
+      <div style="overflow: auto;max-height: 450px;" #refTableWrap>
+        <div>
+          <table style="min-width:1000px;" mat-table [dataSource]="LEAVE_DATA_DISCREPANCY" *ngIf="LEAVE_DATA_DISCREPANCY.length!=0"
+            class="mat-elevation-z8 w-100">
+            <colgroup>
+              <col width='120'/>
+              <col width='120'/>
+              <col width='250'/>
+              <col width="130"/>
+              <col width="180"/>
+              <col width="180"/>
+              <col width="150"/>
+              <col width="220"/>
+              <col width="150"/>
+            </colgroup>
+            <ng-container matColumnDef="serial">
+              <th mat-header-cell *matHeaderCellDef> S.No. </th>
+              <td mat-cell *matCellDef="let element;let i=index;">{{i+1}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="staff_no">
+              <th mat-header-cell *matHeaderCellDef>
+                Staff No.
+              </th>
+              <td mat-cell *matCellDef="let element;let i=index;">{{element?.emp_staff_no}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="employee">
+              <th mat-header-cell *matHeaderCellDef class="p-table-5"> Name </th>
+              <td mat-cell *matCellDef="let element;let i=index;" class="p-table-5">{{element?.emp_name}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="day_count">
+              <th mat-header-cell *matHeaderCellDef>Total Days </th>
+              <td mat-cell *matCellDef="let element"> {{element?.day_count}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="startdate">
+              <th mat-header-cell *matHeaderCellDef> Start Date </th>
+              <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.startdate)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="enddate">
+              <th mat-header-cell *matHeaderCellDef> End Date </th>
+              <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.enddate)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="leave_type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let element">
+                {{element.leave_type_name == 'Paid' ? 'General' : element.leave_type_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="p-table-5">Status </th>
+              <td mat-cell *matCellDef="let element" class="p-table-5"> {{leaveApplcnStatus[element?.status_discrepancy]}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="view">
+              <th mat-header-cell *matHeaderCellDef style="min-width: 120px;"> Action</th>
+              <td mat-cell *matCellDef="let element;let i = index">
+                <div class="flex middle-xs ">
+                  <button title="View" class="rem-def-btn-style">
+                  <svg class="view-leave-discrepancy-details   use-svg" title="View Details"
+                    symbol="view-details" w="20" [attr.data-id]="element.id"
+                    color="var(--col-primary-100)" [attr.data-start-date]="convertDatefmt(element.startdate)+ ' to ' +convertDatefmt(element.enddate)"
+                    svg-fill="currentColor"></svg>
+                  </button>
+                    <div style="width:15px;"></div>
+                  <button title="Approve" class="rem-def-btn-style">
+                  <svg class="approve-request discrepancy   use-svg"
+                    *ngIf="element.status_discrepancy == leaveApplcnStatus.Pending" symbol="tick-circle" w="20"
+                    color="var(--col-primary-100)" [attr.data-request-id]="element.id"></svg>
+                  </button>
+                    <div style="width:15px;"></div>
+                  <button title="Reject" class="rem-def-btn-style">
+                  <svg class="reject-request discrepancy   use-svg"
+                    *ngIf="element.status_discrepancy == leaveApplcnStatus.Pending" symbol="circle-close-red" w="27"
+                    [attr.data-request-id]="element.id"
+                    [attr.data-start-date]="convertDatefmt(element.startdate)+ ' to ' +convertDatefmt(element.enddate)">
+                  </svg>
+                </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="leaveApplicationColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: leaveApplicationColumns; "></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="bg-box mt-30">
+  <div class="flex col">
+    <h2 class="heading mb-20">Timesheet Correction Requests</h2>
+    <div class="grid">
+      <div class="fs-14 col-primary-200" *ngIf="TIMESHEET_DISCREPANCY.length==0 && timesheetErrMsg===true">
+        No Timesheet Corrections to resolve
+      </div>
+      <div style="overflow: auto;max-height: 450px;" #refTableWrap>
+        <div>
+          <table mat-table style="min-width:1000px;" [dataSource]="TIMESHEET_DISCREPANCY" *ngIf="TIMESHEET_DISCREPANCY.length!=0"
+            class="mat-elevation-z8 w-100">
+            <colgroup>
+              <col width='120'/>
+              <col width='120'/>
+              <col width='250'/>
+              <col width="130"/>
+              <col width="180"/>
+              <col width="180"/>
+              <col width="150"/>
+              <col width="220"/>
+              <col width="150"/>
+            </colgroup>
+            <ng-container matColumnDef="serial">
+              <th mat-header-cell *matHeaderCellDef> S.No. </th>
+              <td mat-cell *matCellDef="let element;let i=index;">{{i+1}} </td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="staff_no">
+              <th mat-header-cell *matHeaderCellDef>
+                Staff No.
+              </th>
+              <td mat-cell *matCellDef="let element;let i=index;">{{element?.emp_staff_no}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="employee">
+              <th mat-header-cell *matHeaderCellDef class="p-table-5"> Name </th>
+              <td mat-cell *matCellDef="let element;let i=index;" class="p-table-5">{{element?.emp_name}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="day_count">
+              <th mat-header-cell *matHeaderCellDef>Total Days </th>
+              <td mat-cell *matCellDef="let element"> {{element?.day_count}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="startdate">
+              <th mat-header-cell *matHeaderCellDef> Start Date </th>
+              <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.startdate)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="enddate">
+              <th mat-header-cell *matHeaderCellDef> End Date </th>
+              <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.enddate)}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="leave_type">
+              <th mat-header-cell *matHeaderCellDef>Type</th>
+              <td mat-cell *matCellDef="let element">
+                {{element.leave_type_name == 'Paid' ? 'General' : element.leave_type_name}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="status">
+              <th mat-header-cell *matHeaderCellDef class="p-table-5">Leave Status </th>
+              <td mat-cell *matCellDef="let element" class="p-table-5"> {{leaveApplcnStatus[element?.status]}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="view">
+              <th mat-header-cell *matHeaderCellDef style="min-width: 120px;"> Action</th>
+              <td mat-cell *matCellDef="let element;let i = index">
+                <div class="flex middle-xs ">
+                <button title="View" class="rem-def-btn-style">
+                  <svg class=" use-svg" title="View Details"
+                    (click)="getResTimesheetDiscrepancies(element.leave_request_id)" symbol="view-details" w="20"
+                    color="var(--col-primary-100)" svg-fill="currentColor"></svg>
+                </button>
+                    <div style="width:15px;"></div>
+                <button title="Approve" class="rem-def-btn-style">
+                  <svg title="Approve" class=" approve-request discrepancy   use-svg"
+                    *ngIf="element.status_discrepancy == leaveApplcnStatus.Pending" symbol="tick-circle" w="17"
+                    color="var(--col-primary-100)" [attr.data-request-id]="element.id"></svg>
+                </button>
+                    <div style="width:15px;"></div>
+                <button title="Reject" class="rem-def-btn-style">
+                  <svg class="reject-request discrepancy    use-svg"
+                    *ngIf="element.status_discrepancy == leaveApplcnStatus.Pending" symbol="circle-close-red" w="27"
+                    [attr.data-request-id]="element.id">
+                  </svg>
+                </button>
+                </div>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="leaveApplicationColumns; sticky: true"></tr>
+            <tr mat-row *matRowDef="let row; columns: leaveApplicationColumns; "></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="bg-box mt-20">
+  <div class="flex between-xs">
+    <h2 class="heading mb-20"> Leave History </h2>
+  </div>
+  <div class="flex fs-14 bottom-md flex-col-xs flex-row-md top-xs">
+    <form [formGroup]="fgFilter" class="flex middle-xs">
+      <div style="min-width: 225px; " class="mb-15 mb-md-0">
+        <mat-form-field class="w-100 mr-10 no-pb">
+          <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="managerCtrl"
+            [(ngModel)]="value">
+          <svg matSuffix svg-fill="currentColor" class="col-primary-300   use-svg" (click)="clear()"
+            symbol="triangle-down" w="8"></svg>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSubmitResolvedLeaveFilter($event)">
+            <mat-option *ngFor="let emp of filteredManagers | async" [value]="emp.emp_name">
+              {{emp.emp_name}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </form>
+    <mat-form-field appearance="legacy" style="min-width:225px" class="ml-md-15 mb-15 mb-md-0 no-pb atai-date-range">
+      <app-atai-date-range [maxDate]="maxDate"   [showInput]="true" [showPresets]="true"
+        (dateSelected)="onDateSelect($event)"></app-atai-date-range>
+    </mat-form-field>
+
+    <svg class="export_icon ml-md-15 pointer pos-r use-svg" style="z-index: 10;" (click)="onClickExportResolved()"
+      symbol="excel-green" w="25" style="color:var(--color-tertiary);margin-top:0px;cursor:pointer"
+      svg-fill="currentColor">
+    </svg>
+  </div>
+</div>
+
+<div class="bg-box" *ngIf="showMessage == true">
+  <!-- <h2 style="color: var(--color-primary);">Resolved Leave Applications </h2> -->
+  <div class="grid">
+    <ng-container *ngIf="LEAVE_DATA_HISTORY.length==0">
+      <div class="fs-14 col-primary-200 mt-20" *ngIf=" historyLeavesFiltersApplied">
+        No leave history
+      </div>
+      <ng-template #refFiltersNotApplied>
+        <div>
+          Apply filters to fetch leave requests
+        </div>
+      </ng-template>
+    </ng-container>
+
+    <div style="overflow: auto;max-height: 450px;" #refTableWrap class="mt-20">
+      <table mat-table style="min-width:1000px;" [dataSource]="LEAVE_DATA_HISTORY" *ngIf="LEAVE_DATA_HISTORY.length!=0" class="mat-elevation-z8 w-100">
+        <colgroup>
+          <col width='120'/>
+          <col width='120'/>
+          <col width='250'/>
+          <col width="130"/>
+          <col width="180"/>
+          <col width="180"/>
+          <col width="150"/>
+          <col width="220"/>
+          <col width="150"/>
+        </colgroup>
+        <ng-container matColumnDef="serial">
+          <th mat-header-cell *matHeaderCellDef> S.No.</th>
+          <td mat-cell *matCellDef="let element;let i=index;">{{i+1}}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="staff_no">
+          <th mat-header-cell *matHeaderCellDef>
+            Staff No.
+          </th>
+          <td mat-cell *matCellDef="let element;let i=index;">{{element?.emp_staff_no}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="employee">
+          <th mat-header-cell *matHeaderCellDef [class.show-on-hover]="!sortHistoric.empName" class="p-table-5">
+            Name
+            <svg svg-fill="currentColor" class="col-primary-300   sort-icon pos-r use-svg" style="top:2px"
+              (click)="onClickSort('empName')" [symbol]="(sortHistoric.empName ? 'asc':'desc')" w="12">
+            </svg>
+          </th>
+          <td mat-cell *matCellDef="let element;let i=index;" class="p-table-5">{{element?.emp_name}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="day_count">
+          <th mat-header-cell *matHeaderCellDef>Total Days </th>
+          <td mat-cell *matCellDef="let element"> {{element?.day_count}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="startdate">
+          <th mat-header-cell *matHeaderCellDef [class.show-on-hover]="!sortHistoric.startDate"> Start Date
+            <svg class="col-primary-300   sort-icon pos-r use-svg" style="top:2px" (click)="onClickSort('startDate')"
+              [symbol]="(sortHistoric.startDate ? 'asc':'desc')" w="12">
+            </svg>
+          </th>
+          <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.startdate)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="enddate">
+          <th mat-header-cell *matHeaderCellDef [class.show-on-hover]="!sortHistoric.endDate"> End Date
+            <svg svg-fill="currentColor" class="col-primary-300 use-svg sort-icon pos-r" style="top:2px"
+              (click)="onClickSort('endDate')" [symbol]="(sortHistoric.endDate ? 'asc':'desc')" w="12">
+            </svg>
+
+          </th>
+          <td mat-cell *matCellDef="let element"> {{convertDatefmt(element?.enddate)}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="leave_type">
+          <th mat-header-cell *matHeaderCellDef>Type</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.leave_type_name == 'Paid' ? 'General' : element.leave_type_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef class="p-table-5">Status </th>
+          <td mat-cell *matCellDef="let element" class="p-table-5"> {{element?.req_status}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="view">
+          <th mat-header-cell *matHeaderCellDef style="min-width: 120px;"> <span >Action</span></th>
+          <td mat-cell *matCellDef="let element;let i = index">
+            <div class="flex middle-xs ">
+              <button title="View" class="rem-def-btn-style">
+              <svg tabindex="0"  class="  view-leave-details-history use-svg" title="View Details"
+                 [attr.data-id]="element.id"
+                [attr.data-start-date]="convertDatefmt(element.startdate)+ ' to ' +convertDatefmt(element.enddate)"
+                color="var(--col-primary-100)" symbol="view-details" w="20"></svg>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="leaveApplicationColumns sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: leaveApplicationColumns; "></tr>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<ng-template #showAppliedLeaveDialog>
+  <app-leave-details type='team' [requestId]="leaveDetailsRequestId" ></app-leave-details>
+</ng-template>
+
+<ng-template #timesheetDiscrepancyDialog>
+
+  <div>
+    <div class="w-100 of-auto">
+      <table style="min-width: 500px;" class="w-100" mat-table [dataSource]="LEAVE_REQ_TIMESHEET_DISCREPANCY" *ngIf="LEAVE_REQ_TIMESHEET_DISCREPANCY.length!=0"
+         >
+
+        <ng-container matColumnDef="serial">
+          <th mat-header-cell *matHeaderCellDef style="width: 80px;"> S.No. </th>
+          <td mat-cell *matCellDef="let element;let i=index;">{{i+1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Date</th>
+          <td mat-cell *matCellDef="let element"> {{element.work_date}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="project">
+          <th mat-header-cell *matHeaderCellDef>Project </th>
+          <td mat-cell *matCellDef="let element"> {{element.project_name}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="posted_hours">
+          <th mat-header-cell *matHeaderCellDef> Posted Hours </th>
+          <td mat-cell *matCellDef="let element"> {{element.work_minutes}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="modified_hours">
+          <th mat-header-cell *matHeaderCellDef> Corrected Hours </th>
+          <td mat-cell *matCellDef="let element"> {{element.modified_work_minutes}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="timesheetDiscrepancyColumns sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: timesheetDiscrepancyColumns; "></tr>
+      </table>
+    </div>
+
+    <app-button style="float:right" size='small' theme="success" type="submit" class="mt-20"
+      (click)="approveTimesheetDiscrepancies(timesheetDiscrepancyId)">Approve
+    </app-button>
+
+  </div>
+</ng-template>

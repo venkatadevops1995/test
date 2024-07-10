@@ -1,0 +1,288 @@
+<div class="timesheet {{mode}}" [class.disable]="disable"
+  *ngIf="showTimeSheet && isTimeSheetResolved;else noTimeSheetData">
+  <div class="timesheet__overlay">
+    <div class="timesheet__weekend-overlay">
+      
+    </div>
+  </div>
+  <div [ataiAffix]="{top:0 ,referenceHierarchy:'p.p.p', disable:false }" [scrollX]="translateTitle" *ngIf="showHeader"
+    class="timesheet__head header-gradient">
+    <div class="week">
+      <span class="translate-title-text">Week {{data?.week_number}}</span>
+    </div>
+    <div class="timesheet_day" *ngFor="let day of data?.days;">
+      <ng-container *ngIf="day != 'Total'">
+        <span> {{day | date:'dd'}}</span>&nbsp;
+        <span class="fs-10"> {{day | date:'EEE'}}</span>
+      </ng-container>
+
+      <div class="fw-500" *ngIf="day == 'Total'">{{day}}</div>
+    </div>
+  </div>
+
+  <div class="timesheet__wrapper">
+    <div class="timesheet__wrapper-bg"></div>
+
+    <ng-container *ngIf="mode == 'default'">
+      <ng-container *ngTemplateOutlet="activeProjectsTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="variousTimesheetEntries"></ng-container>
+      <ng-container *ngTemplateOutlet="totalTimesheetEntries"></ng-container>
+      <ng-container *ngIf="data.attendance_flag">
+        <ng-container *ngTemplateOutlet="accessData"></ng-container>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="mode == 'resolve-timesheet'">
+      <ng-container *ngTemplateOutlet="nameActions"></ng-container>
+      <ng-container *ngTemplateOutlet="totalTimesheetEntries"></ng-container>
+      <ng-container *ngTemplateOutlet="subtotalTimesheetEntries"></ng-container>
+      <ng-container *ngTemplateOutlet="activeProjectsTemplate"></ng-container>
+      <ng-container *ngTemplateOutlet="variousTimesheetEntries"></ng-container>
+      <ng-container *ngIf="data.attendance_flag">
+        <ng-container *ngTemplateOutlet="accessData"></ng-container>
+      </ng-container>
+    </ng-container>
+
+  </div>
+</div>
+
+<ng-template #nameActions>
+  <div class="timesheet__head-name p-10" [class.translate-title-text]="is_MD_LT">
+    <div class="timesheet__name  " *ngIf="data.status == 3">
+      {{data?.emp_name}} <span class="dot-red"></span>
+    </div>
+    <div class="timesheet__name " *ngIf="data.status != 3">
+      {{data?.emp_name}}
+    </div>
+    <div [class.dis-nn]="is_MD_LT"></div>
+    <div class="timesheet__actions w-100 flex  end-md center-xs">
+      <div *ngIf="!disableResolution" class="flex" [class.fg-1]="!is_MD_LT">
+        <div *ngIf="data.status == 1" class="flex">
+          <app-button class="timesheet__approve  ml-15 pointer-none" theme="grey"
+            [size]="is_MD_LT ? 'extra-small' : 'small'">Approved
+          </app-button>
+          <app-button class="timesheet__reject ml-15" [size]="is_MD_LT ? 'extra-small' : 'small'" theme="red"
+            (click)="onClickResolveBtns('reject',{wkNo:data.week_number,empId:data.emp_id,year:data.year})">Reject
+          </app-button>
+        </div>
+        <div *ngIf="data.status == 2">
+          <app-button class="timesheet__approve  mr-15 pointer-none" theme="grey" [size]="is_MD_LT ? 'extra-small' : 'small'">Rejected
+          </app-button>
+        </div>
+        <div class="flex start-xs" *ngIf="data.status == 0 || data.status == 3">
+          <app-button class="timesheet__approve pointer ml-15" theme="success"
+            [size]="is_MD_LT ? 'extra-small' : 'small'"
+            (click)="onClickResolveBtns('approve',{wkNo:data.week_number,empId:data.emp_id,year:data.year})">Approve
+          </app-button>
+          <app-button class="timesheet__reject ml-15" [size]="is_MD_LT ? 'extra-small' : 'small'" theme="red"
+            (click)="onClickResolveBtns('reject',{wkNo:data.week_number,empId:data.emp_id,year:data.year})">Reject
+          </app-button>
+        </div>
+      </div>
+      <div class="w-15 flex center-xs middle-xs">
+        <div tabindex="0" (keydown.enter)="onClickResolveBtns('view',{empId:data?.emp_id})"
+          (click)="onClickResolveBtns('view',{empId:data?.emp_id})" class="flex center-xs col col-primary-200 pointer">
+          <svg class="use-svg" symbol="view-details" w="20"></svg>
+          <span class="fs-10 mt-5">WSR</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #activeProjectsTemplate>
+  <div class="timesheet__body">
+    <div class="timesheet__row" [ngStyle]="{'zIndex':(12 - i)}"
+      *ngFor="let project of visibleActiveProjects;let i=index;">
+      <div class="project">
+        <span class="translate-title-text">
+          {{project?.project_name}} [{{project?.cumulative?.h | number:'2.'}} :
+          {{project?.cumulative?.m | number:'2.' }}]
+        </span>
+        <svg tabindex="0" *ngIf="project.priority != 1 && !disable" [attr.data-index]='i'
+          class="timesheet__row-remove col-warn-500 use-svg" symbol="remove" w="14"></svg>
+      </div>
+      <ng-container *ngFor="let day of project?.work_hours;let j=index;">
+        <div #field *ngIf="day?.date != 'Total' && mode != 'resolve-timesheet'">
+          <app-time-field [index]="j"
+            [formControl]="fgTimeFields['controls']['active_projects']['controls'][i].controls[j]" [editable]="!disable"
+            [disabled]="!day?.enable"></app-time-field>
+        </div>
+        <div *ngIf="day?.date == 'Total' || mode == 'resolve-timesheet'" class="time-value"
+          [class.disabled]="day.h == '00' && day.m == '00'" [class.total-row-value]="day?.date == 'Total'">
+          {{day.h | number:'2.'}} :
+          {{day.m | number:'2.'}}
+        </div>
+      </ng-container>
+    </div>
+    <div *ngIf="!disable && hiddenActiveProjects.length > 0" class="timesheet__row timesheet--sel-project"
+      style="z-index: 11;">
+      <div (keydown)="key_pressed($event)" #selProject class="sel-project "
+        [class.disabled]="hiddenActiveProjects.length < 1">
+        <div tabindex="0" class=" flex middle-xs center-xs sel-project__btn btn-outline">
+          <svg class=" mr-5 use-svg" symbol="add-circle" w="14"></svg>
+          Select Project
+        </div>
+        <div class="sel-project__project-list" *ngIf="showProjectList && hiddenActiveProjects.length > 0">
+          <div class="sel-project__project" [attr.data-project]="project?.project_id" [attr.index]="i" #select
+            id="{{ i }}" *ngFor="let project of hiddenActiveProjects;let i = index;">
+            {{project?.project_name}}
+          </div>
+        </div>
+      </div>
+      <ng-container *ngFor="let x of [1,2,3,4,5,6,7,8]">
+        <div>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #variousTimesheetEntries>
+
+  <div class="timesheet__row timesheet--misc">
+    <div class="misc timesheet__row-title">
+      <span class="translate-title-text" [ngClass]="is_LessThenTab?'col-primary-100':'col-primary-300'">
+        Miscellaneous
+      </span>
+    </div>
+    <ng-container *ngFor="let day of data?.MISCELLANEOUS?.work_hours;let i=index;">
+      <div *ngIf="day.date != 'Total' && mode != 'resolve-timesheet'">
+        <app-time-field [index]="i" [formControl]="fgTimeFields['controls']['MISCELLANEOUS']['controls'][i]"
+          [editable]="!disable" [disabled]="!day?.enable"></app-time-field>
+      </div>
+      <div [class.disabled]="day.h == '00' && day.m == '00'" *ngIf="day.date == 'Total' || mode == 'resolve-timesheet'"
+        class="total-row-value">{{day.h | number:'2.'}} :
+        {{day.m | number:'2.'}}</div>
+    </ng-container>
+    <!-- <div >{{projectWeekTotal(data?.MISCELLANEOUS?.work_hours)}}</div> -->
+  </div>
+
+  <div class="timesheet__row timesheet--holi">
+    <div class="holi timesheet__row-title">
+      <span class="translate-title-text" [ngClass]="is_LessThenTab?'col-primary-100':'col-primary-300'">
+        Holiday
+      </span>
+    </div>
+    <ng-container *ngFor="let day of data?.HOLIDAY?.work_hours;let i=index;">
+      <div *ngIf="day?.date != 'Total' && mode != 'resolve-timesheet'">
+        <app-time-field [index]="i" [formControl]="fgTimeFields['controls']['HOLIDAY']['controls'][i]"
+          [editable]="!disable" [disabled]="!day?.enable"></app-time-field>
+      </div>
+      <div [class.disabled]="day.h == '00' && day.m == '00'" *ngIf="day?.date == 'Total' || mode == 'resolve-timesheet'"
+        class="total-row-value">{{day.h | number:'2.'}} :
+        {{day.m | number:'2.'}}
+      </div>
+    </ng-container>
+    <!-- <div >{{projectWeekTotal(data?.HOLIDAY?.work_hours)}}</div> -->
+  </div>
+
+  <div class="timesheet__row  timesheet--vacation">
+    <div class="vacation  timesheet__row-title">
+      <span class="translate-title-text" [ngClass]="is_LessThenTab?'col-primary-100':'col-primary-300'">
+        Vacation
+      </span>
+    </div>
+    <ng-container *ngFor="let day of data?.VACATION?.work_hours;let i=index;">
+      <div *ngIf="day?.date != 'Total' && mode != 'resolve-timesheet'">
+        <app-time-field [index]="i" [formControl]="fgTimeFields['controls']['VACATION']['controls'][i]"
+          [editable]="!disable" [disabled]="!day?.enable"></app-time-field>
+      </div>
+      <div [class.disabled]="day.h == '00' && day.m == '00'" *ngIf="day?.date == 'Total' || mode == 'resolve-timesheet'"
+        class="total-row-value">{{day.h | number:'2.'}} :
+        {{day.m | number:'2.'}}
+      </div>
+    </ng-container>
+    <!-- <div >{{projectWeekTotal(data?.VACATION?.work_hours)}}</div> -->
+  </div>
+</ng-template>
+
+<ng-template #totalTimesheetEntries>
+
+
+  <div class="timesheet__row timesheet--total">
+    <div class="total  timesheet__row-title">
+      <span class="translate-title-text">
+        Total Hours
+      </span>
+    </div>
+    <ng-container *ngFor="let x of [1,2,3,4,5,6,7];let i=index;">
+      <div class=" total-value {{mode}} "
+        [ngClass]="{'total-value__red':(mode == 'resolve-timesheet' && data['total_highlight'][i])}">
+        {{totalDayTimeMeta[i]?.h | number:'2.'}} : {{totalDayTimeMeta[i]?.m | number:'2.'}}
+        <p class="error-total" *ngIf="totalDayTimeMeta[i]?.showError">The total hours for a day has to be less than
+          24.
+        </p>
+      </div>
+    </ng-container>
+    <div [class.disabled]="grandTotal == '00 : 00'" class="total-row-value">{{grandTotal}}</div>
+  </div>
+</ng-template>
+
+<ng-template #subtotalTimesheetEntries>
+
+
+  <div class="timesheet__row timesheet--total">
+    <div class="sub-total  timesheet__row-title" style="font-weight: 300;">
+      <span class="translate-title-text">
+        Project Sub Total
+      </span>
+    </div>
+    <ng-container *ngFor="let x of [1,2,3,4,5,6,7];let i=index;">
+      <div class=" time-value">
+        {{data?.projectSubTotal[i]?.h | number:'2.'}} : {{data?.projectSubTotal[i]?.m | number:'2.'}}
+        <p class="error-total" *ngIf="data?.projectSubTotal[i]?.showError">The total hours for a day has to be less than
+          24.
+        </p>
+      </div>
+    </ng-container>
+    <div [class.disabled]="data?.projSubTotal == '00 : 00'" class="total-row-value">{{data?.projSubTotal}}</div>
+  </div>
+</ng-template>
+
+<ng-template #accessData>
+  <div class="pb-5">
+    <div class="timesheet__row  timesheet--nethours p-2">
+      <div class="nethours timesheet__row-title">
+        <span class="translate-title-text">
+          Net Working Hours<br><span class="fs-12">(from Access Control)</span>
+        </span>
+      </div>
+      <ng-container *ngFor="let day of data?.net_working_hours;let i=index;">
+        <div *ngIf="day?.date != 'Total'" class="total-value">
+          {{day.h | number:'2.'}} : {{day?.m | number:'2.'}}
+        </div>
+        <div [class.disabled]="day.h == '00' && day.m == '00'" *ngIf="day?.date == 'Total'" class="total-row-value">
+          {{day.h | number:'2.'}} : {{day.m | number:'2.'}}
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="timesheet__row  timesheet--grosshours p-2">
+      <div class="grosshours timesheet__row-title">
+        <span class="translate-title-text">
+          Gross Working Hours<br><span class="fs-12">(from Access Control)</span>
+        </span>
+      </div>
+      <ng-container *ngFor="let day of data?.gross_working_hours;let i=index;">
+        <div *ngIf="day?.date != 'Total'" class="total-value">
+          {{day.h | number:'2.'}} : {{day?.m | number:'2.'}}
+        </div>
+        <div [class.disabled]="day.h == '00' && day.m == '00'" *ngIf="day?.date == 'Total'" class="total-row-value">
+          {{day.h | number:'2.'}} : {{day.m | number:'2.'}}
+        </div>
+      </ng-container>
+      <!-- <div >{{projectWeekTotal(data?.VACATION?.work_hours)}}</div> -->
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #noTimeSheetData>
+  <ng-container *ngIf="isTimeSheetResolved">
+    <!-- <p class="p-15 dis-ib" style="background:#ccc;">None</p> -->
+    <div class="flex col middle-xs center-xs pt-30 pt-md-50 ">
+      <img src="./assets/images/happy_announcement.png" alt="">
+      <p class="col-primary-300 fs-14 mt-10">No Pending Timesheets to submit</p>
+    </div>
+  </ng-container>
+</ng-template>

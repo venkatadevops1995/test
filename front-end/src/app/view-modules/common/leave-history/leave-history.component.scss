@@ -1,0 +1,37 @@
+::ng-deep {
+  .example-month-picker .mat-calendar-period-button {
+    pointer-events: none;
+  }
+
+  .example-month-picker .mat-calendar-arrow {
+    display: none;
+  }
+
+  .mat-form-field-flex {
+    border-radius: 20px !important;
+  }
+}
+
+.myclass {
+  margin-top: 20px !important;
+}
+
+table {
+  width: 100%;
+}
+
+:host {
+
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.future__leave_checkbox{
+  margin: 0 15px;
+}
+.disable{
+  background-color: rgb(184, 180, 180);
+}
+

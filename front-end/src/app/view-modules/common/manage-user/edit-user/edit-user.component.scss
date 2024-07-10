@@ -1,0 +1,59 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    // background-color: #F6FAFD;
+    border-radius: 20px;
+    margin: 0 0 10px;
+    padding: 4px;
+}
+ 
+
+.disabled-input {
+    background-color: ( --color-quaternary-dark);
+    opacity: 0.4 !important;
+}
+
+.disabled_field {
+    mat-label,
+    mat-select {
+        color: #AAAAAA;
+    }
+}
+.delete__emp{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+   p span{
+    color: red;
+   }
+} 
+
+:host ::ng-deep div.middle {
+    div.model__content{
+        padding: 0 !important;
+    
+    }
+}
+.disable__emp_msg{
+    padding: 20px 0 0 40px;
+}
+button.disable--emp-btn{
+    color: var(--col-warn-500) !important;
+    cursor: default !important;
+    svg{
+        pointer-events: none;
+    }
+}
+ button.action--btn{
+    background-color: transparent;
+    color: var(--col-primary-100);
+
+}
+.heading{
+    text-align: left;
+}
+::ng-deep.mat-datepicker-content-container{
+    width: 310px !important;
+    height: unset !important;
+}

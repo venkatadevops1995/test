@@ -1,0 +1,46 @@
+.header-search-form  {
+    position: relative;
+    // top: 50%;
+    // left: 50%;
+    // transform: translate(-50%,-50%);
+    transition: all 1s;   
+    box-sizing: border-box; 
+    padding: 5px;
+    min-width: 320px;
+    cursor: pointer;
+}
+ 
+
+.search-icon {
+    box-sizing: border-box; 
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    text-align: center; color:var(--on-col-primary-600);
+    opacity: 0.6;
+    margin-top: -3px;
+}
+.employee-profile-details{
+    .mat-dialog-container{
+        padding:0px;
+    }
+}
+// form:hover{
+//     width: 200px;
+//     cursor: pointer;
+// }
+// form:hover input{
+//     display: block;
+// }
+// form:hover .fa{
+//     background: #06b4e8;
+//     color: #040404;
+// }
+
+@media screen and (max-width:1024px){
+    .header-search-form{
+        min-width:250px;
+    }
+}

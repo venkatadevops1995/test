@@ -1,0 +1,30 @@
+<!-- <h2 mat-dialog-title color="accent">Confirm</h2> -->
+<div class="dummy" appFocus></div>
+<div class="confirm-heading ">
+  <span *ngIf="dataMerged?.heading">{{dataMerged?.heading}}</span>
+</div>
+<div>
+  <div class="mt-10 mb-30" *ngIf="!dataMerged?.template;else templateContent;">
+    <span class="fs-12 fw-300 col-primary-100">
+      {{ dataMerged?.confirmMessage  }}
+    </span>
+    <div class="mt-20" *ngIf="dataMerged?.showTextbox">
+      <textarea class="textarea-border br-10 w-100" [formControl]="fcText" rows="4"
+        placeholder="{{dataMerged?.placeholderTextField }}"></textarea>
+    </div>
+  </div>
+  <ng-template #templateContent>
+    <ng-container *ngTemplateOutlet="dataMerged?.template"></ng-container>
+  </ng-template>
+  <div style="position: relative;top:0px;" *ngIf="!dataMerged?.template">
+    <mat-dialog-actions style="margin-bottom:0px;" class="w-100 between-xs flex nowrap" >
+      <app-button tabindex="0" [mat-dialog-close]="false" cdkFocusInitial  theme="grey" type="button" [size]="(is_XMD_LT ? 'small' : 'default')">
+        {{ dataMerged?.Cancel}}
+      </app-button>
+      <div  *ngIf="!dataMerged?.onlyForAlert">
+        <app-button [mat-dialog-close]="dataMerged?.showTextbox ? {text:fcText.value}: true"  theme="blue-lite" type="button" [size]="(is_XMD_LT ? 'small' : 'default')">
+          {{ dataMerged?.Proceed}}</app-button>
+      </div>
+    </mat-dialog-actions>
+  </div>
+</div>

@@ -1,0 +1,55 @@
+<h2>Holiday List</h2>
+<div class="timesheet">
+    <div class="timesheet__head">
+        <div class="week">Serial no</div>
+        <div *ngFor="let item of headerItems">
+            <ng-container >
+                {{item}}
+            </ng-container>
+
+            <!-- <div *ngIf="day == 'Total'">{{day}}</div> -->
+        </div>
+        <div class="location" *ngFor="let loc of headerLocation">
+            <ng-container >
+                {{loc}}
+            </ng-container>
+
+            <!-- <div *ngIf="day == 'Total'">{{day}}</div> -->
+        </div>
+        
+        <!-- <div>Total</div> -->
+    </div>
+<div class="timesheet__body">
+    <div class="timesheet__row" *ngFor="let holiday of HOLIDAYLIST_TESTDATA;let i=index;">
+        <div class="project">
+            {{i+1}}
+            <!-- <div [attr.data-index]='i' [svgIcon]="{url:'./assets/icons-sprite.svg#close-circle',w:25}" svg-fill="#666" class="timesheet__row-remove">
+            </div> -->
+        </div>
+        <div >{{holiday.date}}</div>
+        <div >{{holiday.day}}</div>
+        <div >{{holiday.des}}</div>
+        <div [ngClass]="{ 'applicable': holiday.hyd }">{{holiday.hyd?'Yes':'No'}}</div>
+        <div [ngClass]="{ 'applicable': holiday.blr }">{{holiday.blr?'Yes':'No'}}</div>
+        <div [ngClass]="{ 'applicable': holiday.delhi }">{{holiday.delhi?'Yes':'No'}}</div>
+    </div>
+</div>
+<!-- <div class="timesheet__row timesheet--sel-project">
+    <div #selProject class="sel-project" >
+        <div style="pointer-events: none;" class="flex middle-xs center-xs">
+            <div class="mr-5" [svgIcon]="{url:'./assets/icons-sprite.svg#plus-circle',w:25}" svg-fill="currentColor"></div> Add Holiday
+        </div> -->
+
+        <!-- <div class="sel-project__project-list" >
+             <div class="sel-project__project" [attr.data-project]="project?.project_id" [attr.index]="i" *ngFor="let project of hiddenActiveProjects;let i = index;">
+                {{project?.project_name}}
+            </div> 
+        </div>   -->
+    <!-- </div> -->
+
+    <!-- <ng-container *ngFor="let x of [1,2,3,4,5,6,7,8]">
+        <div>
+        </div>
+    </ng-container> -->
+<!-- </div>
+</div> -->

@@ -1,0 +1,204 @@
+<div class="material-demo">
+  <h2>Material Components For Demo!</h2>
+  <div>
+    <h3>Overlay</h3> 
+    <button (click)="isOpen = !isOpen" type="button" mat-raised-button cdkOverlayOrigin #trigger="cdkOverlayOrigin">
+      {{isOpen ? "Close" : "Open"}}
+    </button>
+ 
+    <ng-template cdkConnectedOverlay [cdkConnectedOverlayOrigin]="trigger" [cdkConnectedOverlayOpen]="isOpen">
+      <ul class="example-list">
+        <li>Item 1</li>
+        <li>Item 2</li>
+        <li>Item 3</li>
+      </ul>
+    </ng-template>
+  </div>
+  <hr>
+  <div>
+    <h3>Toggle</h3>
+    <mat-slide-toggle>Click me!</mat-slide-toggle>
+  </div>
+  <hr>
+  <div>
+    <h3>Button</h3>
+    <button mat-raised-button color="accent">Basic</button>
+    <span>&nbsp;</span>
+    <button mat-stroked-button>Basic</button>
+
+  </div>
+  <div>
+    <h3>App Button (custom)</h3>
+    <app-button>Submit</app-button>
+  </div>
+  <hr>
+  <div>
+    <h3>Date Range Picker</h3>
+    <div style="font-size: 12px" class="flex ">
+      <mat-form-field appearance="legacy">
+        <app-atai-date-range [formControl]="dateRange"></app-atai-date-range> 
+      </mat-form-field>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <h3>Mat Date Range Picker</h3>
+    <div style="font-size: 12px" class="flex ">
+
+      <mat-form-field appearance="fill">
+        <mat-date-range-input [rangePicker]="picker" [min]="minDate" [max]="maxDate">
+          <input matStartDate placeholder="Start date">
+          <input matEndDate placeholder="End date">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <h3>Radio Buttons</h3>
+    <mat-radio-group aria-label="Select an option">
+      <mat-radio-button value="1">Option 1</mat-radio-button>
+      <mat-radio-button value="2">Option 2</mat-radio-button>
+    </mat-radio-group>
+  </div>
+  <hr>
+  <div>
+    <h3>Checkbox </h3>
+    <mat-checkbox class="example-margin">Check me!</mat-checkbox>
+  </div>
+  <hr>
+
+  <div>
+    <h3>Input</h3>
+    <div style="font-size: 12px">
+      <mat-form-field color="accent" appearance="outline">
+        <mat-label>Small Input </mat-label>
+        <input matInput placeholder="Placeholder"> 
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </div>
+    <br>
+    <div style="font-size: 12px">
+      <mat-form-field color="accent" appearance="legacy">
+        <mat-label>Small Input </mat-label>
+        <input matInput placeholder="Placeholder"> 
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </div>
+    <br>
+    <div>
+      <mat-form-field color="accent" appearance="outline">
+        <mat-label>Large Input</mat-label>
+        <input matInput placeholder="Placeholder"> 
+        <mat-hint>Hint</mat-hint>
+      </mat-form-field>
+    </div>
+
+  </div>
+  <hr>
+
+  <div>
+    <h3>Select dropdown </h3>
+    <div style="font-size: 12px">
+      <mat-form-field color="accent" appearance="outline">
+        <mat-label>Favorite food</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{food.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+    <mat-form-field color="accent" appearance="fill">
+      <mat-label>Favorite food</mat-label>
+      <mat-select>
+        <mat-option *ngFor="let food of foods" [value]="food.value">
+          {{food.viewValue}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <h3>Select drop down legacy</h3>
+    <div>
+      <mat-form-field color="accent" appearance="legacy">
+        <mat-label>Favorite food</mat-label>
+        <!-- <app-select-border></app-select-border> -->
+        <mat-select>
+          <mat-option *ngFor="let food of foods" [value]="food.value">
+            {{food.viewValue}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <hr>
+  <div>
+    <h3>Slider</h3>
+    <mat-slider></mat-slider>
+  </div>
+  <hr>
+
+  <div>
+    <h3>Tooltip </h3>
+    <button mat-raised-button matTooltip="Info about the action"
+      aria-label="Button that displays a tooltip when focused or hovered over">
+      Action
+    </button>
+  </div>
+  <hr>
+  <div>
+    <h3>Search box </h3>
+    <mat-toolbar color="accent">
+      <div class="search-wrapper">
+        <div class="search-wrapper__inline"> 
+          <input placeholder="Search for a employee">
+        </div>
+      </div>
+    </mat-toolbar>
+
+  </div>
+  <hr>
+  <div>
+    <h3>Icon</h3> 
+  </div>
+  <hr>
+  <div>
+    <h3>Tab</h3>
+    <mat-tab-group>
+      <mat-tab label="First"> Content 1 </mat-tab>
+      <mat-tab label="Second"> Content 2 </mat-tab>
+      <mat-tab label="Third"> Content 3 </mat-tab>
+    </mat-tab-group>
+  </div>
+  <hr>
+  <div>
+    <h3>Toolbar</h3>
+    <mat-toolbar color="accent">
+      <button class="example-icon" aria-label="Example icon-button with menu icon"> 
+      </button>
+      <span>My App</span>
+      <span class="example-spacer"></span>
+      <button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon"> 
+      </button>
+      <button class="example-icon" aria-label="Example icon-button with share icon"> 
+      </button>
+    </mat-toolbar>
+
+    <mat-toolbar color="accent" style="margin-top:10px;">
+      <button class="example-icon" aria-label="Example icon-button with menu icon"> 
+      </button>
+      <span>My App</span>
+      <span class="example-spacer"></span>
+      <button class="example-icon favorite-icon" aria-label="Example icon-button with heart icon"> 
+      </button>
+      <button class="example-icon" aria-label="Example icon-button with share icon"> 
+      </button>
+    </mat-toolbar>
+  </div>
+  <hr>
+  <div>
+    <h3>Dialog Box</h3>
+    <button mat-button (click)="openDialog()">Open dialog</button>
+  </div>
+</div>

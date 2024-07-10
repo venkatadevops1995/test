@@ -1,0 +1,45 @@
+:host{
+    .wsr__sel-project{
+        color: #333;
+        position: relative;
+        font-weight: 500;
+        font-size:14px;
+        &.disabled{
+          pointer-events: none;
+          color: #999;
+        }
+        .wsr__sel-project-list{
+            position: absolute;
+            top:calc(100% - 10px);
+            width:200px;
+            left:0;
+            background: var(--color-quaternary);
+            box-shadow: 0px 0px 4px 2px rgba(0,0,0,0.2);
+            border-radius: 5px;
+            max-height:200px;
+            overflow: auto;
+            z-index: 11;
+            div{
+              height:40px;
+              line-height: 40px;
+              padding:0 15px;
+              cursor: pointer;
+              &:hover{
+                background: var(--color-quaternary-dark);
+              }
+            }
+
+        }
+    }
+    .wsr__project-text{
+        width:100%;
+        height:100px;
+        border:1px solid #aaa;
+    }
+    .wsr__project-name{
+        background: var(--color-secondary);
+        display: inline-block;
+        color:#fff;
+        padding:10px 20px;
+    }
+}

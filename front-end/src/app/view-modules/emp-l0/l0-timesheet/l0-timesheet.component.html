@@ -1,0 +1,38 @@
+<h2 class="heading">Weekly Timesheet</h2>
+<app-time-sheet [disable]="disableTimesheet" [data]='weeklyTimeSheetData'>
+  <div *ngIf="!disableTimesheet " class="flex end-xs mt-20">
+    <app-button theme="blue-lite-extra" class="mr-30" (click)="onSubmitTimeSheet('save')">Save</app-button>
+    <app-button (click)="onSubmitTimeSheet('save-submit')">Save & Submit</app-button>
+  </div>
+
+</app-time-sheet>
+
+
+<div *ngIf="showWsr" class="wsr mt-30" [formGroup]="fgWsrProjects">
+  <h2 class="heading">Weekly Status report</h2>
+  <div>
+    <div *ngFor="let project of wsrActiveProjectsVisible;let i=index;">
+      <div class="wsr__project-name">{{project?.project_name}}</div>
+      <textarea [formControl]="fgWsrProjects['controls']['active_projects']['controls'][i] "
+        class="wsr__project-text mb-30"></textarea>
+    </div>
+  </div>
+  <div *ngIf="weeklyTimeSheetData.enableSaveSubmit" #selProject class="wsr__sel-project flex middle-xs"
+    [class.disabled]="wsrActiveProjectsHidden.length < 1" style="margin-top:-15px;">
+    <div style="pointer-events: none;" class="flex middle-xs center-xs">
+      <svg class="mr-5 use-svg" symbol="plus-circle" w="25">
+      </svg> Select Project
+    </div>
+    <div class="wsr__sel-project-list" *ngIf="showProjectList && wsrActiveProjectsHidden.length > 0">
+      <div class="sel-project__project" [attr.data-project]="project?.project_id" [attr.index]="i"
+        *ngFor="let project of wsrActiveProjectsHidden;let i = index;">
+        {{project?.project_name}}
+      </div>
+    </div>
+  </div>
+  <div class="wsr__project-name mt-30">General</div>
+  <textarea formControlName="general" class="wsr__project-text"></textarea>
+  <div class="flex end-xs" *ngIf="weeklyTimeSheetData?.enableSaveSubmit">
+    <app-button [class.disabled]='!enableWsrSubmit' (click)="onSubmitWsr()" class="mt-20">Submit</app-button>
+  </div>
+</div>

@@ -1,0 +1,31 @@
+<div class="dummy" appFocus></div>
+<div class="flex flex-col-xs flex-row-xmd between-md start-xs top-md middle-xmd  mb-20">
+  <h2 class="mb-15 mb-xmd-0">Timesheet Report</h2>
+  <ng-container *ngIf="isPageAccessable;else not_access">
+    <div class="flex flex-col-xs flex-row-md fs-xmd-14 fs-12 fs-md-13  center-xs middle-xs mb-0-xmd bottom-md start-md">
+      <mat-form-field   class="mr-0 mr-md-30 no-pb top-form-field">
+        <input matInput placeholder="Search" aria-label="Leader" [matAutocomplete]="auto" [formControl]="option"
+          [(ngModel)]="value" />
+        <svg matSuffix class="col-primary-300 use-svg" (click)="clear()" symbol="triangle-down" w="8"></svg>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)='selectEmp($event.option.value)'>
+          <mat-option *ngFor="let emp of filteredManagers | async" [value]="emp['emp_name']">
+            {{emp["emp_name"]}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+
+      <mat-form-field  appearance="legacy" class="no-pb atai-date-range mt-15 mt-md-0 top-form-field">
+        <app-atai-date-range [presets]="datePickerPresets" [maxDate]="maxDate" (dateSelected)="onDateSelection($event)">
+        </app-atai-date-range>
+      </mat-form-field>
+      <svg class="export_icon ml-30 mt-15 mt-md-0 use-svg"
+        [dbdFileDownload]="{endPoint:getDownloadEndPoint(),responseType:'blob'}" symbol="excel-green" w="25">
+      </svg>
+    </div>
+  </ng-container>
+</div>
+<ng-template #not_access>
+  <div class="fs-14 col-primary-300">Sorry, You Don't have access to this page</div>
+</ng-template>
+
+<app-download-report-message *ngIf="isPageAccessable;" [message]="message"></app-download-report-message>

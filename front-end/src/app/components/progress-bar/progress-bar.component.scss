@@ -1,0 +1,61 @@
+:host {
+    display: block;
+    position: fixed;
+    top: 65px;
+    height: auto;
+    width: 100%;
+    z-index: 10001;
+    padding-left: 90px;
+    /*pointer-events: none;*/
+}
+
+.progress-bar-wrap, .progress-bg {
+    height: 10px;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0px;
+    right: 0px;
+    background: #666;
+}
+
+/*.progress-bar-wrap {
+    border-bottom: 3px solid #f37834;
+}*/
+
+.progress-bg {
+    z-index: 2;
+}
+:host rect, :host g{      
+    transition: all 200ms ease-in-out;
+}
+:host text{
+    font-size: 18px;
+    font-weight: bold;
+}
+.progress-bar {
+    width: 30px;
+    height: 10px;
+    background: #f37834;
+    position: relative;
+    z-index: 3;
+}
+
+.progress-width {
+    width: 100px;
+    height: 100px;
+    line-height: 145px;
+    position: absolute;
+    top: -50px;
+    border-radius: 50%;
+    background: #666;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #fff;
+    text-align: center;
+    z-index: 1;
+    font-size: 18px;
+    font-weight: bold;
+    border: 3px solid #f37834;
+}

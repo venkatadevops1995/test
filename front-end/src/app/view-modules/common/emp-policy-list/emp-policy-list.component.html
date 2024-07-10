@@ -1,0 +1,137 @@
+<div class="dummy" appFocus></div>
+<div>
+  <h2 class="mb-20 heading">Document</h2>
+  <div>
+    <div class="not--exsiting-policy" *ngIf="EMPLOYEE_FILTERED_DATA.length == 0 && status">
+      <p class="fs-14 col-primary-300">There are no policies available</p>
+    </div>
+    <!-- Rahul change(adding a horizontal scroll bar for the table)********************************* -->
+    <div class="w-100 of-x-auto" *ngIf="EMPLOYEE_FILTERED_DATA.length != 0" [tableAffix]>
+      <table mat-table [dataSource]="EMPLOYEE_FILTERED_DATA" 
+        class="w-100 mat-elevation-z8">
+        <ng-container matColumnDef="sno">
+          <th class="w-15" mat-header-cell *matHeaderCellDef>Serial No.</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            {{ i + 1 }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="policy_name">
+          <th class="table-colum-left pl-table-50" mat-header-cell *matHeaderCellDef>Policy Name</th>
+          <td class="table-colum-left pl-table-50" mat-cell *matCellDef="let element"
+            [ngClass]="{ selectedBg: element.selected == true }">
+            {{ element.policy_name }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="updated_date">
+          <th mat-header-cell *matHeaderCellDef>Updated on</th>
+          <td mat-cell *matCellDef="let element" [ngClass]="{ selectedBg: element.selected == true }">
+            {{ element.enable_on }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="company">
+          <th mat-header-cell *matHeaderCellDef>Groups</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="company" *ngFor="let com of element.company_list">
+              {{ com.company_name }}
+            </div>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="view">
+          <th class="w-15 pr" mat-header-cell *matHeaderCellDef>View</th>
+          <td mat-cell *matCellDef="let element" title="View Policy">
+            <svg
+            tabindex="0"
+            (keydown.enter)="openPolicyDetails(element.policy_name,element.id)"
+            class="ml-5 use-svg" symbol="view-details" w="20"
+              (click)="openPolicyDetails(element.policy_name,element.id)" style=" 
+              margin-top: 0px;
+              cursor: pointer;
+            " svg-fill="currentColor"></svg>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="employeePopupColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: employeePopupColumns"></tr>
+      </table>
+    </div>
+    <!-- ***********************************************************************
+  ***************************************************************** -->
+  </div>
+</div>
+
+
+
+<!-- Rahul change (commenting previous policyDetailsPopUp)************************************* -->
+<!-- <app-modal-popup #policyDetailsRef [w]="'900px'" [h]="'700px'" [policy_style] ="true" >
+  <div class="loader--string" *ngIf="isLoaderVisible" >
+    Loading....
+  </div>
+  <div head>{{clicked_policy_name}}</div>
+  <div style="text-align: center">
+    <pdf-viewer  [src]="filepathUrl" (after-load-complete) ="loader()" [render-text]="true" style="display: block;position: inherit;">
+    </pdf-viewer> -->
+<!-- ************************************************************************ -->
+<!-- <app-secured-file [src]="filepathUrl"></app-secured-file> -->
+
+<!-- 'http://10.60.62.114:8000/api/media/id_card.pdf' -->
+<!-- http://10.60.62.114:4200/assets/images/Email_Friday_V3.jpg -->
+<!-- 'http://10.60.62.114:4200/assets/id_card.pdf' -->
+<!-- <ngx-doc-viewer [viewerUrl]="'https://docs.google.com/gview'" [url]="'https://testvedika.atai.ai/api/media/profiles/SAMPLE.docx'" [viewer]="'url'" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+<!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/media/file-sample_100kB.docx'" viewer="google" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+<!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+
+<!-- <ngx-doc-viewer [url]="'https://docs.google.com/document/d/e/2PACX-1vRs3gemrszDinuGJCi_wO2m5XVP1q2SlRhxM8PAUYc3wu9LFsvteny7l6Rkp695-ruhfn3gWXV03yXC/pub?embedded=true'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+<!-- <iframe src="'http://10.60.62.114:8000/api/media/id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+<!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+<!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+<!-- <iframe src="https://docs.google.com/gview?url=http://testvedika.atai.ai/api/media/profiles/SAMPLE.docx&embedded=true" style="width: 90%; height: 1000px"/> -->
+<!-- <p>Your browser does not support iframes.</p> -->
+<!-- <iframe src="" style="width: 800px; height: 420px"></iframe> -->
+<!-- ***************************************************** -->
+<!-- </div>
+</app-modal-popup> -->
+<!-- **************************************************************************************************************************
+***************************************************************************************** -->
+
+
+
+
+<!-- Rahul change(addding new policyDetailsPopUp)****************************************************** -->
+<ng-template #PolicyDetailsPopUp>
+  <div class="loader--string" *ngIf="isLoaderVisible">
+    Loading....
+  </div>
+  <!-- <div head>{{clicked_policy_name}}</div> -->
+  <div style="text-align: center">
+    <pdf-viewer [ngStyle]="{'height': '72vh'}" [original-size]="true" [autoresize]="true"  (after-load-complete)="loader()"[src]="filepathUrl" [zoom]="setZoomIN()" [zoom-scale]="'page-width'" [render-text]="true" 
+    style="display: block;">
+  </pdf-viewer>
+    <!-- <app-secured-file [src]="filepathUrl"></app-secured-file> -->
+
+    <!-- 'http://10.60.62.114:8000/api/media/id_card.pdf' -->
+    <!-- http://10.60.62.114:4200/assets/images/Email_Friday_V3.jpg -->
+    <!-- 'http://10.60.62.114:4200/assets/id_card.pdf' -->
+    <!-- <ngx-doc-viewer [viewerUrl]="'https://docs.google.com/gview'" [url]="'https://testvedika.atai.ai/api/media/profiles/SAMPLE.docx'" [viewer]="'url'" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+    <!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/media/file-sample_100kB.docx'" viewer="google" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+    <!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+
+    <!-- <ngx-doc-viewer [url]="'https://docs.google.com/document/d/e/2PACX-1vRs3gemrszDinuGJCi_wO2m5XVP1q2SlRhxM8PAUYc3wu9LFsvteny7l6Rkp695-ruhfn3gWXV03yXC/pub?embedded=true'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+    <!-- <iframe src="'http://10.60.62.114:8000/api/media/id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+    <!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+    <!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+    <!-- <iframe src="https://docs.google.com/gview?url=http://testvedika.atai.ai/api/media/profiles/SAMPLE.docx&embedded=true" style="width: 90%; height: 1000px"/> -->
+    <!-- <p>Your browser does not support iframes.</p> -->
+    <!-- <iframe src="" style="width: 800px; height: 420px"></iframe> -->
+  </div>
+</ng-template>
+<!-- ***************************************************************************************************
+************************************************************************************ -->

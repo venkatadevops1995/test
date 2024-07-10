@@ -1,0 +1,20 @@
+::ng-deep .max-w250 .mat-form-field-flex {
+    // max-width: 250px!important;
+    // width: 70%;
+    // width: inherit;
+    min-width: 250px;
+}
+
+::ng-deep .min-w150 .mat-table thead th {
+    min-width: 250px;
+}
+
+.fc_blue {
+    color:var(--col-accent-300);
+}
+.disabled--emp {
+    background-color: #1c1b1b;
+}
+button.action--btn{
+    background-color: transparent;
+}

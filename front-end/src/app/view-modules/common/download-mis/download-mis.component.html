@@ -1,0 +1,28 @@
+<div class="dummy" appFocus></div>
+<div class="mis__wrapper">
+  <h2 class="heading mb-20">Download Employee Details</h2>
+
+  <div class="mis__body p-50 primary-900 flex center-xs">
+    <div class="center-xs mis__datepicker fs-14 flex flex-col-xs flex-row-md" [class.middle-xs]="Is_match" [ngClass]=" Is_match ? 'ml-30':'ml-5'"  style="max-width: 600px;">
+      <div>
+        <mat-form-field class="mr-md-30 no-pb atai-date-range" style="min-width: 225px;">
+          <app-atai-date-range [minDate]="minDate" [disabled]="!Ischecked" (dateSelected)="onDateSelect($event)">
+          </app-atai-date-range>
+        </mat-form-field>
+        <div class="mis__checkbox fs-14 col-primary-400 flex start-xs">
+          <mat-checkbox tabindex="0" [checked]="Ischecked" color="accent" (change)="onIsDisableClick($event)"
+            id="mat-checkbox-disabled-employee">
+            <label class="pointer" for="mat-checkbox-disabled-employee-input"> Disabled Employee</label>
+          </mat-checkbox>
+        </div>
+      </div>
+      <app-button size="small" [class.mt-20]="Is_match" style="width: 140px;"
+        [dbdFileDownload]="{endPoint:'downloadmis/?'+'disable='+ Ischecked+'&startdate='+fromdate+'&enddate='+todate ,responseType:'blob'}">
+        <div class="flex middle-xs center-xs">
+          <svg symbol="download" w="15"  class="ml-5 use-svg  mr-10"></svg> <span>MIS</span>
+        </div>
+      </app-button> 
+    </div>
+
+  </div>
+</div>

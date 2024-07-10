@@ -1,0 +1,160 @@
+:host {
+  display: block;
+
+  .fg {
+    position: relative;
+  }
+
+  .loader-files {
+    position: absolute;
+    top: -15px;
+    right: -15px;
+    width: 50px;
+    height: 30px;
+    z-index: 11;
+  }
+
+  .pH {
+    color: #f37834;
+    margin-bottom: 5px;
+    display: block;
+  }
+
+  .btn-file {
+    display: flex;
+
+    sup {
+      vertical-align: 2px;
+      color: red;
+    }
+  }
+
+  .file-wrap {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    align-content: center;
+    flex-direction: column;
+    height: auto;
+    position: relative;
+    min-height: 150px;
+    background: var(--col-primary-900);
+    border: 2px dashed var(--col-primary-400);
+    border-radius: 10px;
+
+    &.error {
+      border-color: red !important;
+    }
+
+    &:focus {
+      box-shadow: 0 0 4px 2px rgb(0 0 0 / 30%)
+    }
+
+    label {
+      color: var(--col-primary-300);
+      font-size: 13px;
+      padding: 15px;
+      fill: #fff;
+      cursor: pointer;
+      display: flex;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      justify-content: center;
+      flex-direction: column;
+      border-radius: 10px;
+      // background: var(--color-secondary);
+      // border-bottom: 1px solid var(--col-accent-800);
+      font-weight: 700;
+      text-align: center;
+      z-index: 2;
+    }
+
+    .file-list {
+      padding: 10px;
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      justify-content: center;
+      flex-direction: column;
+      z-index: 1;
+    }
+
+  }
+
+  .is-empty {
+    .file-wrap {
+
+      background: none !important;
+    }
+  }
+
+  &.dragover .file-wrap {
+    //   box-shadow: 0px 0px 15px 3px rgba(128,128,128,0.4); 
+    border: 2px dashed #666;
+  }
+
+  .accept-string {
+    color: var(--col-primary-400);
+    font-size: 12px;
+    font-weight: 300;
+  }
+
+  .file-wrap input[type="file"] {
+    visibility: hidden;
+    position: absolute;
+    width: 0;
+  }
+
+  .file-wrap .file {
+    background: var(--color-secondary);
+    color: var(--col-primary-200);
+    padding: 5px 5px 5px 5px;
+    position: relative; 
+    word-break: break-all;
+    margin-bottom: 5px;
+    border-radius: 2px;
+    font-weight: 700;
+
+    >div {
+      top: 50%;
+      svg {
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        cursor: pointer; 
+      }
+    }
+  }
+
+  .file-wrap .file:last-of-type {
+    margin-bottom: 0px;
+  }
+
+  .file-wrap .file-upload-icon {
+    width: 30px;
+    right: 0px;
+    top: 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 3px 1px 3px rgba(128, 128, 128, 0.2);
+  }
+}
+
+app-file.ng-invalid:not(.ng-pristine) .file-wrap {
+  background: #fad9d9;
+}
+
+app-file .error {
+  height: 0px;
+  overflow: hidden;
+}
+
+app-file .error.height {
+  height: auto;
+} 

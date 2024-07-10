@@ -1,0 +1,220 @@
+<div class="dummy" appFocus></div>
+<h2 class="heading fw-600">Add Employee</h2>
+
+<form [formGroup]="addUserForm" (ngSubmit)="openConfirmation()" class="mt-lg-30 mt-xmd-30 mt-20 fs-12 fs-md-14"
+  #f="ngForm">
+  <div class="wrapper grid-container col-lg p-lg-55 p-xmd-25 p-20">
+
+    <div class="w-100">
+      <mat-form-field class="w-50 ">
+        <mat-label>First Name</mat-label>
+        <input autocomplete="nope"   matInput formControlName="firstName" [(ngModel)]='newUserFirstName' >
+        <mat-error
+          *ngIf=" addUserForm.controls.firstName.touched && addUserForm.controls.firstName.hasError('required')">
+          Please enter First Name 
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field class="w-50 ">
+        <mat-label>Last Name</mat-label>
+        <input autocomplete="nope"  matInput formControlName="lastName" [(ngModel)]='newUserLastName'>
+        <mat-error *ngIf="addUserForm.controls.lastName.touched && addUserForm.controls.lastName.hasError('required')">
+          Please enter Last Name
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+
+    <mat-form-field>
+      <mat-label>Email</mat-label>
+      <input autocomplete="off"  matInput formControlName="email" />
+      <mat-error *ngIf="addUserForm.controls.email.touched && addUserForm.controls.email.hasError('required')">
+        Please enter Email
+      </mat-error>
+      <mat-error *ngIf="addUserForm.controls.email.touched && addUserForm.controls.email.hasError('email')">
+        Please enter valid Email
+      </mat-error>
+      <mat-error *ngIf="addUserForm.controls.email.touched && addUserForm.controls.email.hasError('is_duplicated')">
+        Entered Email already exists
+      </mat-error>
+      <!-- {{addUserForm.controls.email.touched}} {{addUserForm.controls.email.hasError('required')}} -->
+    </mat-form-field>
+     <div class="w-100">
+       <mat-form-field class="w-100 ">
+         <mat-label>Staff No.</mat-label>
+         <input autocomplete="off"  matInput formControlName="staff_no">
+         <mat-error *ngIf="addUserForm.controls.staff_no.touched && addUserForm.controls.staff_no.hasError('required')">
+           Please enter Staff No.
+          </mat-error>
+          <mat-error
+          *ngIf="addUserForm.controls.staff_no.touched && addUserForm.controls.staff_no.hasError('is_duplicated')">
+          Entered Staff No. already exists
+        </mat-error>
+      </mat-form-field>
+        </div>
+    <mat-form-field>
+      <mat-label>Location</mat-label>
+      <mat-select formControlName="location">
+        <mat-option [value]="location.id" *ngFor="let location of ALL_LOCATIONS">{{location.name}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="addUserForm.controls.location.touched && addUserForm.controls.location.hasError('required')">
+        Please select Location
+      </mat-error>
+    </mat-form-field>
+
+    <div class="fs-14">
+      <mat-label class="mb-10 " style="display:block;color: var(--col-primary-300);">Gender</mat-label>
+      <mat-radio-group formControlName="gender">
+        <mat-radio-button class="mr-20 mb-5 ml-5" style="color: var(--col-primary-300);" [value]="gender['id']"
+          *ngFor="let gender of ALL_GENDERS">{{gender['name']}}</mat-radio-button>
+      </mat-radio-group>
+      <mat-error *ngIf="addUserForm.controls.gender.touched && addUserForm.controls.gender.hasError('required')">
+        Please select Gender
+      </mat-error>
+
+    </div>
+
+
+    <mat-form-field>
+      <mat-label>Group</mat-label>
+      <mat-select formControlName="company">
+        <mat-option [value]="grp" *ngFor="let grp of GROUPS_DATA">{{grp}}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="addUserForm.controls.company.touched && addUserForm.controls.company.hasError('required')">
+        Please select Group
+      </mat-error>
+    </mat-form-field>
+    
+    <mat-form-field>
+      <mat-label>Category</mat-label>
+      <mat-select formControlName="category">
+        <mat-option [value]="category['id']" *ngFor="let category of ALL_CATEGORIES">{{category['name']}}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="addUserForm.controls.category.touched && addUserForm.controls.category.hasError('required')">
+        Please select Category
+      </mat-error>
+    </mat-form-field>
+ 
+    <div class="fs-14">
+      <p style="margin: 0 0 5px 0px;color:var(--col-primary-300);">Atwork Role</p>
+      <div>
+        <ul>
+          <!-- <li class="mb-lg-5" *ngFor="let role of ROLES;let i=index"> 
+            <label class="container mr-10 mb-5 " style="color:var(--col-primary-100)"> {{role.name}}
+              <input type="checkbox" [disabled]="true" *ngIf="role.name === 'L0'" [checked]="true">
+              <input type="checkbox" (change)="selectRole(i,role.selected)" *ngIf="role.name != 'L0' "
+               [checked]="role.selected" [disabled]="role.disabled">
+              <span class="checkmark"></span>
+            </label> 
+          
+          </li> -->
+              <!-- Rahul change******************* -->
+              <li class="mr-25 fs-16 fw-600" *ngFor="let role of ROLES;let i=index"> 
+          <mat-checkbox (change)="selectRole(i,role.selected)" *ngIf="role.name != 'L0' " 
+          [checked]="role.selected" [disabled]="role.disabled" style="color:var(--col-primary-300);">{{role.name}}</mat-checkbox>
+            <mat-checkbox  [disabled]="true" *ngIf="role.name === 'L0'" [checked]="true">{{role.name}}</mat-checkbox>
+          </li>
+            <!-- ***************************************** -->
+        </ul>
+      </div>
+    </div>
+
+    <mat-form-field class="custompicker">
+      <mat-label>Date of Joining</mat-label>
+      <input    autocomplete="off"  (click)="picker.open()" matInput [matDatepicker]="picker"
+        formControlName="doj" (dateChange)="onDate($event)" readonly>
+       
+      <svg  matSuffix class="use-svg" symbol="calendar" w="20" (click)="picker.open()"></svg>
+  
+      <mat-datepicker [touchUi]="IS_mobile"  (selectedChanged)="onDate($event)" #picker></mat-datepicker>
+      <mat-error *ngIf="addUserForm.controls.doj.touched ">
+        Please select Date of Joining
+      </mat-error>
+    </mat-form-field>
+    
+    <ng-container  *ngIf="!makeSelfFM">
+      <mat-form-field  >
+        <mat-label>Functional Owner</mat-label>
+        <mat-select  formControlName="fun_own" (selectionChange)="changeFM($event.value,newUserRoleValue)">
+          <mat-option  [value]=0 *ngIf="newUserRoleValue==4" class="self-option">Self
+            ({{newUserFirstName +" "+newUserLastName}})</mat-option>
+          <ng-container *ngIf="newUserRoleValue!=4">
+            <mat-option [value]="emp['emp_id']" *ngFor="let emp of FM_DATA">{{emp["emp_name"]}}</mat-option>
+          </ng-container>
+
+        </mat-select>
+        <mat-error *ngIf="addUserForm.controls.fun_own.touched && addUserForm.controls.fun_own.hasError('notNull')">
+          Please select Functional Owner
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Manager's Manager</mat-label>
+        <mat-select formControlName="man_manager" (selectionChange)="changeMM($event.value, newUserRoleValue)">
+          <mat-option [value]=0 *ngIf="newUserRoleValue==4 " class="self-option">Self
+            ({{newUserFirstName +" "+newUserLastName}})</mat-option>
+          <mat-option [value]="emp['emp_id']" *ngFor="let emp of MM_DATA">{{emp["emp_name"]}}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="addUserForm.controls.man_manager.touched && addUserForm.controls.man_manager.hasError('notNull')">
+          Please select Manager's Manager
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field>
+        <mat-label>Reporting Manager</mat-label>
+        <mat-select formControlName="rep_manager">
+          <mat-option [value]=0 *ngIf="newUserRoleValue==4 " class="self-option">Self
+            ({{newUserFirstName +" "+newUserLastName}})</mat-option>
+          <mat-option [value]="emp['emp_id']" *ngFor="let emp of RM_DATA">{{emp["emp_name"]}}</mat-option>
+        </mat-select>
+        <mat-error
+          *ngIf="addUserForm.controls.rep_manager.touched && addUserForm.controls.rep_manager.hasError('notNull')">
+          Please select Reporting Manager
+        </mat-error>
+      </mat-form-field>
+    </ng-container> 
+     <!-- upload image formcontroller ----> 
+     <!-- <div class="flex col flex-row-md fs-14  mb-xmd-0  start-xs ">
+        <input style="display: none" type="file" autocomplete="off" (click)="reSetInput($event)" (change)="onFileChanged($event)" formControlName="user_pic" #fileInput>
+          <button type="button" class="flex flex-row-md   mb-xmd-0  middle-xs remove-btn-style" (click)="fileInput.click()">
+            <svg class="ml-5 mr-5 use-svg col-accent-500"  symbol="user"  w="24" svg-fill="currentColor">
+            </svg>
+            Upload Image
+          </button>
+            <p class="danger" *ngIf="SupportImageType">Only jpg/png/jpeg images allowed</p>
+            <p class="danger" *ngIf="SupportImageSize">Image size shuold be less then 200kb</p>
+            <p class="danger" *ngIf="getImageHeightIsValid" >Image height and width should be 200X200 px </p>
+    </div> -->
+<!-- ************************* -->
+  <mat-form-field>
+    <mat-label>HID</mat-label>
+    <input autocomplete="off"  matInput formControlName="device_id">
+    <mat-error *ngIf="addUserForm.controls.device_id.touched && addUserForm.controls.device_id.hasError('pattern')">
+      Allowed Number Only
+    </mat-error>
+    <mat-error *ngIf="addUserForm.controls.device_id.touched && addUserForm.controls.device_id.hasError('max_length')">
+      max allowed Integer length exceeded
+    </mat-error>
+  </mat-form-field> 
+  <mat-form-field>
+    <mat-label>Alt.ID</mat-label>
+    <input autocomplete="off"  matInput formControlName="amd_id">
+    <mat-error *ngIf="addUserForm.controls.amd_id.touched && addUserForm.controls.amd_id.hasError('pattern')">
+      Allowed Number Only
+    </mat-error>
+    <mat-error *ngIf="addUserForm.controls.amd_id.touched && addUserForm.controls.amd_id.hasError('max_length')">
+      max allowed Integer length exceeded
+    </mat-error>
+  </mat-form-field> 
+  </div> 
+  <div class="flex no-lg-wrap center-xs mt-xmd-30 mt-20 " mat-dialog-actions>
+    <div class="pr-20" style="display: inline-block;padding-bottom: 10px;">
+      <app-button type="button" theme="grey" (click)="reset()" [size]="is_XMD_LT ? 'small' : 'default'">Reset All</app-button>
+    </div>
+    <div style="padding-bottom: 10px;">
+      <app-button type="submit" [disabled]="!addUserForm.valid" [size]="is_XMD_LT ? 'small' : 'default'">Add Employee</app-button>
+    </div>
+
+
+  </div>
+</form> 

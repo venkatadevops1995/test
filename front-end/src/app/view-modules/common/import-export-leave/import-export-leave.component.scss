@@ -1,0 +1,13 @@
+.bold_text {
+    font-weight: bold;
+}
+
+.hightlight_red {
+    color: red;
+}
+
+.error_table {
+    display: grid;
+    grid-template-columns: 2fr 10px 3fr;
+    width: 600px;
+}

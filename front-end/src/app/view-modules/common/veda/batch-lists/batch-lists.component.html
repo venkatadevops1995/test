@@ -1,0 +1,74 @@
+<div class="batch-lists-container">
+    <div class="create-batch-wrapper">
+        <h2 class="heading mb-5 dis-ib">Create Batch </h2>
+        <div class="input-container flex-wrap flex w-100">
+            <form [formGroup]="batchListsForm" #addBatchResetFormRef  class="w-50 flex middle-xs" >
+                <mat-form-field class="w-50 fs-12 " appearance="legacy">
+                    <input matInput placeholder="Enter Batch Name" formControlName="batchNameFormControl" (keyup.enter)="addNewBatch()" >
+                    <mat-error *ngIf="batchListsForm.controls['batchNameFormControl'].touched && batchListsForm.controls['batchNameFormControl'].hasError('pattern')">
+                        Batch name can only contain string alphanumeric or underscore
+                    </mat-error>
+                    <mat-error *ngIf="batchListsForm.controls['batchNameFormControl'].touched && batchListsForm.controls['batchNameFormControl'].hasError('required')">
+                        Batch name is required
+                    </mat-error>
+                </mat-form-field>  
+                <app-button [disabled]="batchListsForm.invalid" theme="blue-lite-extra" class="ml-30" (click)="addNewBatch()">Create Batch</app-button>
+            </form>
+            
+        </div>
+    </div>
+    
+    <div class="flex between-xs mt-20 mb-20" >
+        <h2 class="heading dis-ib">Batch List</h2> 
+        <div class="quick-links">
+            <span class="company" (click)="fetchBatchList('all')" [class.active]="quickLinkStatus=='all'">All</span>
+            <span class="company" (click)="fetchBatchList('active')" [class.active]="quickLinkStatus=='active'">Active</span>
+            <span class="company" (click)="fetchBatchList('inactive')" [class.active]="quickLinkStatus=='inactive'">Inactive</span>
+        </div>
+    </div>
+
+    <div class="w-100 of-x-auto mt-10" *ngIf="dataSource.data.length!=0">
+        <table style="min-width:1024px;" mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+          <colgroup>
+            <col width='150'/>
+            <col width='150'/>
+            <col width='150'/>
+            <col width='150'/>
+          </colgroup> 
+
+          <!-- Serial number Column -->
+          <ng-container matColumnDef="serial_number">
+            <th class="p-table-5" mat-header-cell *matHeaderCellDef> S.NO </th>
+            <td class="p-table-5" mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+          </ng-container>  
+
+          <!-- Batch Column -->
+          <ng-container matColumnDef="batch_name">
+            <th class="p-table-5" mat-header-cell *matHeaderCellDef> Batch Name </th>
+            <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.batch_name}} </td>
+          </ng-container>
+
+          <!-- status -->
+           <ng-container matColumnDef="status">
+            <th class="p-table-5" mat-header-cell *matHeaderCellDef> Status </th>
+            <td class="p-table-5" mat-cell *matCellDef="let element"> 
+                {{element?.status == 1 ? "Active" : "Inactive"}} 
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+           <ng-container matColumnDef="action">
+            <th class="p-table-5" mat-header-cell *matHeaderCellDef> Action</th>
+            <td class="p-table-5 " mat-cell *matCellDef="let element;let i = index">
+                <mat-slide-toggle [checked]="element?.status==1" (click)="changeBatchStatus($event, element)"></mat-slide-toggle>
+            </td>
+          </ng-container>   
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" [style.cursor]="row?.status==1?'pointer':'auto'" (click)="row?.status==1?showBatchDetails(row):''"></tr>
+        </table>
+    </div>
+
+    <div *ngIf="dataSource.data.length == 0" class="p-20 fs-14 col-primary-300">NO DATA AVAILABLE</div>
+</div>
+

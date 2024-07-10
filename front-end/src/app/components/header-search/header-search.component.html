@@ -1,0 +1,16 @@
+<!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css"
+  integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous"> -->
+
+<form (click)="onClickAutoComplete($event)" [formGroup]="searchForm" class="header-search-form flex middle-xs mr-30 fs-14" >
+  <mat-form-field class="w-100 fs-12" appearance="legacy">
+    <input matInput placeholder="Enter Employee Name / Staff No." aria-label="Leader" [matAutocomplete]="auto"
+      [formControl]="search" [(ngModel)]="value">
+      <svg matSuffix class="  col-primary-200 mr-5 use-svg pos-r" symbol="search" w="15 " style="top:2px;"  (click)="openEmployeepopUp()"></svg>
+    <mat-autocomplete  #auto="matAutocomplete" (optionSelected)="onSubmitResolvedLeaveFilter($event)">
+      <mat-option *ngFor="let emp of filteredManagers | async" [value]="emp.emp_name">
+        {{emp.emp_name}} ({{emp.staff_no}})
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>  
+</form>
+ 

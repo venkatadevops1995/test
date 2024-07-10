@@ -1,0 +1,51 @@
+<app-pre-sign-in>
+  <div class="welcome-heading">
+    <h1>Hello,</h1>
+    <span>Welcome back!</span>
+  </div>
+  <!-- <h2 class="heading tac">Login!</h2> -->
+  <form #form="ngForm" class="fs-16" [formGroup]="fgLogin" (ngSubmit)="onSubmitLogin()">
+    <div class="  middle-xs flex  fs-15 fs-
+    md-16 fs-lg-18" matPrefix>
+      <svg class="mr-10 use-svg" symbol="user" [w]="is_XS ? 17 : 21" style="color:var(--col-accent-500);"></svg>
+      <mat-form-field class="formField lite fs-13" style="flex-grow: 1;" color="primary">
+        <mat-label>Email
+        </mat-label>
+        <input autocomplete="off" matInput type="email" placeholder="Enter email" formControlName="email" autofocus>
+        <mat-error *ngIf="fgLogin.controls.email.hasError('email')">
+          Please enter a valid email
+        </mat-error>
+        <mat-error *ngIf="fgLogin.controls.email.hasError('required')">
+          Please enter your email
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="mt-15 middle-xs flex fs-15 fs-md-16 fs-lg-18" matPrefix>
+      <svg class="mr-10 use-svg" symbol="key" [w]="is_XS ? 14 : 18" style="color:var(--col-accent-500);"></svg>
+      <mat-form-field class="formField lite" style="flex-grow: 1;">
+        <mat-label>Password
+        </mat-label>
+        <input autocomplete="off" matInput [attr.type]="hidePassword ? 'password' : 'text'" placeholder="Enter password"
+          formControlName="password">
+        <mat-error *ngIf="fgLogin.controls.password.hasError('required')">
+          Please enter the password
+        </mat-error>
+
+        <div class="col-primary-300" style="cursor: pointer;" matSuffix [attr.aria-label]="'Hide password'"
+          (click)="hidePassword = !hidePassword">
+          <svg class=" use-svg" title="Show password" *ngIf="hidePassword" matPrefix symbol="show-password" w="20"></svg>
+          <svg class=" use-svg" title="Hide password" *ngIf="!hidePassword" matPrefix symbol="hide-password" w="20"></svg>
+        </div>
+      </mat-form-field>
+    </div>
+
+    <div class="flex end-xs mb-30 mt-20">
+      <a tabindex="0" style="color:var(--col-accent-500);" class="fs-12" [routerLink]="'/forgot-password'">Forgot password</a>
+    </div>
+    <div class="flex center-xs">
+      <app-button type="submit" style="width: 100%;" theme="black">Login</app-button>
+    </div>
+
+  </form>
+</app-pre-sign-in>

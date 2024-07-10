@@ -1,0 +1,28 @@
+<!-- <h2 mat-dialog-title color="accent">Confirm</h2> -->
+<div class="dummy" ></div>
+<div class="popup">
+  <div class="flex center-xs middle-xs pos-r popup__heading nowrap">
+    <h2 class="fg-1">{{dataMerged?.heading}}</h2>
+    <div *ngIf="dataMerged?.showCloseButton">
+      <svg class="popup__close use-svg" (click)="dialogRef.close()"
+        symbol="circle-close-red" w="35" ></svg>
+    </div>
+  </div>  
+  <div class="popup__body" [class.p-h]="dataMerged.padding_horizontal" [class.p-v]="dataMerged.padding_vertical" [class.overflow]="dataMerged.vertical_scroll">
+    <div  class="mt-10"[class.mb_30]="dataMerged.mb_30"> 
+      <ng-container appFocus *ngTemplateOutlet="dataMerged.template"></ng-container>
+    </div>
+    <!-- {{dataMerged | json}} {{data | json}} -->
+    <div style="position: relative;top:0px;" *ngIf="!dataMerged.hideFooterButtons">
+      <mat-dialog-actions style="margin-bottom:0px;" class="between-xs">
+        <app-button tabindex="0" [mat-dialog-close]="false" cdkFocusInitial theme="grey" type="button">
+          Cancel
+        </app-button>
+        <div class="mr-5 ml-10">
+          <app-button [mat-dialog-close]="true" type="button">
+            Proceed</app-button>
+        </div>
+      </mat-dialog-actions>
+    </div>
+  </div>
+</div>

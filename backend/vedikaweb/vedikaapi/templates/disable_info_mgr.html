@@ -1,0 +1,7 @@
+<p>Hi {{mgr_name}},</p>
+
+{% if stagging %}
+    <p>HR has initiated the relieving process of {{name}}({{staff_no}}) with the last working day as {{relieved}} . atwork will be accessible to {{name}} till the last working day.</p>
+{% else %}
+   <p>HR has relieved {{name}}({{staff_no}}) on {{relieved}} from his/her services. Access to atwork has been disabled successfully.</p>
+{% endif %}

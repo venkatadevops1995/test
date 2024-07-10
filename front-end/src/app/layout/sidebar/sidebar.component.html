@@ -1,0 +1,47 @@
+<div class="page-wrapper toggled sidebar">
+  <div (click)="onClickMenuToggle()" [class.is-menu-open]="isSidebarOpen" class="sidebar__toggle col-primary-200 flex center-xs middle-xs">
+    <svg class="use-svg" [attr.fill]="'currentColor'" symbol="angle-right" [w]="15"></svg>
+  </div>
+  <div id="sidebar" [class.is-menu-open]="isSidebarOpen" class="sidebar__wrapper">
+    <div class="sidebar-content">
+      <div class="user p-15">
+        <div class="user__pic">
+        </div>
+        <div class="user__name mt-25">
+          <p>Hi, {{username}}</p>
+        </div>
+      </div>
+      <nav class="nav">
+        <ul class="menu">
+          <ng-container *ngFor="let item of menu">
+            <li class=" mt-10">
+              <ng-container *ngIf=" item.link!='' ">
+                <a class="li-link" [routerLinkActive]="'active'" [routerLink]="routePrefix+'/'+item.link">
+                  {{item.text}}
+                </a>
+              </ng-container>
+              <span *ngIf=" item.link=='' "[ngClass]="is_LessThenTab?'heading':''">{{item.text}}</span>
+              <ul class="submenu"  *ngIf="item.submenu && item.submenu.length > 0">
+                <li [ngClass]="is_LessThenTab?'col-primary-200':''" *ngFor="let submenu of item.submenu">
+                  <a class="li-link" [routerLinkActive]="'active'" [routerLink]="routePrefix+'/'+submenu.link">
+                    <span>{{submenu.text}} </span>
+                    <ng-container *ngIf="submenu.showRedDot && submenu.link == 'approve-timesheets' ">
+                      <div *ngIf="pendingApprovalCount == 0 && rejectedCount == 0"
+                        style="background-color: var(--col-accent-500);" class="menu__red-dot"></div>
+                      <div *ngIf="pendingApprovalCount > 0" class="menu__red-dot" style="background-color:var(--col-warn-500);"></div>
+                      <div *ngIf="pendingApprovalCount == 0 && rejectedCount > 0" class="menu__red-dot" style="background-color:var(--col-warning);"></div>
+                    </ng-container>
+                    <ng-container *ngIf="submenu.showRedDot && submenu.link == 'rejected-timesheet'">
+                      <div class="menu__red-dot"></div>
+                    </ng-container>
+                  </a>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </nav>
+    </div>
+
+  </div>
+</div>

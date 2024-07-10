@@ -1,0 +1,77 @@
+.presignin {
+  display: grid;
+  grid-template-columns: 1fr minmax(500px, 600px) 100px;
+  min-height: 100vh;
+  background: var(--col-primary-A100);
+
+  .presignin__form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--col-primary-A100);
+    width: calc(100% - 40px);
+
+    >div { 
+      border-radius: 25px;
+      width: 100%;
+      max-width: 450px;
+      border: 1px solid var(--col-primary-500);
+      background-image: radial-gradient(130% 100% at 0% 0%, var(--col-primary-500), var(--col-primary-900) 100%);
+      box-shadow: inset 0px -75px 60px rgb(0 0 0 / 22%);
+
+    }
+  }
+
+  .presignin__logo {
+    img {
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+      max-width: 70%;
+      max-height: 50%;
+    }
+  }
+ 
+}
+
+@media screen and (min-width:1025px) and (max-width:1350px) {
+  .presignin {
+    grid-template-columns: 1fr 450px 4vw;
+  }
+}
+
+@media screen and (max-width:1024px)  {
+
+  .presignin {
+    padding-top: 130px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    min-height: auto;
+ 
+
+    .presignin__logo{
+      position: absolute;
+      top:10px;
+      left: 50%;
+      width: 200px;
+      height: 140px;
+      transform: translateX(-50%);
+      img {
+        max-height: 80%;
+      }
+    } 
+    &.login{
+      .presignin__form {
+        margin-top: 100px; 
+      }
+    }
+    &:not(.login){
+      .presignin__form {
+        margin-top: 40px; 
+      }
+    }
+
+  }
+
+}

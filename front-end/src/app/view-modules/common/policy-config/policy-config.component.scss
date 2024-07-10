@@ -1,0 +1,145 @@
+.selectedTab {
+    border-bottom: 2px black solid;
+    background-color: red;
+}
+
+::ng-deep {
+    .mat-tab-label-active {
+        border-bottom: 4px var(--color-secondary) solid;
+        // font-weight: 700;
+    }
+    // .mat-form-field-wrapper {
+    //     width: 80%;
+    // }
+}
+
+.container {
+    width: 100%;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    background-color: #F6FAFD;
+    border-radius: 20px;
+    margin: 0 0 10px;
+    padding: 4px;
+}
+
+.example-section {
+    margin: 12px 0;
+}
+
+.example-margin {
+    margin: 0 12px;
+}
+
+ul {
+    list-style-type: none;
+    margin-top: 4px;
+}
+
+.optdion {
+    // position: absolute;
+    height: 39px;
+    left: 553px;
+    top: 626px;
+    border: 3px solid #1991DF;
+    border-radius: 19px;
+    box-sizing: border-box;
+}
+
+
+// Rahul check customizing style for the checkbox for selectemp popup***********
+
+label input {
+    display: none; /* Hide the default checkbox */
+  }
+  
+  /* Style the artificial checkbox */
+  label span {
+    height: 18px;
+    width: 18px;
+    border-radius:50%;
+   
+    display: inline-block;
+    background: var(--col-primary-300);
+    // border: 1px solid var(--col-primary-300);
+    z-index: 1000px;
+    position: relative;
+  }
+  
+  /* Style its checked state...with a ticked icon */
+  input[type=checkbox]:checked + span:before {
+    content: '\2714';
+    position: absolute;
+    top: 0px;
+    left: 0;
+    background:var(--col-accent-500);
+    border: 1px solid var(--col-accent-500);
+    width: 100%;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: 100%;
+    height: 100%;
+    align-items: center;
+    border-radius: 50%;
+    z-index: 1000px;
+  }
+ 
+
+//********************************************************************
+
+// Rahul change *****************
+.custom_checkbox{
+    height: 40px;  
+    display: flex;
+    align-items: center;
+    &.all{
+        opacity: 0.6;
+    }
+}
+// *************************************
+.custom_checkbox>input[type=checkbox] {
+    display: none;
+}
+
+.custom_checkbox>input[type=checkbox]+label {
+    display: inline-block; 
+    border-radius: 20px;
+    padding: 3px 19px;
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 1.70;
+    color: #333;
+    text-align: center; 
+    vertical-align: middle;
+    cursor: pointer;   
+    border: 2px solid var(--col-primary-400);   
+    color:var(--col-primary-400);   
+}
+
+.custom_checkbox>input[type=checkbox]:checked+label {
+    background-image: none;
+    outline: 0; 
+    // border: 2px solid var(--col-accent-500);  
+    border: 2px solid var(--col-primary-200);   
+    background:var(--col-primary-400) ;
+    // color:var(--col-primary-200);  
+    color:#fff;
+}
+
+// .selectedBg {
+//     background-color: #add8e6;
+// }
+.example::-webkit-scrollbar {
+    display: none;
+  }
+
+.margin_prev{
+    margin:10px 0px 0px 100px;
+}
+.margin_next{
+margin:  10px 0px 0px 0px;
+}

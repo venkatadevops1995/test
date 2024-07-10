@@ -1,0 +1,71 @@
+
+@use 'breakpoints';
+
+@mixin flexAlign($key){
+    .start-#{$key} {
+		justify-content: flex-start;
+		text-align: start;
+	}
+
+	.center-#{$key} {
+		justify-content: center;
+		text-align: center;
+	}
+
+	.end-#{$key} {
+		justify-content: flex-end;
+		text-align: end;
+	}
+
+	.top-#{$key} {
+		align-items: flex-start;
+	}
+
+	.middle-#{$key} {
+		align-items: center;
+	}
+
+	.bottom-#{$key} {
+		align-items: flex-end;
+	}
+
+	.around-#{$key} {
+		justify-content: space-around;
+	}
+
+	.between-#{$key} {
+		justify-content: space-between;
+	}
+
+	.first-#{$key} {
+		order: -9999;
+	}
+
+	.last-#{$key} {
+		order: 9999;
+	}
+	.flex-col-#{$key}{
+	   flex-direction: column;
+	   gap:0.5em;
+	}
+	.flex-row-#{$key}{
+		flex-direction: row ;
+	}
+	.flex-wrap-#{$key}{
+		flex-wrap: wrap ;
+	}
+	.flex-nowrap-#{$key}{
+		flex-wrap: nowrap ;
+	}
+};
+
+@each $key, $value in breakpoints.$breakpoints {
+    @if($key == xs){
+        @include flexAlign($key); 
+    }@else{
+        $min-width: map-get($value, "min-width");
+        @media screen and (min-width: $min-width) {  
+             @include flexAlign($key); 
+        }
+    }
+}

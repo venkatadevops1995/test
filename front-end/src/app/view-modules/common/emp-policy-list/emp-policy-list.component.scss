@@ -1,0 +1,26 @@
+.not--exsiting-policy{
+    display: flex;
+    // justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    // margin-top: 100px;
+    color: var(--col-primary-300);
+}
+// style for loader
+.loader--string{
+    display: block;
+    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+}
+
+
+
+
+ // Rahul change(removing padding from the last cellie view column
+::ng-deep th.mat-header-cell:last-of-type, td.mat-cell:last-of-type{
+    padding-right:0 !important;
+}
+//**************************************************************

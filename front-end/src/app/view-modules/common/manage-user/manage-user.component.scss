@@ -1,0 +1,285 @@
+// input[type=checkbox]+label {
+//     color: #000000;
+//     font-style: normal;
+// }
+// input[type=checkbox]:checked+label {
+//     color: #067BCA;
+//     // font-style: italic;
+//     font-weight: bold;
+// }
+li {
+    display: inline-block;
+    // padding: 4px;
+}
+
+// ul {
+//     list-style-type: none;
+//     margin-top: 4px;
+// }
+.grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    background-color: #F6FAFD;
+    border-radius: 20px;
+    margin: 0 0 10px;
+    padding: 4px;
+}
+
+.box2 {
+    grid-row: 3 /span 1;
+}
+
+.box3 {
+    grid-row: 4;
+}
+ 
+.container {
+    // display: inline-block;
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    // font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Hide the browser's default checkbox */
+
+.container input {
+    // position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+/* Create a custom checkbox */
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // height: 20px;
+    // width: 20px;
+    height: 18px;
+    width: 18px;
+    border: 2px solid var(--col-primary-300);
+    // background:var(--col-primary-A200);
+  
+    // border-radius: 50%;
+}
+.checkmark input:checked+ .checkmark{
+    background-color: #fff;
+}
+
+/* On mouse-over, add a grey background color */
+
+// .container:hover input~.checkmark {
+    // background-color: #ccc;
+// }
+
+
+/* When the checkbox is checked, add a blue background */
+
+.container input:checked~.checkmark {
+    // background-color: #067BCA;
+  
+    border-color:  var(--col-accent-500);
+  
+  
+}
+.container input:checked~.checkmark:after{
+    background:var(--col-accent-500) !important; 
+}
+
+.container input:disabled~.checkmark {
+    // background-color: var( --color-quaternary-dark);
+    border: 2px solid var(--col-accent-A400);
+    // background: var(--col-primary-A200) !important;
+}
+.container input:disabled~.checkmark:after{
+
+    background: var(--col-accent-A400) !important;
+}
+
+.self-option {
+    background-color: ( --color-quaternary-dark);
+}
+
+
+/* Create the checkmark/indicator (hidden when not checked) */
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+/* Show the checkmark when checked */
+
+.container input:checked~.checkmark:after {
+    display: inline-block;
+}
+
+
+/* Style the checkmark/indicator */
+
+.container .checkmark:after {
+    // left: 6px;
+    // top: 3px;
+    // width: 5px;
+    // height: 9px;
+    // border: solid white;
+    // border-width: 0 3px 3px 0;
+    // transform: rotate(45deg);
+    // position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    // border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    background: var(--col-accent-A400);
+  
+}
+/* Create a custom checkbox */
+
+
+// // Rahul change*****************************
+// .checkmark {
+
+//     // height: 20px;
+//     // width: 20px;
+//     height: 18px;
+//     width: 18px;
+//     border: 2px solid var(--col-primary-300);
+
+// }
+// //*********************************************
+
+// /* On mouse-over, add a grey background color */
+
+
+// // Rahul change*****************************
+// // .container:hover input~.checkmark {
+// //     background-color: #ccc;
+// // }
+// //*********************************************
+
+// /* When the checkbox is checked, add a blue background */
+
+
+// // Rahul change*****************************
+// .container input:checked~.checkmark {
+//     // background-color: #067BCA;
+
+// }
+// //**********************************
+
+
+// // Rahul change*****************************
+// .container input:disabled~.checkmark {
+//     // background-color: var( --color-quaternary-dark);
+
+// }
+// //**********************************
+
+// // Rahul change*****************************
+// .container input:disabled~.checkmark:after{
+
+// }
+// //**********************************
+
+// .self-option {
+//     background-color: ( --color-quaternary-dark);
+// }
+
+
+// /* Create the checkmark/indicator (hidden when not checked) */
+
+// .checkmark:after {
+//     content: "";
+//     position: absolute;
+//     display: none;
+// }
+
+
+// /* Show the checkmark when checked */
+
+// // Rahul change*****************************
+// .container input:checked~.checkmark:after {
+//     display: inline-block;
+
+// }
+// //**********************************
+
+// /* Style the checkmark/indicator */
+
+
+// // Rahul change*****************************
+// .container .checkmark:after {
+//     // left: 6px;
+//     // top: 3px;
+//     // width: 5px;
+//     // height: 9px;
+//     // border: solid white;
+//     // border-width: 0 3px 3px 0;
+//     // transform: rotate(45deg);
+//     // border-radius: 50%;
+// }
+// //**********************************
+
+
+.disabled-input {
+    background-color: ( --color-quaternary-dark);
+}
+
+.fc_blue {
+    color: var( --color-orange);
+}
+
+.disabled_field {
+    mat-label,
+    mat-select {
+        color: #AAAAAA;
+    }
+}
+.upload{
+    label {
+        display: inline-block;
+        padding: 8px 12px; 
+        cursor: pointer;
+        border-left: 50px;
+        border-radius: 4px;
+        background-color: var(--color-secondary);
+        font-size: 16px;
+        color: #fff;
+    }
+    input[type="file"] {
+      position: absolute;
+      z-index: -1;
+      top: 6px;
+      left: 0;
+      font-size: 15px;
+      color: rgb(153,153,153);
+    }
+    label::before {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 20px;
+  height: 5px;
+}
+}
+.disabled--emp {
+    background-color: #1c1b1b;
+}
+button.action--btn{
+    background-color: transparent;
+}

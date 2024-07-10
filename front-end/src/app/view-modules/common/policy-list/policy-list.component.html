@@ -1,0 +1,201 @@
+<div class="dummy" appFocus></div>
+<div>
+  <h2 class="heading mb-20">Document</h2>
+  <div class="not--exsiting-policy fs-14 col-primary-400" *ngIf="EMPLOYEE_FILTERED_DATA.length == 0 && dataResolution">
+    <p class="fs-14">There are no policies available</p>
+  </div>
+  <div>
+    <!-- Rahulchange(adding a horizontal scroll bar in table)********************************** -->
+    <div style="width:100%;overflow-x: auto;" [tableAffix] *ngIf="EMPLOYEE_FILTERED_DATA.length != 0">
+    <table mat-table [dataSource]="EMPLOYEE_FILTERED_DATA" 
+      class="w-100 mat-elevation-z8">
+      <ng-container matColumnDef="sno">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Serial No.</th>
+        <td class="p-table-5" mat-cell *matCellDef="let element; let i = index">
+          {{ i + 1 }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="policy_name">
+        <!-- Rahul change ********* -->
+        <th  class="table-colum-left p-table-5" mat-header-cell *matHeaderCellDef>Policy Name</th>
+        <td  class="table-colum-left p-table-5" mat-cell *matCellDef="let element"
+          [ngClass]="{ selectedBg: element.selected == true }">
+          {{ element.policy_name }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="updated_date">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Updated on</th>
+        <td class="p-table-5" mat-cell *matCellDef="let element" [ngClass]="{ selectedBg: element.selected == true }">
+          {{ element.enable_on }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="company">
+        <!-- Rahul change ********* -->
+        <th class="w-25 table-colum-left  w-350px p-table-5" mat-header-cell *matHeaderCellDef>Groups</th>
+        <!-- Rahul change ********* -->
+        <td  class="table-colum-left flex w-350px middle-xs p-table-5" mat-cell *matCellDef="let element">
+
+          <div class="company" *ngFor="let com of element.company_list">
+            {{ com.company_name }}
+            <button tabindex="-1" class="badge--custom"
+              [ngClass]=" com.count > 99 || com.count == 'All' ? 'badge--custom--sm ': ''">{{com.count}} </button>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="view">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>View</th>
+        <td class="p-table-5" mat-cell *matCellDef="let element" title="View Policy">
+          <svg 
+          tabindex="0" 
+          (keydown.enter)="openPolicyDetails(element.policy_name,element.id)"
+          class="ml-5  use-svg " symbol="view-details" w="20"
+            (click)="openPolicyDetails(element.policy_name,element.id)" style=" 
+              margin-top: 0px; 
+            "></svg>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="edit">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Edit</th>
+        <td class="pointer p-table-5" mat-cell *matCellDef="let element" title="Edit Policy">
+          <!-- Rahul change **************** -->
+          <!-- <span
+            class="ml-5 material-icons"
+            (click)="navigateToEdit(element.id, element.policy_type)"
+             style="color: black;cursor: pointer;margin-bottom: 10px;"><span style="font-size: 16px">mode_edit</span></span> -->
+          <svg tabindex="0" 
+          (keydown.enter)="navigateToEdit(element.id, element.policy_type)"
+          class=" use-svg" symbol="edit" w="20" svg-fill="currentColor"
+            (click)="navigateToEdit(element.id, element.policy_type)"></svg>
+          <!-- ************************************ -->
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="delete">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef>Delete</th>
+        <td class="p-table-5" mat-cell *matCellDef="let element" title="Delete Policy">
+          <svg
+          tabindex="0" 
+          (keydown.enter)="openDeletePolicy(element.id)"
+          class="ml-5 use-svg" symbol="delete" w="20" (click)="openDeletePolicy(element.id)" style=" 
+              margin-top: 0px; 
+            " fill="#FF0000"></svg>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="employeePopupColumns; sticky: true"></tr>
+      <tr mat-row *matRowDef="let row; columns: employeePopupColumns"></tr>
+    </table>
+  </div>
+  <!-- ********************************************************************************** -->
+  </div>
+</div>
+
+
+<!-- Rahul change (commenting previous policyDetailsPopUp)************************ -->
+<!-- <app-modal-popup #policyDetailsRef [w]="'900px'" [h]="'700px'" [policy_style] ="true" >
+  <div class="loader--string" *ngIf="isLoaderVisible" >
+    Loading....
+  </div>
+  <div head>{{clicked_policy_name}}</div>
+  <div style="text-align: center"> -->
+<!-- ===================== {{fileResponse}}============ -->
+<!-- <pdf-viewer [src]="filepathUrl" (page-rendered)="pageRendered($event)" (after-load-complete) ="loader()" [render-text]="true" style="display: block ; position: inherit;">
+    </pdf-viewer> -->
+<!-- ******************************************************* -->
+<!-- <pdf-viewer [src]="pdfSrc" [render-text]="true" style="display: block;"></pdf-viewer> -->
+
+<!-- 'http://10.60.62.114:8000/api/media/id_card.pdf' -->
+<!-- http://10.60.62.114:4200/assets/images/Email_Friday_V3.jpg -->
+<!-- 'http://10.60.62.114:4200/assets/id_card.pdf' -->
+<!-- <ngx-doc-viewer [viewerUrl]="'https://docs.google.com/gview'" [url]="'https://testvedika.atai.ai/api/media/profiles/SAMPLE.docx'" [viewer]="'url'" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+<!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/media/file-sample_100kB.docx'" viewer="google" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+<!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+
+<!-- <ngx-doc-viewer [url]="'https://docs.google.com/document/d/e/2PACX-1vRs3gemrszDinuGJCi_wO2m5XVP1q2SlRhxM8PAUYc3wu9LFsvteny7l6Rkp695-ruhfn3gWXV03yXC/pub?embedded=true'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+<!-- <iframe src="'http://10.60.62.114:8000/api/media/id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+<!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+<!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+<!-- <iframe
+      src=""
+      #ifr
+      type="application/pdf"
+      style="width: 800px; height: 420px"
+    ></iframe> -->
+
+<!-- <p>Your browser does not support iframes.</p> -->
+<!-- ********************************************************************** -->
+<!-- </div>
+</app-modal-popup> -->
+<!-- ************************************************************************************** -->
+
+
+<!-- Rahul change(addding new policyDetailsPopUp)****************************************************** -->
+<ng-template #PolicyDetailsPopUp>
+  <div class="loader--string" *ngIf="isLoaderVisible">
+    Loading....
+  </div>
+  <!-- <div head>{{clicked_policy_name}}</div> -->
+  <div style="text-align: center">
+    <pdf-viewer [ngStyle]="{'height': '72vh'}" [original-size]="true" [autoresize]="true" (page-rendered)="pageRendered($event)" (after-load-complete)="loader()"[src]="filepathUrl" [zoom]="setZoomIN()" [zoom-scale]="'page-width'" [render-text]="true" 
+      style="display: block;">
+    </pdf-viewer>
+    <!-- <app-secured-file [src]="filepathUrl"></app-secured-file> -->
+
+    <!-- 'http://10.60.62.114:8000/api/media/id_card.pdf' -->
+    <!-- http://10.60.62.114:4200/assets/images/Email_Friday_V3.jpg -->
+    <!-- 'http://10.60.62.114:4200/assets/id_card.pdf' -->
+    <!-- <ngx-doc-viewer [viewerUrl]="'https://docs.google.com/gview'" [url]="'https://testvedika.atai.ai/api/media/profiles/SAMPLE.docx'" [viewer]="'url'" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+    <!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/media/file-sample_100kB.docx'" viewer="google" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+    <!-- <ngx-doc-viewer [url]="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+
+    <!-- <ngx-doc-viewer [url]="'https://docs.google.com/document/d/e/2PACX-1vRs3gemrszDinuGJCi_wO2m5XVP1q2SlRhxM8PAUYc3wu9LFsvteny7l6Rkp695-ruhfn3gWXV03yXC/pub?embedded=true'" viewer="url" style="width:100%;height:50vh;"></ngx-doc-viewer> -->
+    <!-- <iframe src="'http://10.60.62.114:8000/api/media/id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+    <!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+    <!-- <iframe src="'http://10.60.62.114:8000/api/policy/upload/?filename=id_card.pdf'" style="width: 100%;height: 400px;" title="Policy"></iframe> -->
+
+    <!-- <iframe src="https://docs.google.com/gview?url=http://testvedika.atai.ai/api/media/profiles/SAMPLE.docx&embedded=true" style="width: 90%; height: 1000px"/> -->
+    <!-- <p>Your browser does not support iframes.</p> -->
+    <!-- <iframe src="" style="width: 800px; height: 420px"></iframe> -->
+  </div>
+</ng-template>
+<!-- ***************************************************************************************************
+************************************************************************************ -->
+
+<!-- Rahul change(commenting prevvious popup for delete policy) *************** -->
+<!-- <app-modal-popup #deletePolicyRef [w]="'30%'" [h]="'30%'">
+  <div head>Policy</div>
+  <div style="margin: 10px; text-align: center">
+    Are you sure want to delete the policy ?
+  </div>
+  <br />
+  <div style="text-align: center">
+    
+    <app-button
+      style="margin: 5px 20px"
+      size="small"
+      theme="grey"
+      type="button"
+      w="130"
+      (click)="closeDeletePolicy()"
+      >Cancel
+    </app-button>
+    <app-button
+      style="margin: 5px 20px"
+      size="small"
+      theme="success"
+      type="button"
+      w="130"
+      (click)="deletePolicy(deleteId)"
+      >Delete
+    </app-button>
+  </div>
+</app-modal-popup> -->
+<!-- ******************************************************
+**************************************************** -->

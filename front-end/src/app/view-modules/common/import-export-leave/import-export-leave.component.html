@@ -1,0 +1,83 @@
+<div class="dummy" appFocus></div>
+<h2 class="heading">
+  Bulk Leave Update
+</h2>
+<div class="flex start-xs end-md mt-15 mt-md-0">
+  <app-button theme="grey" [size]="is_MD_LT ? 'small' : 'default'" [dbdFileDownload]="{endPoint:'leave/config/export-emp-leave/?',responseType:'blob'}">
+    <div class="flex middle-xs center-xs col-primary-100">
+      <svg symbol="excel-green" [w]="is_MD_LT ? 18 : 25" class="use-svg"></svg>
+      <span class="ml-15 fs-13 fs-md-14">Download Leave Balance Sheet</span>
+    </div>
+  </app-button>
+</div>
+<div style="margin-top: 20px; background-color: var(--color-quaternary); padding: 10px; max-width:1000px;">
+
+  <form [formGroup]="fileUpdateForm">
+    <mat-form-field class="full-width fg-1 file  atai-file-upload no-pb" style="width: 100%;align-content: center;">
+      <app-file [folderUpload]="false" formControlName="file" acceptString="(.Xlsx only)" [multiple]="false"
+        pH="Upload Leave Balance Sheet" idd="leave-bal-upload" [optional]='true'
+        [accept]="{browse:'.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', drop:['.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']}">
+      </app-file>
+
+      <mat-error class="fs-12"
+        *ngIf="fileUpdateForm.controls.file.touched && fileUpdateForm.controls.file.hasError('required')">
+        This field is required
+      </mat-error>
+
+      <mat-error class="fs-12"
+        *ngIf="fileUpdateForm.controls.file.touched && fileUpdateForm.controls.file.hasError('unAcceptedFile')">
+        Only xlsx format allowed
+      </mat-error>
+      <mat-error class="fs-12"
+        *ngIf="fileUpdateForm.controls.file.touched && fileUpdateForm.controls.file.hasError('maxSize')">
+        Maximum file size limit is 2MB
+      </mat-error>
+    </mat-form-field>
+    <div class="flex center-xs mt-25">
+      <app-button size='small' theme="blue-lite" type="button" (click)="uploadLeaveExcel()"
+        [disabled]="fileUpdateForm.invalid">Upload</app-button>
+    </div>
+  </form>
+  <br>
+  <div *ngIf="show_error==true">
+    <div class="error_table">
+      <div class="bold_text hightlight_red">Error details</div>
+      <div></div>
+      <div class="bold_text hightlight_red">Employees</div>
+    </div>
+    <div class="error_table" *ngIf="error_response['duplicated_empnames'].length>0">
+      <div class="bold_text">Duplicated Employee Name</div>:
+      <div> {{error_response["duplicated_empnames"]}}</div>
+    </div>
+    <div class="error_table" *ngIf="error_response['empty_comments'].length>0">
+      <div class="bold_text">Empty Comment</div>:
+      <div> {{error_response["empty_comments"]}}</div>
+    </div>
+    <div class="error_table" *ngIf="error_response['invalid_empnames'].length>0">
+      <div class="bold_text">Invalid Employee Name</div>:
+      <div> {{error_response["invalid_empnames"]}}</div>
+    </div>
+    <div class="error_table" *ngIf="error_response['invalid_leave_data_emplist'].length>0">
+      <div class="bold_text">Invalid Leave Data</div>:
+      <div> {{error_response["invalid_leave_data_emplist"]}}</div>
+    </div>
+    <div class="error_table" *ngIf="error_response['mismatched_leave_bals'].length>0">
+      <div class="bold_text">Mismatched Current Leave Balance</div>:
+      <div>
+        <div style="display: inline;" *ngFor="let each of error_response['mismatched_leave_bals'] ;let i=index ">
+          {{each['name']}}: {{ each.leave_bal}}
+          <br>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="upload " style="position: relative;margin-top: 10px; ">
+        <label for="upload "> Import Leaves </label>
+        <input  class="upload " id="upload " type="file " (change)="addFile($event) "> -->
+  <!-- <div *ngIf="leaveUpdateFormControl.touched && leaveUpdateFormControl.hasError( 'required') " style="color: red; ">This field is required</div>
+        <div *ngIf="leaveUpdateFormControl.touched && !leaveUpdateFormControl.hasError( 'required') ">{{leaveUpdateFormControl.value.name}}</div>
+            -->
+  <!-- </div> -->
+</div>

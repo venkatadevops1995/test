@@ -1,0 +1,11 @@
+<div class="strip-table">
+    <ng-container  *ngFor="let dataItem of data;">
+        <div class="strip__left">
+            {{dataItem?.left}}
+          </div>
+          <div>:</div>
+          <div class="strip__right">
+            {{dataItem?.right=="null" ? 'Not specified' : dataItem?.right}}
+          </div>
+    </ng-container>
+</div>

@@ -1,0 +1,25 @@
+$xs:320;
+$sm:550;
+$md:768;
+$xmd:1024;
+$lg:1200;
+$xlg:1350;
+$xxlg:1650;
+
+$breakpoints:('xs':('min-width':$xs),
+  'sm':('min-width':($sm+1)+'px',
+    'max-width':($md)+'px'
+  ),
+  'md':('min-width':($md+1)+'px',
+    'max-width':($xmd)+'px'
+  ),
+  'xmd':('min-width':($xmd+1)+'px',
+    'max-width':($lg)+'px'
+  ),
+  'lg':('min-width':($lg+1)+'px',
+    'max-width':($xlg)+'px'
+  ),
+  'xlg':('min-width':($xlg+1)+'px',
+    'max-width':($xxlg)+'px'
+  ),
+  'xxlg':('min-width':($xxlg+1)+'px'));

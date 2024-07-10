@@ -1,0 +1,45 @@
+<!-- <div>
+  <div class="policy-grid-wrap" (click)="onClickDefaultLeaveCreditGrid($event);" #refPolicyLeaveCredit>
+    <div class="policy-grid-left-header"
+      [ngStyle]="{'grid-template-rows':'repeat('+(employeeTypes.length + 1)+',50px)'}">
+      <div class="policy-grid-cell"></div>
+      <div class="policy-grid-cell bold" *ngFor="let empType of employeeTypes">{{empType?.name}}</div>
+    </div>
+    <div class="policy-grid-right" [ngStyle]="{'grid-template-columns':'repeat('+(leaveTypes.length + 1)+',1fr)'}">
+      <ng-container *ngFor="let leaveType of leaveTypes">
+        <div class="policy-grid-cell bold">
+          {{leaveType?.name}}
+        </div>
+      </ng-container>
+      <div class="policy-grid-cell action">
+      </div>
+      <ng-container *ngFor="let leaveCredit of leaveCredits;let i=index">
+        <ng-container *ngFor="let leaveType of leaveCredit.leave_type_credits | objectToKVArray;">
+          <div class="policy-grid-cell">
+            <span *ngIf="!leaveCredit?.edit || leaveType?.value == 'NA'">
+              {{leaveType?.value}}
+            </span>
+            <input class="input-leave-policy-config" type="number" step="0.5" min="0" [(ngModel)]="leaveType.value"
+              *ngIf="leaveCredit?.edit && leaveType?.value != 'NA'" />
+          </div>
+        </ng-container>
+        <div class="policy-grid-cell action">
+          <mat-icon class="pointer policy-grid-edit-icon" [attr.data-index]="i"
+            [attr.data-emp-type-id]="leaveCredit.emp_type_id" *ngIf="!leaveCredit?.edit">edit</mat-icon>
+          <mat-icon class="pointer policy-grid-close-icon mr-5" [attr.data-index]="i"
+            [attr.data-emp-type-id]="leaveCredit.emp_type_id" *ngIf="leaveCredit?.edit">cancel</mat-icon>
+          <app-button class="policy-grid-save-button" [attr.data-index]="i"
+            [attr.data-emp-type-id]="leaveCredit.emp_type_id" theme="blue-lite" size="small" *ngIf="leaveCredit?.edit">
+            Save</app-button>
+        </div>
+      </ng-container>
+    </div>
+  </div>
+  <div class="flex center-xs mt-20" *ngIf="leaveCreditsInEdit.length > 1">
+    <app-button theme="black" (click)="onClickSaveAllDefaultLeaveCredit(false)" size="default" class="mr-20">Cancel
+      All
+    </app-button>
+    <app-button theme="blue-lite" (click)="onClickSaveAllDefaultLeaveCredit(true)" size="default">Save All
+    </app-button>
+  </div>
+</div> -->

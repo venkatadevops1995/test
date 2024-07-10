@@ -1,0 +1,65 @@
+.export {
+  margin-top: 20px;
+  color: #3a7bca;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.export:hover {
+  text-decoration: underline;
+  border-bottom: 1px solid red;
+}
+
+.dateinput {
+  display: inline-flex;
+  align-items: baseline;
+  box-sizing: border-box;
+  padding: 15px 15px 15px 10px;
+  background: none;
+  height: 60px;
+  border-radius: 20px;
+  align-items: center;
+  border: 1px solid #666;
+}
+
+.weekend_class {
+  background-color: var(--col-primary-900);
+}
+
+
+.holiday_class {
+  color: var(--col-accent-300);
+}
+
+.vacation_class {
+  color: #e98818;
+}
+
+.project_class {
+//   color: var(--col-primary-200);
+}
+
+.holiday { 
+  .project_class {
+    color: var(--col-accent-500);
+  }
+}
+
+.export_icon {
+  // padding-top: 20px;
+  align-items: baseline;
+  // padding-top: 6px;
+  padding-top: 12px;
+}
+
+.attendance-heading {
+  color: var(--col-accent-500);
+
+}
+
+.attend--table-scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

@@ -1,0 +1,99 @@
+<!-- <div class="flex end-xs mb-5">
+  <span *ngIf="pendingApprovalCount == 0 && rejectedCount == 0" style="background-color: var(--col-accent-500);"
+    class="dot"></span>
+  <span *ngIf="pendingApprovalCount > 0" class="dot" style="background-color:red;"></span>
+  <span *ngIf="pendingApprovalCount == 0 && rejectedCount > 0" class="dot"
+    style="background-color: var(--color-warn-500);"></span>
+</div> -->
+<div class="dummy" appFocus></div>
+<div class="pb-20 flex between-xmd flex-col-xs flex-row-xmd">
+
+  <h2 class="heading">Team Timesheets
+  </h2>
+  <div class="flex between-xs">
+    <div class="flex center-xs  col-primary-200 fs-12 mr-30 mt-15 mt-md-0">
+      <a tabindex="0"  [dbdFileDownload]="{endPoint:'downloadwst/', responseType:'blob'}" class="flex middle-xs pointer">
+        <svg class="ml-3 mr-10 use-svg" symbol="download" w="20"></svg> WTR
+      </a>
+      <a tabindex="0" [dbdFileDownload]="{endPoint:'downloadwsr/',responseType:'blob'}" class="flex middle-xs mr-50 ml-50 pointer">
+        <svg class="mr-10 use-svg" symbol="download" w="20"></svg> WSR
+      </a>
+    </div>
+ <div [ngClass]="is_XS ?'w-100':''">
+    <form #searchForm="ngForm" [formGroup]="fgSearch">
+      <div class="flex end-xs top-xs fs-14">
+        <mat-form-field [ngClass]="is_XS ?'mt-15':''" class="no-pb">
+          <mat-select formControlName="filtervalue"
+            (selectionChange)="onSubmitSearch($event.value,1,paginator.pageSize,1)">
+            <mat-option *ngFor="let item of filterArray" [value]="item.value">
+              {{item.Name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </form>
+  <!-- Rahul changes(showing dots based on pending and approve timesheet)*********** -->
+  <div class="flex end-xs mb-5">
+    <span *ngIf="pendingApprovalCount == 0 && rejectedCount == 0" style="background-color: var(--col-accent-500);"
+      class="dot"></span>
+    <span *ngIf="pendingApprovalCount > 0" class="dot" style="background-color:var(--col-warn-500);"></span>
+    <span *ngIf="pendingApprovalCount == 0 && rejectedCount > 0" class="dot"
+      style="background-color: var(--col-warning);"></span>
+  </div>
+</div>
+  <!-- ********************************************************************** -->
+  </div>
+</div> 
+<div class="timesheet"> 
+
+  <div class="timesheet-wrap w-100" style="overflow-x:auto;" #refTimesheetWrap>
+    <ng-container *ngFor="let timesheet of timesheetsData;let ts_index=index">
+      <app-time-sheet [translateTitle]="translateTimesheetTitle" [ngStyle]="{minWidth:timesheet ? '800px':'auto'}"
+        (event)="onEventEmitTimeSheet($event)" [disable]="!enableFlag" [showHeader]="ts_index == 0"
+        mode="resolve-timesheet" [disable]="true" [disableResolution]="!enableFlag" [data]='timesheet'
+        class="mb-15 dis-blk">
+      </app-time-sheet>
+    </ng-container>
+  </div>
+
+
+</div>
+
+<mat-paginator appStylePaginator *ngIf="timesheetsData.length > 0" #refPaginator [length]="totalTimesheetsLength"
+  [pageSize]="paginator.pageSize" [pageSizeOptions]="paginator.pageSizeOptions" (page)="onChangePage($event)">
+</mat-paginator>
+
+<div *ngIf="timesheetsData?.length == 0 && showMessage == true" class="flex col center-xs middle-xs fg-1 mt-20 mt-sm-40">
+  <img src="./assets/images/no-data-sheet.png" alt=""  class="no-timesheet-data">
+  <p class="p-15 fs-14 col-primary-300">No time sheets available</p>
+</div>
+
+<ng-template #templateRefRejectTimeSheet>
+  <form #commentForm="ngForm" [formGroup]="fgRejectionComments" (ngSubmit)="onSubmitApprove(fgRejectionComments.value)">
+    <textarea formControlName="comments" class="textarea-black" placeholder="Enter comments *"></textarea>
+    <div class="flex end-xs middle-xs mt-20">
+      <app-button [disabled]="!fgRejectionComments?.controls['comments']?.value?.length">Submit
+      </app-button>
+    </div>
+  </form>
+</ng-template>
+
+
+<ng-template #templateRefWSRData>
+  <div class="resolve-popup">
+    <ng-container *ngFor="let data of wsrData;let i=index;">
+      <div>
+        <div *ngFor="let project of data.active_projects;let i=index;">
+          <ng-container *ngIf="project.visibilityFlag">
+            <div class="resolve-popup__project-name fs-14 mb-15 pl-10">{{project?.project_name}}</div>
+            <textarea  disabled class="textarea-black mb-30 fs-14 fs-xmd-16 ">{{project.work_report}}</textarea>
+          </ng-container>
+        </div>
+      </div>
+      <ng-container *ngIf="data.GENERAL.visibilityFlag">
+        <div class="resolve-popup__project-name fs-14 mb-15 pl-10">General</div>
+        <textarea disabled class="textarea-black fs-14 fs-xmd-16  ">{{data.GENERAL.work_report}}</textarea>
+      </ng-container>
+    </ng-container>
+  </div>
+</ng-template>

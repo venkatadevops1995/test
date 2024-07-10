@@ -1,0 +1,25 @@
+<!-- <h2 mat-dialog-title color="accent">Confirm</h2> -->
+<mat-toolbar class="mat-dialog-header">
+  <span>Confirm</span>
+</mat-toolbar>
+<div class="p-10">
+  <div class="p-20">
+    <span>
+      {{ data?.confirmMessage || 'Are you sure you want to continue ?' }}
+    </span>
+    <div class="mt-20">
+      <textarea cdkFocusInitial matInput [formControl]="fcRejectMessage" rows="4"
+        placeholder="Manager Comments"></textarea>
+    </div>
+  </div>
+  <div style="position: relative;top:0px;">
+    <mat-dialog-actions style="margin-bottom:0px;" align="end">
+      <app-button tabindex="0" mat-dialog-close size='small' theme="danger" type="button">Cancel
+      </app-button>
+      <div class="mr-5 ml-10">
+        <app-button [mat-dialog-close]="{manager_comments:fcRejectMessage.value}" size='small' theme="blue-lite"
+          type="button">Proceed</app-button>
+      </div>
+    </mat-dialog-actions>
+  </div>
+</div>

@@ -1,0 +1,64 @@
+
+.dis-nn{
+    display: none;
+}
+.dis-blk{
+    display: block;
+}
+.dis-ib{
+    display: inline-block;
+}
+.pos-r{
+    position: relative;
+}
+.tac{
+    text-align:center;
+}
+.uppercase{
+   text-transform: uppercase;
+}
+.pointer{
+    cursor: pointer;
+}
+.pointer-none{
+    pointer-events: none;
+}
+.wbr{
+    word-break: break-all;
+}
+.fwb{
+    font-weight: bold;
+}
+.tar{
+    text-align: right;
+}
+.tal{
+    text-align: left;
+}
+.vam{
+    vertical-align: middle;
+}
+.grid{
+    display:grid;
+}
+.white{
+    color:#fff;
+}
+.bold{
+    font-weight: bold;
+}
+.fg-1{
+    flex-grow: 1;
+}
+.fg-5 {
+  gap: 5px;
+}
+.of-auto{
+    overflow: auto;
+}
+.of-x-auto{
+    overflow-x: auto;
+}
+.header-gradient{    
+    background: linear-gradient(170.84deg, var(--col-primary-500) -49.76%, var(--col-primary-900) 190.96%);
+}

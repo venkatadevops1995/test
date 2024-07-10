@@ -1,0 +1,113 @@
+:host {
+    --cell-gap: 5px;
+.timesheet__row,
+.timesheet__head {
+  display: grid;
+  grid-template-columns: minmax(150px,250px) repeat(8, 1fr);
+  margin-bottom: var(--cell-gap);
+  position: relative;
+}
+
+.timesheet__body {
+  display: grid;
+  // row-gap: 5px;
+}
+.timesheet {
+    position: relative;  
+    font-size: 16px;
+    &.disable{
+      pointer-events: none;
+    }
+
+
+    }
+    .timesheet__row {
+        > * {
+          height: 45px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+        }
+        > *:not(:first-child) {
+            border-top: 1px solid #bbb;
+            border-bottom: 1px solid #bbb;
+          }
+          > *:nth-child(2) {
+            border-left: 1px solid #bbb;
+          }
+        > *:last-child {
+            border-right: 1px solid #bbb;
+          }
+          > *:first-child {
+            margin-right: var(--cell-gap);
+            word-break: break-all;
+          }
+        > .project {
+            background: var(--color-primary);
+            border: 1px solid var(--color-primary);
+            color: #fff;
+            position: relative;
+            padding:0 15px;
+          }
+          >.applicable{
+            background: var(--color-success);
+            
+        }
+        >.not_applicable{
+            background: var(--color-danger);
+        }
+          .timesheet__row-remove{
+            position: absolute;
+            left:-15px;
+            top:50%;
+            transform:translateY(-50%);
+            background: #fff;
+            border-radius: 50%;
+      
+          }
+          > .sel-project {
+            background: var(--color-quaternary);
+            border: 1px solid var(--color-quaternary);
+            color: #333;
+            position: relative;
+            &.disabled {
+              pointer-events: none;
+              color: #999;
+            }
+            .sel-project__project-list {
+              position: absolute;
+              top: calc(100% - 10px);
+              width: 200px;
+              left: 0;
+              background: var(--color-quaternary);
+              box-shadow: 0px 0px 4px 2px rgba(0, 0, 0, 0.2);
+              border-radius: 5px;
+              max-height: 200px;
+              overflow: auto;
+              z-index: 11;
+            }
+        }
+    }
+    .timesheet__head {
+        > * {
+          height: 35px;
+          line-height: 35px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: var(--color-secondary);
+          color: #fff;
+        }
+        > div.week {
+          background: #bbb;
+          margin-right: var(--cell-gap);
+        }
+        > div.location {
+            background: #333;
+            margin: 0px 2px;
+            // margin-right: var(--cell-gap);
+          }
+
+      }
+      
+}

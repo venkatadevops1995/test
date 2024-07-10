@@ -1,0 +1,105 @@
+<div class="batch-lists-container">
+  <div class="create-batch-wrapper">
+    <span class="" style="position: relative; top:3px;"><svg class="export_icon use-svg" symbol="back-circle" w="20" (click)="backToBackList()"></svg></span>
+    <h2 class="heading mb-5 dis-ib ml-10">{{batchName}}</h2>
+    <div class="input-container flex-wrap w-100">
+      <form [formGroup]="studentsListFormGroup" #studentFormResetRef class="flex middle-xs w-50">
+        <mat-form-field class="w-30 fs-12" appearance="legacy">
+          <input matInput placeholder="Enter Student Full Name" formControlName="studentNameFormControl">
+          <mat-error *ngIf="studentsListFormGroup.controls['studentNameFormControl'].touched && studentsListFormGroup.controls['studentNameFormControl'].hasError('required')">
+            Please enter valid name.
+          </mat-error>
+          <mat-error *ngIf="studentsListFormGroup.controls['studentNameFormControl'].touched && studentsListFormGroup.controls['studentNameFormControl'].hasError('pattern')">
+            Name can only contain letters of the alphabet and spaces
+          </mat-error>
+        </mat-form-field>  
+        <mat-form-field class="w-30 fs-12 ml-40" appearance="legacy">
+          <input matInput placeholder="Enter HID No." formControlName="deviceIDFormControl">
+          <mat-error *ngIf="studentsListFormGroup.controls.deviceIDFormControl.touched && studentsListFormGroup.controls.deviceIDFormControl.hasError('required')">
+            Please enter valid HID.
+          </mat-error>
+          <mat-error *ngIf="studentsListFormGroup.controls.deviceIDFormControl.touched && studentsListFormGroup.controls.deviceIDFormControl.hasError('pattern')">
+            HID can only contain 6 digit numeric value 
+          </mat-error>
+        </mat-form-field>  
+        <app-button [disabled]="studentsListFormGroup.invalid" theme="blue-lite-extra" class="ml-50" (click)="addStudent()">Add Student</app-button>
+      </form>
+
+      <div class="flex middle-xs">
+        <span class="ml-30">OR</span>
+        <app-button theme="blue-lite-extra" class="ml-50" (click)="openStudentSheetUploaderPopUp()">Bulk Upload</app-button>
+      </div>
+    </div>
+  </div>  
+
+  <div class="flex between-xs mb-15 middle-md flex-col-xs flex-row-md top-xs mt-20">
+    <h2>Students List</h2>
+    <div class="flex bottom-xs mt-15 mt-md-0">
+      <div class="fs-14">
+        <mat-form-field appearance="legacy" class="no-pb atai-date-range " style="width: 205px;">
+          <app-atai-date-range [presets]="datePickerPresets" [maxDate]="maxDate" (dateSelected)="onDateSelection($event)"></app-atai-date-range>
+        </mat-form-field>
+      </div>
+      <div class="export_icon ml-40 col-primary-300">
+        <a (click)="downloadStudentAttendanceReport()">
+          <svg class="ml-5 use-svg" symbol="excel-green" w="25" style=" margin-top:0px;cursor:pointer"></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-100 of-x-auto mt-10" *ngIf="dataSource.data.length!=0">
+    <table style="min-width:1024px;" mat-table [dataSource]="dataSource" class="mat-elevation-z8 w-100">
+      <colgroup>
+        <col width='150'/>
+        <col width='150'/>
+        <col width='150'/>
+      </colgroup>  
+
+      <!-- Serial No -->
+      <ng-container matColumnDef="serial_number">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> S.NO </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element;let i = index;"> {{i+1}} </td>
+      </ng-container>  
+
+      <!-- Student Name -->
+      <ng-container matColumnDef="student_name">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> Student Name </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> {{element.student_name}} </td>
+      </ng-container>
+
+      <!-- HID -->
+        <ng-container matColumnDef="hid">
+        <th class="p-table-5" mat-header-cell *matHeaderCellDef> HID </th>
+        <td class="p-table-5" mat-cell *matCellDef="let element"> 
+          {{element?.device_id}}
+        </td>
+      </ng-container>
+      
+      <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="cursor: pointer;"></tr>
+    </table>
+  </div> 
+
+  <div *ngIf="dataSource.data.length == 0" class="p-20 fs-14 col-primary-300">NO DATA AVAILABLE</div>  
+</div>
+
+<ng-template #uploadBatchListSheetPopUp>
+  <div class="flex end-xs pr-20 ">
+      <app-button size='small' class="mt-10" theme="blue-lite" type="button" (click)="downloadBatchListSheet()">Download Template</app-button>
+  </div>
+  <div style="margin: auto; background-color: var(--color-quaternary); padding: 10px; max-width:1000px;">
+      <form [formGroup]="batchListFileUploadFormGroup" >
+          <mat-form-field class="full-width fg-1 file  atai-file-upload no-pb" style="width: 100%;align-content: center;">
+              <app-file  acceptString="(.Xlsx only)" formControlName="batchListFileFormControl" [multiple]="false" pH="Upload Student List Sheet" idd="student-list-upload" [optional]='true' [accept]="{browse:'.xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', drop:['.xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet']}">
+              </app-file> 
+               <mat-error class="fs-12" *ngIf="batchListFileUploadFormGroup.controls.batchListFileFormControl.touched && batchListFileUploadFormGroup.controls.batchListFileFormControl.hasError('required')">
+                  This field is required
+              </mat-error>
+          </mat-form-field>
+          <div class="flex center-xs mt-25">
+              <app-button size='small' [disabled]="batchListFileUploadFormGroup.invalid" theme="blue-lite" type="button" (click)="uploadBatchListSheet()" >Upload</app-button>
+          </div>
+      </form>  
+  </div>
+</ng-template>

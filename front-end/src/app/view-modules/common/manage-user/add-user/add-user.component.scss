@@ -1,0 +1,231 @@
+@use '../../../../../assets/scss/breakpoints' as bp;
+
+li {
+    display: inline-block;
+    // padding: 4px;
+}
+
+// ul {
+//     list-style-type: none;
+//     margin-top: 4px;
+// }
+// Outer wrapper for the form
+.wrapper{
+    background-color:var(--col-primary-A200);
+    border-radius:10px;
+    display: grid;
+    grid-template-columns:repeat(3,1fr) ;
+//    column-gap: 4.5em;
+   grid-gap:2em;
+   @media (min-width:bp.$xs+'px') {
+       grid-template-columns:repeat(1,1fr) ;
+       grid-gap:1.5em;
+   }
+   @media (min-width:bp.$sm+'px') {
+    grid-gap:2em;
+}
+   @media (min-width:bp.$md+'px') {
+    grid-template-columns:repeat(2,1fr) ;
+}
+   @media (min-width:bp.$xmd+'px') {
+       grid-template-columns:repeat(2,1fr) ;
+   }
+    @media (min-width:bp.$lg+'px') {
+        // grid-gap:1.5em;
+          grid-gap:2em;
+        grid-template-columns:repeat(3,1fr) ;
+    }
+   
+} 
+.box2 {
+    grid-row: 3 /span 1;
+}
+
+.box3 {
+    grid-row: 4;
+}
+
+mat-form-field { 
+    padding: 4px;
+}
+
+.gap{
+    width: 100%;
+    height: 2em;
+   
+}
+.container {
+    // display: inline-block;
+    position: relative;
+    padding-left: 24px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    // font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+
+/* Hide the browser's default checkbox */
+
+.container input {
+    // position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+// @media screen and (min-width: 320px) and (max-width:550px) and  (orientation: portrait) {
+//     .mat-datepicker-content-touch .mat-datepicker-content-container {
+//         min-width: 310px !important;
+//         height: auto;
+//     }
+//   }
+
+
+::ng-deep.mat-datepicker-content-container{
+    width: 310px !important;
+    height: unset !important;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Create a custom checkbox */
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    // height: 20px;
+    // width: 20px;
+    height: 18px;
+    width: 18px;
+    border: 2px solid var(--col-primary-300);
+    // background:var(--col-primary-A200);
+  
+    border-radius: 50%;
+}
+.checkmark input:checked+ .checkmark{
+    background-color: #fff;
+}
+
+/* On mouse-over, add a grey background color */
+
+// .container:hover input~.checkmark {
+    // background-color: #ccc;
+// }
+
+
+/* When the checkbox is checked, add a blue background */
+
+.container input:checked~.checkmark {
+    // background-color: #067BCA;
+  
+    border-color:  var(--col-accent-500);
+  
+  
+}
+.container input:checked~.checkmark:after{
+    background:var(--col-accent-500) !important; 
+}
+
+.container input:disabled~.checkmark {
+    // background-color: var( --color-quaternary-dark);
+    border: 2px solid var(--col-accent-A400);
+    // background: var(--col-primary-A200) !important;
+}
+.container input:disabled~.checkmark:after{
+
+    background: var(--col-accent-A400) !important;
+}
+
+.self-option {
+    background-color: ( --color-quaternary-dark);
+}
+
+
+/* Create the checkmark/indicator (hidden when not checked) */
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+/* Show the checkmark when checked */
+
+.container input:checked~.checkmark:after {
+    display: inline-block;
+}
+
+
+/* Style the checkmark/indicator */
+
+.container .checkmark:after {
+    // left: 6px;
+    // top: 3px;
+    // width: 5px;
+    // height: 9px;
+    // border: solid white;
+    // border-width: 0 3px 3px 0;
+    // transform: rotate(45deg);
+    // position: relative;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    // border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    border-radius:50%;
+    background: var(--col-accent-A400);
+  
+}
+
+.disabled-input {
+    background-color: ( --color-quaternary-dark);
+}
+
+.fc_blue {
+    color: var( --color-orange);
+}
+
+.disabled_field {
+    mat-label,
+    mat-select {
+        color: #AAAAAA;
+    }
+}
+// adding css for radio button
+// ::ng-deep .mat-radio-label-content{
+//     padding-left: 4px !important;
+//     padding-right: 0px !important;
+// }
+// ::ng-deep .mat-radio-label{
+//    color: var(--col-primary-100);
+// }
+// ::ng-deep .mat-radio-inner-circle{
+//     width:18px !important;
+//     height:18px  !important;
+// }
+// ::ng-deep .mat-radio-outer-circle{
+//     width:18px !important;
+//     height:18px  !important;
+// }
+// ::ng-deep .mat-radio-outer-circle{
+//     border-color:var(--col-primary-300);;
+// }
